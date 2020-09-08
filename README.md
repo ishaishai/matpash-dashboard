@@ -1,5 +1,9 @@
 # matpash dashboard
 
+## install:
+### inside the project directory: `npm install`
+### inside the client directory: `npm install`
+
 ## run client & server:
 ### `npm run dev`
 
