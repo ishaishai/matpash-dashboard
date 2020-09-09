@@ -18,6 +18,8 @@ app.use('/api/statistics', require('./routes/statisticsRoutes'));
 app.use('/api/users', require('./routes/usersRoutes'));
 app.use('/upload', require('./routes/upload.route'));
 app.use('/tables', require('./routes/tables.route'));
+app.use('/dashboard', require('./routes/dashboard.route'));
+
 
 app.get('/', (req, res) => {
   res.send('matpash-server');
