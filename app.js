@@ -2,10 +2,12 @@ const express = require('express');
 const upload = require('express-fileupload');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 const app = express();
 
 // Middlewares
+app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
