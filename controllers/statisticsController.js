@@ -2,10 +2,10 @@ const { usersdbpool } = require('../config/dbConfig');
 
 const getStatistics = async (req, res) => {
   const stats = await usersdbpool.query(
-    `SELECT concat("שם פרטי",' ',"שם משפחה") as "שם" ,"סוג הרשאה","תפקיד","פעולה","תאריך","ארגון"
-     FROM "eventsTable" JOIN "usersInfoTable" using("שם משתמש")`
+    `SELECT concat("firstName", ' ', "lastName") as "name", "operation", "role", "organization", "date"
+    FROM "eventsTable" JOIN "usersInfoTable" USING("username")`
   );
-  res.send(stats.rows);
+  res.json({ statistics: stats.rows });
 };
 
 module.exports = { getStatistics };
