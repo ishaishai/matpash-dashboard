@@ -4,12 +4,11 @@ import MaterialTable from 'material-table';
 
 const tableConfig = {
   columns: [
-    { title: 'שם', field: 'שם' },
-    { title: 'סוג הרשאה', field: 'סוג הרשאה' },
-    { title: 'תפקיד', field: 'תפקיד' },
-    { title: 'פעולה', field: 'פעולה' },
-    { title: 'תאריך', field: 'תאריך' },
-    { title: 'ארגון', field: 'ארגון' },
+    { title: 'שם', field: 'name' },
+    { title: 'תפקיד', field: 'role' },
+    { title: 'פעולה', field: 'operation' },
+    { title: 'תאריך', field: 'date' },
+    { title: 'ארגון', field: 'organization' },
   ],
   tableOptions: {
     search: true,
@@ -30,8 +29,7 @@ const Statistics = () => {
   useEffect(() => {
     (async () => {
       const response = await axios.get('/api/statistics');
-      setData(response.data);
-      console.log(response.data);
+      setData(response.data.statistics);
       setLoading(false);
     })();
   }, []);
