@@ -26,16 +26,19 @@ const Statistics = () => {
   const [loading, setLoading] = useState(true);
   const [selectedRow, setSelectedRow] = useState(null);
 
+  const fetchStatistics = async () => {
+    const response = await axios.get('/api/statistics');
+    const { statistics } = response.data;
+    setData(statistics);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    (async () => {
-      const response = await axios.get('/api/statistics');
-      setData(response.data.statistics);
-      setLoading(false);
-    })();
+    fetchStatistics();
   }, []);
 
   return (
-    <div>
+    <div className="container">
       <MaterialTable
         title="היסטוריית פעילות"
         columns={tableConfig.columns}

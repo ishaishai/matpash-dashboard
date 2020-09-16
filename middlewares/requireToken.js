@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config/keys');
 
 module.exports = async (req, res, next) => {
-  const token = req.header('x-auth-token');
+  const token = req.cookies.token || '';
   if (!token) {
-    return res.status(401).json({ error: 'Please provide access token' });
+    return res.status(401).json({ error: 'Please login' });
   }
 
   try {
