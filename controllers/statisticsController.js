@@ -1,14 +1,11 @@
-const { usersdbpool } = require('../config/dbConfig');
+const StatisticsService = require('../services/statisticsService');
 
-const USERS_TABLE = 'usersInfoTable';
+const statisticsService = new StatisticsService();
 
 const getStatistics = async (req, res) => {
-  const stats = await usersdbpool.query(`
-    SELECT concat("firstName", ' ', "lastName") as "name", "operation", "role", "organization", "date"
-    FROM "eventsTable" JOIN "${USERS_TABLE}" USING("username")
-  `);
+  const statistics = await statisticsService.getStatistics();
 
-  res.json({ statistics: stats.rows });
+  res.json({ statistics });
 };
 
 module.exports = { getStatistics };

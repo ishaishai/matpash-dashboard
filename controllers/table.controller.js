@@ -1,6 +1,5 @@
 const xlsx = require("xlsx");
-const db = require("../config/dbConfig")
-const maindbpool = db.maindbpool;
+const { maindbpool } = require('../db');
 
 exports.getTablesName = async(req, res)=>{
     maindbpool.query("SELECT table_name FROM information_schema.tables WHERE table_schema='public' and table_name not like '%KV%' ")

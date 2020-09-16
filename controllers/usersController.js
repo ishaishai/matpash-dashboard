@@ -1,14 +1,12 @@
-const { usersdbpool } = require('../config/dbConfig');
+const UserService = require('../services/userService');
 
-const DB_NAME = 'usersInfoTable';
+const userService = new UserService();
 
-const getUsers = async (req, res) => {
+exports.getUsers = async (req, res) => {
   try {
-    const results = await usersdbpool.query(`SELECT * FROM "${DB_NAME}"`);
-    res.status(200).json(results.rows);
+    const users = await userService.getAll();
+    res.status(200).json({ users });
   } catch (error) {
     res.status(404).json({ error });
   }
 };
-
-module.exports = { getUsers };
