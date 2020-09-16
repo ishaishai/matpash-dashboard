@@ -1,18 +1,29 @@
-module.exports = action => {
-  switch (action.type) {
+const db = require('../db');
+
+module.exports = async operation => {
+  switch (operation.type) {
     case 'login':
-      console.log(action.data);
-      break;
+      await store(operation.username, 'התחברות למערכת');
+      return;
 
     case 'graph_creation':
       console.log(action.data);
-      break;
+      return;
 
     case 'graph_deletion':
       console.log(action.data);
-      break;
+      return;
 
     default:
-      break;
+      return;
   }
 };
+
+async function store(username, operation) {
+  await db.query(
+    `INSERT INTO "eventsTable" 
+      ("username", "operation", "date")
+      VALUES ($1, $2, $3)`,
+    [username, operation, new Date().toLocaleString()]
+  );
+}
