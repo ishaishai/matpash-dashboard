@@ -2,10 +2,14 @@ const express = require('express');
 const dashboardContoller = require('../controllers/dashboard.controller');
 const router = express.Router();
 
-router.get('/getbyid/:id', dashboardContoller.getDashboardById);
-router.delete('/deletebyid/:id', dashboardContoller.deleteDashboardById);
-router.post('/addnew', dashboardContoller.addNewDashboard);
+router.get('/get-by-id', dashboardContoller.getDashboardById);
+router.get('/get-dashboard-names', dashboardContoller.getDashboarNames);
+router.delete('/delete-dashboard-by-id', dashboardContoller.deleteDashboardById);
+router.delete('/remove-graph-from-dashboard', dashboardContoller.deleteGraphFromDashboard);
+router.post('/add-new-dashboard', dashboardContoller.addNewDashboard);
+router.post('/add-new-grah-to-dashboard', dashboardContoller.addNewDashboard);
 router.post('/update', dashboardContoller.updateDashboardById);
 
 
 module.exports = router;
+
