@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
-import Statistics from './components/Statistics/Statistics'
 
-import axios from 'axios';
+import { BrowserRouter} from 'react-router-dom';
 
-window.axios = axios;
-
-ReactDOM.render(<App />, document.querySelector('#root'));
+const app = (
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>
+);
+ReactDOM.render(app, document.getElementById('root'));

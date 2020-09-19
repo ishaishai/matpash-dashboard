@@ -6,6 +6,9 @@ import Highcharts from "highcharts";
 import NavBar from "../Menu/NavBar";
 // import {Button} from "@material-ui/core";
 import Button from "react-bootstrap/Button";
+// import Route from "react-router-dom";
+import CreateChart from "../Menu/CreateChart";
+import {Link, Route, useHistory} from "react-router-dom";
 require("highcharts/modules/exporting")(Highcharts);
 
 const defaultContextMenuButtons = Highcharts.getOptions().exporting.buttons.contextButton.menuItems;
@@ -66,6 +69,11 @@ function ResponsiveGrid() {
           </div>
         ))}
       </ResponsiveGridLayout>
+        <Route path="/CreateChart" exact render={() => <CreateChart/>}/>
+        <Button className="float-lg-left" variant="outline-info" ><Link to={{
+            pathname: '/new-Chart'
+        }}>יצירת כפתור</Link></Button>
+
     </div>
   );
 }
