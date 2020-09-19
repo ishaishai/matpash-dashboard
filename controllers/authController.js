@@ -1,60 +1,52 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const keys = require('../config/keys');
-const { usersdbpool } = require('../config/dbConfig');
-const recordOperation = require('../services/recordOperation');
+const storeOperation = require('../services/storeOperation');
+const UserService = require('../services/userService');
 
+const userService = new UserService();
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
-  const options = { expiresIn: '12h' };
-
   try {
-    const sql = `
-      SELECT "ID", "username", "password" FROM "usersInfoTable"
-      WHERE "username"='${username}'
-    `;
-    const result = await usersdbpool.query(sql);
-    if (!result.rows) {
-      return res.json({ error: 'username does not exists' });
+    const user = await userService.findUser(username);
+
+    if (!user) {
+      return res.status(400).json({ error: 'username does not exists' });
     }
-    const user = result.rows[0];
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.json({ error: 'incorrect password' });
+      return res.status(400).json({ error: 'incorrect password' });
     }
-    const payload = { user: { id: user.ID, username: user.username } };
-    jwt.sign(payload, keys.JWT_SECRET, options, (error, token) => {
-      return error ? res.json({ error: 'server error' }) : res.json({ token });
-    });
+
+    const accessToken = generateAccessToken(user);
+    res.cookie('token', accessToken, { httpOnly: true });
+
+    await storeOperation({ type: 'login', username });
+
+    return res.json({ id: user.ID, username: user.username });
   } catch (error) {
     console.log(error);
   }
 };
 
 exports.registerUser = async (req, res) => {
-  const {
-    id,
-    username,
-    password,
-    firstName,
-    lastName,
-    role,
-    organiztion,
-  } = req.body;
+  const user = req.body;
 
   try {
+    const userExists = await userService.findUser(user.username);
+
+    if (userExists) {
+      return res.status(400).json({ error: 'username is already exists' });
+    }
+    // Hash passwords before saving
     const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
 
-    const sql = `
-    INSERT INTO "usersInfoTable" 
-    ("ID", "username", "firstName", "lastName", "password", "role", "organization")
-    VALUES ('${id}', '${username}', '${firstName}', '${lastName}', '${hashedPassword}', '${role}', '${organiztion}')
-  `;
-
-    await usersdbpool.query(sql);
+    await userService.save(user);
 
     return res.send({});
   } catch (error) {
@@ -62,4 +54,15 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-exports.user = async (req, res) => {};
+exports.currentUser = async (req, res) => {
+  return res.json(req.user);
+};
+
+function generateAccessToken(user) {
+  const options = { expiresIn: '12h' };
+  const payload = { user: { id: user.ID, username: user.username } };
+
+  const accessToken = jwt.sign(payload, keys.JWT_SECRET, options);
+
+  return accessToken;
+}
