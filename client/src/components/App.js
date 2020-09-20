@@ -6,16 +6,19 @@ import NavBar from "./Menu/NavBar";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Menu from "./Menu/Menu";
 import CreateChart from "./Menu/CreateChart";
-import Tabs from './Dashboard/Tabs';
+import Tabs from './Dashboard/Tabs'; 
+import SignIn from "./Login-Page/sign-in/sign-in.component";
 
 function App() {
     return (
         <div style={{ height: '100vh' }}>
-            <NavBar/>
+           <NavBar/> 
             {/* <Menu/> */}
             {/* <CreateChart /> */}
-            <Tabs />
-            {/* <ResponsiveGrid/> */}
+             <Tabs />  
+            {/* <SignIn/> */}
+             {/* <ResponsiveGrid/>  */}
+        
         </div>
     );
 }
