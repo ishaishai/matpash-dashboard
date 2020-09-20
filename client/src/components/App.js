@@ -15,7 +15,7 @@ function App() {
            <NavBar/> 
             {/* <Menu/> */}
             {/* <CreateChart /> */}
-             <Tabs />  עןא
+             <Tabs />  
             {/* <SignIn/> */}
              {/* <ResponsiveGrid/>  */}
         
