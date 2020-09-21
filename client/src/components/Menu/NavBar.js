@@ -17,7 +17,7 @@ function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto justify-content-lg-end">
             <Nav.Link href="/Statistics">סטטיסטיקה</Nav.Link>
-            <Nav.Link href="/CreateChart">צור טבלה</Nav.Link>
+            <Nav.Link href="/CreateChart">צור גרף</Nav.Link>
             <Nav.Link href="/">עבור לדשבורד</Nav.Link>
           </Nav>
 
