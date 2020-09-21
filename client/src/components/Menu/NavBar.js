@@ -1,5 +1,7 @@
 import React from "react";
 import { Navbar, Nav } from 'react-bootstrap';
+import './CreateChart.css';
+
 
 const items = [
   { label: "צור טבלה", link: "#chart" },
@@ -9,7 +11,7 @@ const items = [
 
 function NavBar() {
   return (
-      <Navbar bg="primary" expand="lg" className="justify-content-lg-end">
+      <Navbar bg="primary" variant={"dark"} expand="lg" className="justify-content-lg-end">
         <Navbar.Brand href="#home">מתפ״ש</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

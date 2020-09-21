@@ -5,6 +5,7 @@ import Chart from '../Dashboard/Charts';
 import Highcharts from "highcharts";
 import { Form, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import {Button, Container} from 'react-bootstrap/'
+import {dark} from "@material-ui/core/styles/createPalette";
 
 
 
@@ -152,11 +153,11 @@ const CreateChart = props =>{
   return(
       <div>
         <div className="CreateChart">
-          <Navbar bg={{backgroundColor: '#40a8c4'}} expand="lg" className="justify-content-md-end " >
+          <Navbar  expand="lg" variant={"dark"} className="justify-content-md-end navBar-Color" >
             <Navbar.Brand >סוגי טבלה</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="mr-auto" >
+              <Nav className="ml-auto justify-content-lg-end" variant={"dark"} >
                 <a className="nav-link" id="line" className="btn" >Line</a>
                 <a className="nav-link" id= "bar" className="btn">Bar</a>
                 <a className="nav-link" id="pie" className="btn">Pie</a>
@@ -167,28 +168,28 @@ const CreateChart = props =>{
           </Navbar>
 
 
-          <nav className="navbar navbar-expand-md navbar-dark "style={{backgroundColor: '#40a8c4'}}>
-            <button className="navbar-toggler" type="button" data-toggle="collapse basic-navbar-nav"
-                    data-target="#collapsibleNavbar">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse justify-content-md-end" id="collapsibleNavbar" >
-              <ul className="navbar-nav">
-                <li className="nav-item">
-                  <a className="nav-link" id="line" className="btn" >Line</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" id= "bar" className="btn">Bar</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" id="pie" className="btn">Pie</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" id="area" className="btn">Area</a>
-                </li>
-              </ul>
-            </div>
-          </nav>
+          {/*<nav className="navbar navbar-expand-md navbar-dark "style={{backgroundColor: '#40a8c4'}}>*/}
+          {/*  <button className="navbar-toggler" type="button" data-toggle="collapse basic-navbar-nav"*/}
+          {/*          data-target="#collapsibleNavbar">*/}
+          {/*    <span class="navbar-toggler-icon"></span>*/}
+          {/*  </button>*/}
+          {/*  <div className="collapse navbar-collapse justify-content-md-end" id="collapsibleNavbar" >*/}
+          {/*    <ul className="navbar-nav">*/}
+          {/*      <li className="nav-item">*/}
+          {/*        <a className="nav-link" id="line" className="btn" >Line</a>*/}
+          {/*      </li>*/}
+          {/*      <li className="nav-item">*/}
+          {/*        <a className="nav-link" id= "bar" className="btn">Bar</a>*/}
+          {/*      </li>*/}
+          {/*      <li className="nav-item">*/}
+          {/*        <a className="nav-link" id="pie" className="btn">Pie</a>*/}
+          {/*      </li>*/}
+          {/*      <li className="nav-item">*/}
+          {/*        <a className="nav-link" id="area" className="btn">Area</a>*/}
+          {/*      </li>*/}
+          {/*    </ul>*/}
+          {/*  </div>*/}
+          {/*</nav>*/}
 
 
         </div>
@@ -219,7 +220,6 @@ const CreateChart = props =>{
 
         {/*</div>*/}
         <div className="title " >
-          <Container >
             <Form>
               <Form.Row >
                 <Button variant="outline-primary" type="submit" onClick={changeTitle}>
@@ -242,7 +242,6 @@ const CreateChart = props =>{
 
             <Button  variant="outline-success " type="" className="text-lg-center buttonDesign">אישור</Button>
 
-          </Container>
 
         </div>
       </div>
