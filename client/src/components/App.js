@@ -12,11 +12,11 @@ import SignIn from "./Login-Page/sign-in/sign-in.component";
 function App() {
     return (
         <div style={{ height: '100vh' }}>
-           <NavBar/> 
+           {/* <NavBar/>  */}
             {/* <Menu/> */}
             {/* <CreateChart /> */}
-             <Tabs />  
-            {/* <SignIn/> */}
+             {/* <Tabs />   */}
+            <SignIn/>
              {/* <ResponsiveGrid/>  */}
         
         </div>
