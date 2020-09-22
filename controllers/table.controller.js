@@ -6,33 +6,28 @@ exports.getTablesName = async(req, res)=>{
     .then(result =>{
         tbList = result.rows.map( t=> t.table_name)
         res.status(200).json({
-            msg: 'ok',
             tableList: tbList
         })
     }).catch(err =>{
         res.status(404).json({
-            error: err
+            error: err.message
         })
     })
 }
 
 exports.getColFromTable = async(req, res)=>{
-    let { tableName } = req.body;
-    console.log(req.body);
-    tableName = `${tableName} - KV`
-    console.log(tableName);
+    let { table_name } = req.params;
+    table_name = `${table_name} - KV`
 
-    maindbpool.query(`SELECT * FROM "${tableName}" `)
+    maindbpool.query(`SELECT * FROM "${table_name}" `)
     .then(result =>{
         cols = Object.values(result.rows[0]);
-        console.log(cols);
         res.status(200).json({
-            msg: 'ok',
             colNamesList : cols
         })
     }).catch(err =>{
         res.status(404).json({
-            error: err
+            error: err.message
         })
     })
 

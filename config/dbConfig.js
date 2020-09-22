@@ -30,7 +30,7 @@ const dashboarddbpool = new Pool({
     password: "1234",
     host: "localhost",
     port: 5432,
-    database: "matpash",
+    database: "usersdb",
     max: 3000,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
