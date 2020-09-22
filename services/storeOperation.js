@@ -7,13 +7,24 @@ module.exports = async operation => {
       return;
 
     case 'graph_creation':
-      console.log(action.data);
+      await store(operation.username, 'יצירת גרף');
       return;
 
     case 'graph_deletion':
-      console.log(action.data);
+      await store(operation.username, 'מחיקת גרף');
       return;
 
+    case 'dashboard_creation':
+      await store(operation.username, 'יצירת דשבורד');
+      return;
+
+    case 'dashboard_update':
+      await store(operation.username, 'עדכון דשבורד');
+      return;
+
+    case 'dashboard_deletion':
+      await store(operation.username, 'מחיקת דשבורד');
+      return;
     default:
       return;
   }
