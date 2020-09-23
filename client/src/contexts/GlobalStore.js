@@ -14,9 +14,13 @@ const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   const fetchUser = async () => {
-    const res = await axios.get('/api/current_user');
-    const { user } = res.data;
-    dispatch({ type: FETCH_USER, payload: user });
+    try {
+      const res = await axios.get('/api/current_user');
+      const { user } = res.data;
+      dispatch({ type: FETCH_USER, payload: user });
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
   return (
