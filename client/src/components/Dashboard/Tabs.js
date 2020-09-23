@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Tabs, Tab, Dropdown, DropdownButton } from "react-bootstrap";
+import React, { useState, useCallback } from "react";
+import { Tabs, Tab, Dropdown, DropdownButton, Button } from "react-bootstrap";
 import ResponsiveGrid from "./ResponsiveGrid";
-import TabContent from "react-bootstrap/TabContent";
 
 const DashboardTabs = () => {
   let tabsInfo = [
@@ -15,6 +14,8 @@ const DashboardTabs = () => {
     { name: "dashboard3", id: "3" },
     { name: "dashboard4", id: "4" },
   ];
+
+  let layoutAfterChange = null;
 
   const clickAddTabHandler = (e) => {
     if (e == "addTab") {
@@ -61,9 +62,20 @@ const DashboardTabs = () => {
 
   const [dashboards, setDashboards] = useState(dashboardDropDown);
 
+  const setLayout = useCallback((event) => {
+    layoutAfterChange = event;
+  }, []);
+
+  const saveLayout = () => {
+    console.log(layoutAfterChange);
+  };
+
   const NavTabs = () => (
     <div>
       {dashboards}
+      <Button className="saveLayoutBtn" onClick={saveLayout}>
+        Save Layout
+      </Button>
       <Tabs className="Tab" defaultActiveKey={"home"} onSelect={clickAddTabHandler}>
         {tabsInfo.map((tab, i) => (
           <Tab
@@ -80,7 +92,7 @@ const DashboardTabs = () => {
             }
             eventKey={tab.eventKey}
             onEnter={handleDashboard}>
-            <ResponsiveGrid />
+            <ResponsiveGrid onLayoutChange={setLayout} />
           </Tab>
         ))}
         <Tab className="addTabBtn" title="+" eventKey="addTab"></Tab>
