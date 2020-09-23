@@ -8,8 +8,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Statistics from './Statistics/Statistics';
 import NavBar from "./Menu/NavBar";
 import CreateChart from "./Menu/CreateChart";
-
-import Tabs from './Dashboard/Tabs'; 
+import Tabs from './Dashboard/Tabs';
 import SignIn from "./Login-Page/sign-in/sign-in.component";
 
 
@@ -22,7 +21,7 @@ function App() {
                 <Route path="/" exact component={Tabs}/>
                 <Route path="/CreateChart" component={CreateChart}/>
                 <Route path="/Statistics" component={Statistics}/>
-
+                <Route path="/SignIn" component={SignIn}/>
             </Switch>
         </div>
     );
