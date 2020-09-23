@@ -56,6 +56,11 @@ exports.getDashboardById = async (req, res) => {
                 layoutIndex: graph.layoutIndex
             }
 
+            let [table, col] = graphToAdd.xAxisColumn.split('.');
+
+            result = await maindbpool.query(`select "${col}" from public."${table} - KV"`);
+
+            graphToAdd.xAxisColumn = result.rows[0][col];
 
             const xAxisColumnName = graph.xAxisColumn.split('.')[1];
             const xAxisTableName = graph.xAxisColumn.split('.')[0];
@@ -93,8 +98,14 @@ exports.getDashboardById = async (req, res) => {
                 const tableName = series.serieName.split('.')[0]
                 const columnName = series.serieName.split('.')[1]
 
+                
+                let [table, col] = series.serieName.split('.');
+                
+                result = await maindbpool.query(`select "${col}" from public."${table} - KV"`);
+    
+
                 const seriesToAdd = {
-                    name: series.serieName, //maybe cahnge this to name
+                    name: result.rows[0][col],
                     colr: series.color,
                     data: []
                 }
