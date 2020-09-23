@@ -9,21 +9,22 @@ import Statistics from './Statistics/Statistics';
 import NavBar from "./Menu/NavBar";
 import CreateChart from "./Menu/CreateChart";
 import Tabs from './Dashboard/Tabs';
-import SignIn from "./Login-Page/sign-in/sign-in.component";
+import SignIn from "./Login/sign-in/sign-in.component";
 
 
 function App() {
     return (
-        <div style={{ height: '100vh' }}>
-            <NavBar/>
-            <Switch>
-
-                <Route path="/" exact component={Tabs}/>
-                <Route path="/CreateChart" component={CreateChart}/>
-                <Route path="/Statistics" component={Statistics}/>
-                <Route path="/SignIn" component={SignIn}/>
-            </Switch>
-        </div>
+      <div style={{ height: '100vh' }}>
+        <BrowserRouter>
+          <NavBar />
+          <Switch>
+            <Route path="/" exact component={Tabs} />
+            <Route path="/CreateChart" component={CreateChart} />
+            <Route path="/Statistics" component={Statistics} />
+            <Route path="/SignIn" component={SignIn} />
+          </Switch>
+        </BrowserRouter>
+      </div>
     );
 }
 

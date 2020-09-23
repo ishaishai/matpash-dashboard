@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Nav } from 'react-bootstrap';
 import './CreateChart.css';
-import SignIn from "../Login-Page/sign-in/sign-in.component";
+import SignIn from "../Login/sign-in/sign-in.component";
 
 
 const items = [

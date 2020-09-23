@@ -55,7 +55,7 @@ exports.registerUser = async (req, res) => {
 };
 
 exports.currentUser = async (req, res) => {
-  return res.json(req.user);
+  return res.json({ user: req.user });
 };
 
 function generateAccessToken(user) {
