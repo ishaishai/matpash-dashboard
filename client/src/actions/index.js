@@ -19,7 +19,7 @@ export const login = user => async dispatch => {
 
     dispatch({ type: FETCH_USER, payload: response.data });
   } catch (error) {
-    dispatch(getErrors(error.response.data.error));
+    dispatch(getErrors(error.response.data));
     dispatch({ type: AUTH_ERROR });
     dispatch({ type: FETCH_USER, payload: false });   
   }
@@ -28,7 +28,7 @@ export const login = user => async dispatch => {
 export const getErrors = msg => {
   return {
     type: GET_ERRORS,
-    payload: { msg },
+    payload: msg,
   };
 };
 

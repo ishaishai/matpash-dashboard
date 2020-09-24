@@ -13,12 +13,16 @@ exports.login = async (req, res) => {
     const user = await userService.findUser(username);
 
     if (!user) {
-      return res.status(400).json({ error: 'username does not exists' });
+      return res
+        .status(400)
+        .json({ username: 'שם משתמש אינו קיים' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ error: 'incorrect password' });
+      return res
+        .status(400)
+        .json({ password: 'סיסמא שגויה' } );
     }
 
     const accessToken = generateAccessToken(user);
@@ -39,7 +43,9 @@ exports.registerUser = async (req, res) => {
     const userExists = await userService.findUser(user.username);
 
     if (userExists) {
-      return res.status(400).json({ error: 'username is already exists' });
+      return res
+        .status(400)
+        .json({ username: 'שם משתמש תפוס' } );
     }
 
     // Hash passwords before saving

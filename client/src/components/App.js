@@ -10,10 +10,9 @@ import Statistics from './Statistics/Statistics';
 import NavBar from './Menu/NavBar';
 import CreateChart from './Menu/CreateChart';
 import Tabs from './Dashboard/Tabs';
-import SignIn from './Login/sign-in/sign-in.component';
+import Login from './Login/Login';
 import Permissions from './Permissions/index';
 import Loader from './Loader';
-
 
 const App = ({ fetchUser, auth }) => {
   useEffect(() => {
@@ -22,10 +21,10 @@ const App = ({ fetchUser, auth }) => {
 
   switch (auth) {
     case null:
-      return <Loader/>
+      return <Loader />;
 
     case false:
-      return <SignIn />;
+      return <Login />;
 
     default:
       return (
