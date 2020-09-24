@@ -20,23 +20,24 @@ $main-color: black;
     display: block;
     width: 100%;
     border: none;
-    
+    direction: rtl;
+    text-align: right;
     border-radius: 0;
     border-bottom: 1px solid $sub-color;
     margin: 25px 0;
 
-    &:focus {
-      outline: none;
-    }
+    // &:focus {
+    //   outline: none;
+    // }
 
-    &:focus ~ .form-input-label {
-      @include shrinkLabel();
-    }
+    // &:focus ~ .form-input-label {
+    //   @include shrinkLabel();
+    // }
   }
 
-  input[type='password'] {
-    letter-spacing: 0.3em;
-  }
+  // input[type='password'] {
+  //   letter-spacing: 0.3em;
+  // }
 
   .form-input-label {
     color: $sub-color;
@@ -46,12 +47,12 @@ $main-color: black;
     pointer-events: none;
     right: 5px;
     top: 10px;
-    transition: 300ms ease all; 
+    //transition: 300ms ease all;
     // direction: rtl;
     // text-align: right;
 
-    &.shrink {
-      @include shrinkLabel();
-    }
+    // &.shrink {
+    //   @include shrinkLabel();
+    // }
   }
 }

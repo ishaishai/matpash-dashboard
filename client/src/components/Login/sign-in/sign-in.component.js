@@ -41,7 +41,7 @@ class SignIn extends React.Component {
               type="text"
               handleChange={this.handlechange}
               value={this.state.UserName}
-              label="שם משתמש"
+              placeholder="שם משתמש"
               required
             />
             <FormInput
@@ -49,7 +49,7 @@ class SignIn extends React.Component {
               type="password"
               handleChange={this.handlechange}
               value={this.state.Password}
-              label="סיסמא"
+              placeholder="סיסמא"
               required
             />
             <CustomButton type="submit" onClick={this.senduserdetails}>
