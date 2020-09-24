@@ -1,4 +1,4 @@
-const db = require('../db');
+const {usersQuery} = require('../db');
 
 module.exports = async operation => {
   switch (operation.type) {
@@ -31,8 +31,8 @@ module.exports = async operation => {
 };
 
 async function store(username, operation) {
-  await db.query(
-    `INSERT INTO "eventsTable" 
+  await usersQuery(
+    `INSERT INTO public."eventsTable" 
       ("username", "operation", "date")
       VALUES ($1, $2, $3)`,
     [username, operation, new Date().toLocaleString()]

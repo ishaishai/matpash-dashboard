@@ -1,10 +1,10 @@
-const db = require('../db');
+const { usersQuery } = require('../db');
 
 class StatisticsService {
   async getStatistics() {
-    const { rows } = await db.query(
+    const { rows } = await usersQuery(
       `SELECT concat("firstName", ' ', "lastName") as "name", "operation", "role", "organization", "date"
-    FROM "eventsTable" JOIN "usersInfoTable" USING("username")`
+    FROM public."eventsTable" JOIN public."usersInfoTable" USING("username")`
     );
     return rows;
   }

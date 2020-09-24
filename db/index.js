@@ -28,14 +28,14 @@ const usersdbpool = new Pool({
   password: '1234',
   host: 'localhost',
   port: 5432,
-  database: 'matpash',
+  database: 'UsersDB',
   max: 3000,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
 });
 
 module.exports = {
-  query: (sql, params) => usersdbpool.query(sql, params),
+  usersQuery: (sql, params) => usersdbpool.query(sql, params),
   maindbpool,
   dashboarddbpool
 };

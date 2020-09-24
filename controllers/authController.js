@@ -26,9 +26,9 @@ exports.login = async (req, res) => {
 
     await storeOperation({ type: 'login', username });
 
-    return res.json({ id: user.ID, username: user.username });
+    return res.json({ id: user.id, username: user.username });
   } catch (error) {
-    console.log(error);
+    return res.json({});
   }
 };
 
@@ -41,6 +41,7 @@ exports.registerUser = async (req, res) => {
     if (userExists) {
       return res.status(400).json({ error: 'username is already exists' });
     }
+
     // Hash passwords before saving
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -50,12 +51,17 @@ exports.registerUser = async (req, res) => {
 
     return res.send({});
   } catch (error) {
-    return res.json({ error });
+    return res.status(400).json({ error });
   }
 };
 
 exports.currentUser = async (req, res) => {
-  return res.json({ user: req.user });
+  return res.json(req.user);
+};
+
+exports.logout = async (req, res) => {
+  res.clearCookie('token');
+  return res.redirect('/');
 };
 
 function generateAccessToken(user) {

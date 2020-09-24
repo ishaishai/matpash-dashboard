@@ -1,11 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import GlobalProvider from './contexts/GlobalStore';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
+import reduxThunk from 'redux-thunk';
+import reducers from './reducers';
 import App from './components/App';
 
+const enhancers = [
+  applyMiddleware(reduxThunk),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+];
+
+const store = createStore(reducers, compose(...enhancers));
+
 ReactDOM.render(
-  <GlobalProvider>
+  <Provider store={store}>
     <App />
-  </GlobalProvider>,
-  document.getElementById('root')
+  </Provider>,
+  document.querySelector('#root')
 );
