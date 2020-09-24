@@ -4,7 +4,7 @@ const { JWT_SECRET } = require('../config/keys');
 module.exports = async (req, res, next) => {
   const token = req.cookies.token || '';
   if (!token) {
-    return res.status(401).json({ error: 'Please login' });
+    return res.status(401).json({});
   }
 
   try {

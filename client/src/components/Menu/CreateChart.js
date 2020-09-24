@@ -3,11 +3,8 @@ import './CreateChart.css';
 // import { Button } from '@material-ui/core';
 import Chart from '../Dashboard/Charts';
 import Highcharts from "highcharts";
-import { Form, Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import {Button, Container} from 'react-bootstrap/'
-import {dark} from "@material-ui/core/styles/createPalette";
-
-
+import { Form, Navbar, Nav} from 'react-bootstrap';
+import {Button } from 'react-bootstrap/'
 
 
 const CreateChart = props =>{

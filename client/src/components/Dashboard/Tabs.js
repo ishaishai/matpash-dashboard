@@ -18,7 +18,7 @@ const DashboardTabs = () => {
   let layoutAfterChange = null;
 
   const clickAddTabHandler = (e) => {
-    if (e == "addTab") {
+    if (e === "addTab") {
       tabsInfo.push({ title: "home3", eventKey: "home3" });
       setTabs(NavTabs);
     }
@@ -26,10 +26,10 @@ const DashboardTabs = () => {
 
   const removeTabHandler = (event, title) => {
     event.stopPropagation();
-    let obj = tabsInfo.find((o) => o.title == title);
+    // let obj = tabsInfo.find((o) => o.title == title);
 
     tabsInfo = tabsInfo.filter(function (el) {
-      return el.title != title;
+      return el.title !== title;
     });
 
     setTabs(NavTabs);
