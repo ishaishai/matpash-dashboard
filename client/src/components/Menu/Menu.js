@@ -17,7 +17,6 @@ const Menu = (props) => {
 
   const backDropClickHandler = () => {
     setMenuOpen(false);
-    console.log("test2");
   };
 
   const items = [
