@@ -5,7 +5,6 @@ import './sign-in.styles.scss';
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 
-
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
@@ -28,9 +27,15 @@ class SignIn extends React.Component {
       username: this.state.UserName,
       password: this.state.Password,
     };
+
     this.props.login(user);
   };
+
   render() {
+    // if (this.props.error.msg) {
+    //   alert(this.props.error.msg);
+    //   this.props.clearErrors();
+    // }
     return (
       <div style={{ height: '100vh' }} className="image">
         <div className="sign-in">
@@ -41,7 +46,7 @@ class SignIn extends React.Component {
               type="text"
               handleChange={this.handlechange}
               value={this.state.UserName}
-              label="שם משתמש"
+              placeholder="שם משתמש"
               required
             />
             <FormInput
@@ -49,7 +54,7 @@ class SignIn extends React.Component {
               type="password"
               handleChange={this.handlechange}
               value={this.state.Password}
-              label="סיסמא"
+              placeholder="סיסמא"
               required
             />
             <CustomButton type="submit" onClick={this.senduserdetails}>

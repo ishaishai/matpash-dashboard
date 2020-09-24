@@ -34,11 +34,10 @@
 
 
 import React, {Component} from 'react';
-import ReactDOM from "react-dom";
 import Users from "./users_table";
 import User_permission from "./user_permission";
 import User_view_permission from "./user_view_permission";
-import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
+import { Tabs, TabList, Tab} from "react-tabs";
 import 'bootstrap-v4-rtl';
 import './index.scss';
 import './style.css'
@@ -46,9 +45,6 @@ import './style.css'
 import {BrowserRouter as Router,Switch,Route,Link} from "react-router-dom";
 
 class App  extends Component {
-  constructor(props){
-    super(props);
-  }
   render(){
       return (
         <Router>
