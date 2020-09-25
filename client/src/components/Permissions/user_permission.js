@@ -20,26 +20,6 @@ class User_permission extends Component {
     this.handlePageClick = this.handlePageClick.bind(this);
   }
 
-  // componentDidMount() {
-  //   fetch("http://localhost:5000/permissions/getPermission")
-  //     .then(res => res.json())
-  //     .then(
-  //       (result) => {
-  //         this.setState({
-  //           value: result.users
-  //         });
-  //       },
-  //       // Note: it's important to handle errors here
-  //       // instead of a catch() block so that we don't swallow
-  //       // exceptions from actual bugs in components.
-  //       (error) => {
-  //         // this.setState({
-  //         //   isLoaded: true,
-  //         //   error
-  //         // });
-  //       }
-  //     )
-  // }
   receivedData() {
     axios.get('http://localhost:5000/permissions/getPermission').then(res => {
       const datas = res.data.users;

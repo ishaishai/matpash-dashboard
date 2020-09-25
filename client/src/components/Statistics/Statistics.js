@@ -4,11 +4,41 @@ import MaterialTable from 'material-table';
 
 const tableConfig = {
   columns: [
-    { title: 'שם', field: 'name' },
-    { title: 'תפקיד', field: 'role' },
-    { title: 'פעולה', field: 'operation' },
-    { title: 'תאריך', field: 'date' },
-    { title: 'ארגון', field: 'organization' },
+    {
+      title: 'שם',
+      field: 'name',
+      cellStyle: {
+        textAlign: 'right',
+      },
+    },
+    {
+      title: 'תפקיד',
+      field: 'role',
+      cellStyle: {
+        textAlign: 'right',
+      },
+    },
+    {
+      title: 'פעולה',
+      field: 'operation',
+      cellStyle: {
+        textAlign: 'right',
+      },
+    },
+    {
+      title: 'תאריך',
+      field: 'date',
+      cellStyle: {
+        textAlign: 'right',
+      },
+    },
+    {
+      title: 'ארגון',
+      field: 'organization',
+      cellStyle: {
+        textAlign: 'right',
+      },
+    },
   ],
   tableOptions: {
     search: true,
@@ -38,7 +68,7 @@ const Statistics = () => {
   }, []);
 
   return (
-    <div className="container">
+    <div className="container" dir="rtl">
       <MaterialTable
         title="היסטוריית פעילות"
         columns={tableConfig.columns}

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import Users from "./users_table";
 import User_permission from "./user_permission";
 import User_view_permission from "./user_view_permission";
