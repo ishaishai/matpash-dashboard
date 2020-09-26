@@ -4,7 +4,7 @@ const { dashboarddbpool, maindbpool, usersdbpool } = db
 exports.getDashboardById = async (req, res) => {
   const { id } = req.params;
 
-  const userId = '111'; //** here need to get user id from token.
+  const userId = '123456789'; //** here need to get user id from token.
 
   try {
 
@@ -12,12 +12,19 @@ exports.getDashboardById = async (req, res) => {
     const queryPullDashboard = `select dashboard${id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."userId" = '${userId}'`;
     let result = await dashboarddbpool.query(queryPullDashboard);//complete query.
 
-    if (result.rows[0][`dashboard${id}`] === null) throw new Error('user has no permisson to dashboard');
+    if (result.rows[0][`dashboard${id}`] === null || result.rows[0] === undefined) throw new Error('user has no permisson to dashboard');
 
     let graphsExtracted = result.rows[0][`dashboard${id}`].split(',');
 
 
-    graphsExtracted = graphsExtracted.map(num => `'${num}'`).join(',');
+    let tempGraphsExtracted = []
+
+
+    for( num of graphsExtracted){
+      tempGraphsExtracted.push( `'${num}'`)
+    }
+
+    graphsExtracted = tempGraphsExtracted.join(',');
 
     //extract the string of the numbers from '1,2,3' to `'1','2','3'` and use the following
     const queryPullGraphs = `select * from public."graphsInfoTable" where "graphsInfoTable"."index" in (${graphsExtracted})`;
@@ -72,7 +79,6 @@ exports.getDashboardById = async (req, res) => {
       //extract enumerated value of rows for the wanted range 
       let queryGetEnumeratedValues;
       if (!toStr) {
-        console.log('111111');
         queryGetEnumeratedValues = `select "rownum" from (select "${xAxisColumnName}",row_number() over(order by 1) as "rownum"  from public."${xAxisTableName}") as tmp
                 where "${xAxisColumnName}" like '%${fromStr}%';`;
       } else {
@@ -80,10 +86,9 @@ exports.getDashboardById = async (req, res) => {
                 where "${xAxisColumnName}" like '%${fromStr}%' or "${xAxisColumnName}" like '%${toStr}%'`;
       }
 
-      console.log('AAAAAAAAAAAAAAAAAAAAAAA');
-      console.log(queryGetEnumeratedValues);
 
       result = await maindbpool.query(queryGetEnumeratedValues);
+      console.log(result.rows);
       const fromNum = result.rows[0].rownum;
       const toNum = !result.rows[1] ? undefined : result.rows[1].rownum;
 
@@ -96,29 +101,42 @@ exports.getDashboardById = async (req, res) => {
         queryGetXAxisCatagory = `select "${xAxisColumnName}" from (select "${xAxisColumnName}",row_number() over(order by 1) as "rownum"  from public."${xAxisTableName}") as tmp where
                 rownum >=${fromNum} and rownum<=${toNum}`;
       }
-      console.log(queryGetXAxisCatagory);
       result = await maindbpool.query(queryGetXAxisCatagory);
 
-      graphToAdd.xAxisCatagoryRange = result.rows.map(
-        obj => Object.values(obj)[0]
-      );
+      console.log(result.rows);
+
+
+      let tempxAxisCatagoryRange = []
+
+      for(obj of result.rows){
+        tempxAxisCatagoryRange.push(Object.values(obj)[0]);
+      }
+
+      graphToAdd.xAxisCatagoryRange = tempxAxisCatagoryRange;
+
+      console.log("---------- xAxisCatagoryRange: "+graphToAdd.xAxisCatagoryRange);
 
       //get all the series of dashboard and extract from it which series to the right graph by its index
-      const queryDashSeries = `select * from public."dashboard${id}Series"`;
+      const queryDashSeries = `select * from public."dashboard${id}Series" where "dashboard${id}Series"."index" = ${graphToAdd.index}`;
 
       result = await dashboarddbpool.query(queryDashSeries);
 
-      const seriesList = result.rows;
+      let seriesList = result.rows;
+
 
       for (series of seriesList) {
         const tableName = series.serieName.split('.')[0];
         const columnName = series.serieName.split('.')[1];
+        let columnNameResult = await maindbpool.query(`select "${columnName}" from public."${tableName} - KV"`);
+        
+        
 
+        //FIX EHERE EXTRACT OF COLUMN NAME
         const seriesToAdd = {
-          name: series.serieName, //maybe cahnge this to name
+          name: Object.values(columnNameResult.rows[0]), 
           colr: series.color,
-          data: [],
-        };
+          data: []
+        }
 
         //for each serie needed to pull its data so serieName needed to be split by dot and then be used like
         //maybe not use range for series because all data in range of xAxis is enough
@@ -133,14 +151,20 @@ exports.getDashboardById = async (req, res) => {
 
         console.log(querySerie);
         result = await maindbpool.query(querySerie);
+        
+        let tempDataToAdd = []
 
-        const dataToAdd = result.rows.map(obj => Object.values(obj)[0]);
-
+        for(obj of result.rows){  
+          console.log(Object.values(obj)[0]);
+          tempDataToAdd.push(Object.values(obj)[0]);
+        }
+        
+        const dataToAdd = tempDataToAdd;
         seriesToAdd.data = dataToAdd;
 
         graphToAdd.series.push(seriesToAdd);
       }
-
+      
       dashboardToReturn.graphList.push(graphToAdd);
     }
 
@@ -354,9 +378,13 @@ exports.addNewDashboard = async (req, res) => {
 
       //next needed to update series for dashboard (for each graph so still in iteration)
       //pull graph series object and then use next statement
-      result = await dashboarddbpool.query(`INSERT INTO public."dashboard${index}Series"(
+
+      for (series of graph.series) {
+
+        result = await dashboarddbpool.query(`INSERT INTO public."dashboard${index}Series"(
                 index, "serieName", "serieRange", color)
-                VALUES ((select max(index) from public."graphsInfoTable"), '${graph.series.name}', '${graph.series.range}', '${graph.series.color}');`);
+                VALUES ((select max(index) from public."graphsInfoTable"), '${series.name}', '${series.range}', '${series.color}');`);
+      }
     }
 
 
@@ -395,7 +423,6 @@ exports.updateDashboardById = async (req, res) => {
 }
 
 exports.addNewGraphToDashboard = async (req, res) => {
-
   const { dashboardId, graph } = req.body;
 
 
