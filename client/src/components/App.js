@@ -20,11 +20,11 @@ const App = ({ fetchUser, auth }) => {
   }, [fetchUser]);
 
   switch (auth) {
-    case null:
-      return <Loader />;
+    // case null:
+    //   return <Loader />;
 
-    case false:
-      return <Login />;
+    // case false:
+    //   return <Login />;
 
     default:
       return (
