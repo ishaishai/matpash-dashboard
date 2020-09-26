@@ -30,3 +30,35 @@
         ]
     }
 }
+
+
+//how add new graph to dashboard body should look like:
+
+{
+    "dashboardId": "6",
+    "graph": {
+            "type": "line",
+            "title": "Title2",
+            "subtitle": "subtitle2",
+            "xAxisTitle": "xTitle2",
+            "yAxisTitle": "yTitle2",
+            "xAxisColumn": "סיוע.A1",
+            "yAxisColumn": "",
+            "xAxisCatagoryRange": "ינואר-יולי",
+            "yAxisCatagoryRange": "",
+            "layout": {
+                "position": "1",
+                "width": 1,
+                "height": 1,
+                "xPos": 1,
+                "yPos": 1,
+                "layoutIndex": 1
+            },
+            "legend": true,
+            "series": {
+                "name": "סיוע.H1",
+                "range": "מרץ-יולי",
+                "color": "red"
+            }
+        }
+}
