@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { login } from '../../actions';
+import { withRouter } from 'react-router-dom';
+import { login, clearErrors } from '../../actions';
 import './styles.scss';
 import logo from '../../assets/Matpash.png';
 
-const SignIn = ({ login, error }) => {
+const SignIn = ({ login, errors, clearErrors, isLoading, history }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = e => {
     e.preventDefault();
+    clearErrors();
     if (username && password) {
-      login({ username, password });
+      login({ username, password }, history);
     }
     setUsername('');
     setPassword('');
@@ -27,8 +29,8 @@ const SignIn = ({ login, error }) => {
           style={{ marginBottom: '40px' }}
         ></img>
         <h1 style={{ marginBottom: '40px' }}> ברוכים הבאים </h1>
-        <form onSubmit={handleLogin} className="ui big form">
-          <div className={`field ${error.msg?.username ? 'error' : ''}`}>
+        <form onSubmit={handleLogin} className="ui big form" dir="rtl">
+          <div className="field">
             <input
               name="UserName"
               type="text"
@@ -38,11 +40,11 @@ const SignIn = ({ login, error }) => {
               placeholder="שם משתמש"
               required
             />
-            {error.msg?.username && (
-              <h4 className="ui red header">{error.msg.username}</h4>
+            {errors?.username && (
+              <h4 className="ui red header">{errors.username}</h4>
             )}
           </div>
-          <div className={`field ${error.msg?.password ? 'error' : ''}`}>
+          <div className="field">
             <input
               name="Password"
               type="password"
@@ -52,13 +54,13 @@ const SignIn = ({ login, error }) => {
               placeholder="סיסמא"
               required
             />
-            {error.msg?.password && (
-              <h4 className="ui red header">{error.msg.password}</h4>
-            )}
           </div>
+          {errors?.password && (
+            <h4 className="ui red header">{errors.password}</h4>
+          )}
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <button
-              className="custom-button ui white button"
+              className={`ui primary ${isLoading ? 'loading' : ''} button`}
               type="submit"
               onClick={handleLogin}
             >
@@ -71,6 +73,11 @@ const SignIn = ({ login, error }) => {
   );
 };
 
-const mapStateToProps = ({ error }) => ({ error });
+const mapStateToProps = ({ auth, errors }) => ({
+  isLoading: auth.isLoading,
+  errors,
+});
 
-export default connect(mapStateToProps, { login })(SignIn);
+export default connect(mapStateToProps, { login, clearErrors })(
+  withRouter(SignIn)
+);

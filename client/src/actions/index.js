@@ -1,5 +1,11 @@
 import axios from 'axios';
-import { AUTH_ERROR, CLEAR_ERRORS, FETCH_USER, GET_ERRORS } from './types';
+import {
+  CLEAR_ERRORS,
+  FETCH_USER,
+  GET_ERRORS,
+  LOADING,
+  LOG_OUT,
+} from './types';
 
 export const fetchUser = () => async dispatch => {
   try {
@@ -7,28 +13,35 @@ export const fetchUser = () => async dispatch => {
 
     dispatch({ type: FETCH_USER, payload: response.data });
   } catch (error) {
-    dispatch(getErrors(error.response.data.error));
-    dispatch({ type: AUTH_ERROR });
+    dispatch(getErrors(error.response.data));
     dispatch({ type: FETCH_USER, payload: false });
   }
 };
 
-export const login = user => async dispatch => {
+export const login = (user, history) => async dispatch => {
+  dispatch({ type: LOADING, payload: true });
   try {
     const response = await axios.post('/api/login', user);
 
     dispatch({ type: FETCH_USER, payload: response.data });
   } catch (error) {
     dispatch(getErrors(error.response.data));
-    dispatch({ type: AUTH_ERROR });
-    dispatch({ type: FETCH_USER, payload: false });   
+    dispatch({ type: FETCH_USER, payload: false });
   }
 };
 
-export const getErrors = msg => {
+export const logout = () => {
+  return {
+    type: LOG_OUT,
+  };
+};
+
+export const fetchStatistics = () => async dispatch => {};
+
+export const getErrors = error => {
   return {
     type: GET_ERRORS,
-    payload: msg,
+    payload: error,
   };
 };
 

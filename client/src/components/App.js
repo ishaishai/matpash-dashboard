@@ -12,35 +12,47 @@ import CreateChart from './Menu/CreateChart';
 import Tabs from './Dashboard/Tabs';
 import Login from './Login/Login';
 import Permissions from './Permissions/index';
-import Loader from './Loader';
+import ProtectedRoute from './ProtectedRoute';
 
 const App = ({ fetchUser, auth }) => {
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
 
-  switch (auth) {
-    case null:
-      return <Loader />;
-
-    case false:
-      return <Login />;
-
-    default:
-      return (
-        <div style={{ height: '100vh' }}>
-          <BrowserRouter>
-            <NavBar />
-            <Switch>
-              <Route path="/" exact component={Tabs} />
-              <Route path="/CreateChart" component={CreateChart} />
-              <Route path="/Statistics" component={Statistics} />
-              <Route path="/Permissions" component={Permissions} />
-            </Switch>
-          </BrowserRouter>
-        </div>
-      );
-  }
+  return (
+    <div style={{ height: '100vh' }}>
+      <BrowserRouter>
+        <ProtectedRoute isLoggedIn={auth.user} component={NavBar} />
+        <Switch>
+          <ProtectedRoute
+            isLoggedIn={auth.user}
+            path="/"
+            exact
+            component={Tabs}
+          />
+          <ProtectedRoute
+            isLoggedIn={auth.user}
+            path="/create-chart"
+            exact
+            component={CreateChart}
+          />
+          <ProtectedRoute
+            isLoggedIn={auth.user}
+            path="/statistics"
+            exact
+            component={Statistics}
+          />
+          <ProtectedRoute
+            isLoggedIn={auth.user}
+            path="/permissions"
+            exact
+            component={Permissions}
+          />
+          <Route path="/login" component={Login} />
+        </Switch>
+      </BrowserRouter>
+    </div>
+  );
 };
 
 const mapStateToProps = ({ auth }) => ({ auth });

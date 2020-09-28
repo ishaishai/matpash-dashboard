@@ -13,16 +13,12 @@ exports.login = async (req, res) => {
     const user = await userService.findUser(username);
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ username: 'שם משתמש אינו קיים' });
+      return res.status(400).send({ username: 'שם משתמש אינו קיים' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res
-        .status(400)
-        .json({ password: 'סיסמא שגויה' } );
+      return res.status(400).json({ password: 'סיסמא שגויה' });
     }
 
     const accessToken = generateAccessToken(user);
@@ -32,7 +28,7 @@ exports.login = async (req, res) => {
 
     return res.json({ id: user.id, username: user.username });
   } catch (error) {
-    return res.json({});
+    return res.status(400).json({ error });
   }
 };
 
@@ -43,9 +39,7 @@ exports.registerUser = async (req, res) => {
     const userExists = await userService.findUser(user.username);
 
     if (userExists) {
-      return res
-        .status(400)
-        .json({ username: 'שם משתמש תפוס' } );
+      return res.status(400).json({ username: 'שם משתמש תפוס' });
     }
 
     // Hash passwords before saving
@@ -71,7 +65,7 @@ exports.logout = async (req, res) => {
 };
 
 function generateAccessToken(user) {
-  const options = { expiresIn: '12h' };
+  const options = { expiresIn: '1h' };
   const payload = { user: { id: user.ID, username: user.username } };
 
   const accessToken = jwt.sign(payload, keys.JWT_SECRET, options);
