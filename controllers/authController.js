@@ -36,10 +36,16 @@ exports.registerUser = async (req, res) => {
   const user = req.body;
 
   try {
-    const userExists = await userService.findUser(user.username);
+    const usernameExists = await userService.findByUsername(user.username);
 
-    if (userExists) {
+    if (usernameExists) {
       return res.status(400).json({ username: 'שם משתמש תפוס' });
+    }
+
+    const userIdExists = await userService.findById(user.id);
+
+    if (userIdExists) {
+      return res.status(400).json({ id: 'ת.ז בשימוש' });
     }
 
     // Hash passwords before saving

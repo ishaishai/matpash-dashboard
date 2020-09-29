@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   CLEAR_ERRORS,
   FETCH_USER,
+  CREATE_USER,
   GET_ERRORS,
   LOADING,
   LOG_OUT,
@@ -18,7 +19,7 @@ export const fetchUser = () => async dispatch => {
   }
 };
 
-export const login = (user, history) => async dispatch => {
+export const login = user => async dispatch => {
   dispatch({ type: LOADING, payload: true });
   try {
     const response = await axios.post('/api/login', user);
@@ -34,6 +35,18 @@ export const logout = () => {
   return {
     type: LOG_OUT,
   };
+};
+
+export const createUser = (user, history) => async dispatch => {
+  dispatch({ type: LOADING, payload: true });
+  try {
+    const response = await axios.post('/api/register', user);
+
+    history.push('/');
+    dispatch({ type: CREATE_USER, payload: response.data });
+  } catch (error) {
+    dispatch(getErrors(error.response.data));
+  }
 };
 
 export const fetchStatistics = () => async dispatch => {};
