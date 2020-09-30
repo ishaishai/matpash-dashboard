@@ -50,7 +50,7 @@ const CreateUser = ({
   };
 
   return (
-    <div className="container" dir="rtl">
+    <div className="container" dir="rtl" style={{ marginTop: '50px' }}>
       <form className="ui error form" onSubmit={handleSubmit}>
         <h2 className="ui dividing header">יצירת משתמש</h2>
         {renderFormFields()}

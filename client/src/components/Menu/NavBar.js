@@ -25,7 +25,7 @@ const NavBar = ({ logout }) => {
           <Nav.Link href="/api/logout" onClick={() => logout()}>
             יציאה
           </Nav.Link>
-          <Nav.Link href="/users">משתמשים</Nav.Link>
+          <Nav.Link href="/users">משתמש חדש</Nav.Link>
           <Nav.Link href="/permissions">הרשאות</Nav.Link>
           <Nav.Link href="/statistics">סטטיסטיקה</Nav.Link>
           <Nav.Link href="/create-chart">צור גרף</Nav.Link>
