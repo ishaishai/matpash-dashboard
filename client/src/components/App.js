@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { fetchUser } from '../actions';
 
 import Statistics from './Statistics/Statistics';
+import CreateUser from '../components/Users/CreateUser';
 import NavBar from './Menu/NavBar';
 import CreateChart from './Menu/CreateChart';
 import Tabs from './Dashboard/Tabs';
@@ -41,6 +42,12 @@ const App = ({ fetchUser, auth }) => {
             path="/statistics"
             exact
             component={Statistics}
+          />
+          <ProtectedRoute
+            isLoggedIn={auth.user}
+            path="/users"
+            exact
+            component={CreateUser}
           />
           <ProtectedRoute
             isLoggedIn={auth.user}

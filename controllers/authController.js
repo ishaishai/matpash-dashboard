@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await userService.findUser(username);
+    const user = await userService.findByUsername(username);
 
     if (!user) {
       return res.status(400).send({ username: 'שם משתמש אינו קיים' });
@@ -36,10 +36,16 @@ exports.registerUser = async (req, res) => {
   const user = req.body;
 
   try {
-    const userExists = await userService.findUser(user.username);
+    const usernameExists = await userService.findByUsername(user.username);
 
-    if (userExists) {
+    if (usernameExists) {
       return res.status(400).json({ username: 'שם משתמש תפוס' });
+    }
+
+    const userIdExists = await userService.findById(user.id);
+
+    if (userIdExists) {
+      return res.status(400).json({ id: 'ת.ז בשימוש' });
     }
 
     // Hash passwords before saving

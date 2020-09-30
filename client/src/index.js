@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import reduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import App from './components/App';
-import ManageUsers from './components/Users/ManageUsers';
 
 const enhancers = [
   applyMiddleware(reduxThunk),
@@ -16,8 +15,7 @@ const store = createStore(reducers, compose(...enhancers));
 
 ReactDOM.render(
   <Provider store={store}>
-    {/* <App /> */}
-    <ManageUsers/>
+    <App />
   </Provider>,
   document.querySelector('#root')
 );
