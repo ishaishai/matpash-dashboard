@@ -19,12 +19,13 @@ export const fetchUser = () => async dispatch => {
   }
 };
 
-export const login = user => async dispatch => {
+export const login = (user, history) => async dispatch => {
   dispatch({ type: LOADING, payload: true });
   try {
     const response = await axios.post('/api/login', user);
 
     dispatch({ type: FETCH_USER, payload: response.data });
+    history.push('/');
   } catch (error) {
     dispatch(getErrors(error.response.data));
     dispatch({ type: FETCH_USER, payload: false });

@@ -7,16 +7,20 @@ import { formFields, formSelectionFields } from './formFields';
 import FormField from './FormField';
 
 const renderFormFields = () =>
-  formFields.map(({ name, label }) => (
-    <Field key={name} name={name} label={label} component={FormField} />
+  formFields.map(({ name, label}) => (
+    <Field
+      key={name}
+      name={name}
+      label={label}
+      component={FormField}
+    />
   ));
 
 const renderSelectionFields = () =>
   formSelectionFields.map(({ name, label, placeholder, options }) => (
-    <div>
+    <div className="field" key={name}>
       <label>{label}</label>
       <Field
-        key={name}
         name={name}
         label={label}
         placeholder={placeholder}
@@ -32,6 +36,8 @@ const renderSelectionFields = () =>
 
 const CreateUser = ({
   formValues,
+  pristine,
+  invalid,
   createUser,
   errors,
   clearErrors,
@@ -52,13 +58,14 @@ const CreateUser = ({
         <button
           type="submit"
           className="ui button primary"
+          disabled={pristine || invalid}
           style={{ marginTop: '10px' }}
         >
           צור משתמש
         </button>
         {errors &&
           Object.keys(errors).map(key => (
-            <div className="ui error message">{<p>{errors[key]}</p>}</div>
+            <div className="ui error message" key={key}>{<p>{errors[key]}</p>}</div>
           ))}
       </form>
     </div>
@@ -97,8 +104,8 @@ const validate = ({
   }
   if (!id) {
     errors.id = 'שדה חובה';
-  } else if (id.length < 9) {
-    errors.id = 'חייב להכיל לפחות 9 תווים';
+  } else if (id.length !== 9) {
+    errors.id = 'חייב להכיל 9 תווים';
   } else if (!/^\d+$/.test(id)) {
     errors.id = 'חייב להכיל ספרות בלבד';
   }

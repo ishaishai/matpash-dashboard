@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await userService.findUser(username);
+    const user = await userService.findByUsername(username);
 
     if (!user) {
       return res.status(400).send({ username: 'שם משתמש אינו קיים' });

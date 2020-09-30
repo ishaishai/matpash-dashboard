@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import { login, clearErrors } from '../../actions';
 import './styles.scss';
 import logo from '../../assets/Matpash.png';
 
-const SignIn = ({ login, errors, clearErrors, isLoading, history }) => {
+const Login = ({ login, errors, clearErrors, isLoading, history }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -79,5 +79,5 @@ const mapStateToProps = ({ auth, errors }) => ({
 });
 
 export default connect(mapStateToProps, { login, clearErrors })(
-  withRouter(SignIn)
+  withRouter(Login)
 );
