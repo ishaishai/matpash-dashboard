@@ -51,7 +51,7 @@ function ResponsiveGrid() {
 
   const getDashboard = async () => {
     const result = await axios.get(
-      'http://localhost:5000/dashboard/get-by-id/1'
+      '/api/dashboard/get-by-id/1'
     );
     const { dashb } = result.data.dashboard.graphList;
 

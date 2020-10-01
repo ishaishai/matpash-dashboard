@@ -59,7 +59,7 @@ const Statistics = () => {
   const fetchStatistics = async () => {
     const response = await axios.get('/api/statistics');
     const { statistics } = response.data;
-    setData(statistics);
+    setData(statistics.reverse());
     setLoading(false);
   };
 

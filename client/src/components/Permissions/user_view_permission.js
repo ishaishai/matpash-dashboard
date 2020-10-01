@@ -16,55 +16,34 @@ class User_view_permission extends Component {
         padding: '10px',
         fontFamily: 'Arial',
       },
+      index: 0,
     };
     this.handlePageClick = this.handlePageClick.bind(this);
   }
 
-  // componentDidMount() {
-  //     fetch("http://localhost:5000/view/getViewPermission")
-  //       .then(res => res.json())
-  //       .then(
-  //         (result) => {
-  //           this.setState({
-  //             value: result.users
-  //           });
-  //         },
-  //         // Note: it's important to handle errors here
-  //         // instead of a catch() block so that we don't swallow
-  //         // exceptions from actual bugs in components.
-  //         (error) => {
-  //           // this.setState({
-  //           //   isLoaded: true,
-  //           //   error
-  //           // });
-  //         }
-  //       )
-  //   }
-
   receivedData() {
-    axios.get('http://localhost:5000/view/getViewPermission').then(res => {
-      const datas = res.data.users;
+    axios.get('/api/dashboard/privilages').then(res => {
+      const datas = res.data.dashboardsPriviledges;
       const slice = datas.slice(
         this.state.offset,
         this.state.offset + this.state.perPage
       );
-      {
-        console.log(slice);
-      }
-      const postData = slice.map(pd => (
+      const postData = slice.map((pd,idx) => (
         <div key={pd['date']} key={pd.id} className="row">
-          <div className="col-1 border text-center">id</div>
-          <div className="col-1 border text-center">{pd['username']} </div>
+          <div className="col-1 border text-center">
+            {idx}
+          </div>
+          <div className="col-1 border text-center">{pd['userId']} </div>
           <div className="col-1 border text-center">
             <input
               className=""
               type="checkbox"
-              checked={pd['act']}
+              checked={pd['dashboard1']}
               value=""
               id=""
             />
           </div>
-          <div className="col-1 border text-center">{pd['date']} </div>
+          {console.log(this.state.currentPage)}
         </div>
       ));
 
@@ -99,17 +78,15 @@ class User_view_permission extends Component {
       <div className="align-items-center">
         <br></br>
         <div className="row">
-          <div className="col-1 border border-dark text-center">ID </div>
+          <div className="col-1 border border-dark text-center"># </div>
+          <div className="col-1 border border-dark text-center">ת.ז </div>
           <div className="col-1 border border-dark text-center">
-            שם משתמשים{' '}
+            דשבורדים מורשים
           </div>
-          <div className="col-1 border border-dark text-center">פעולה</div>
-          <div className="col-1 border border-dark text-center">תאריך</div>
         </div>
         {/* Pagination */}
         <br></br>
         {this.state.postData}
-        {console.log(this.state.perPage)}
         <ReactPaginate
           previousLabel={'<<'}
           nextLabel={'>>'}

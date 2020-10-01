@@ -55,8 +55,11 @@ exports.registerUser = async (req, res) => {
 
     await userService.save(user);
 
+    await storeOperation({ type: 'register', username: req.user.username });
+
     return res.send({});
   } catch (error) {
+    console.log(error);
     return res.status(400).json({ error });
   }
 };

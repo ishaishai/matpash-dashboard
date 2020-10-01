@@ -5,18 +5,18 @@ const maindbpool = new Pool({
   password: '1234',
   host: 'localhost',
   port: 5432,
-  database: 'maindb',
+  database: 'MainDB',
   max: 3000,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
 });
 
-const dashboarddbpool = new Pool({
+const DashboardDBpool = new Pool({
   user: 'matpash',
   password: '1234',
   host: 'localhost',
   port: 5432,
-  database: 'dashboarddb',
+  database: 'DashboardsDB',
   max: 3000,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
@@ -37,5 +37,5 @@ const usersdbpool = new Pool({
 module.exports = {
   usersQuery: (sql, params) => usersdbpool.query(sql, params),
   maindbpool,
-  dashboarddbpool
+  DashboardDBpool,
 };

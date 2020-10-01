@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 
@@ -19,10 +20,9 @@ class User_permission extends Component {
     };
     this.handlePageClick = this.handlePageClick.bind(this);
   }
-
   receivedData() {
-    axios.get('http://localhost:5000/permissions/getPermission').then(res => {
-      const datas = res.data.users;
+    axios.get('/api/permissions').then(res => {
+      const datas = res.data.permissions;
       const slice = datas.slice(
         this.state.offset,
         this.state.offset + this.state.perPage
@@ -33,15 +33,9 @@ class User_permission extends Component {
       const postData = slice.map(pd => (
         <div id={pd.id} key={pd.id} className="row">
           <div className="col-1 border text-center">{pd['id']}</div>
-          <div className="col-1 border text-center">
-            <input
-              className=""
-              type="checkbox"
-              checked={pd['admin']}
-              value=""
-              id=""
-            />
-          </div>
+          <div className="col-1 border text-center">{pd['username']}</div>
+          <div className="col-1 border text-center">{pd['firstName']}</div>
+          <div className="col-1 border text-center">{pd['lastName']}</div>
           <div className="col-1 border text-center">
             <input
               className=""
@@ -105,15 +99,6 @@ class User_permission extends Component {
               id=""
             />
           </div>
-          <div className="col-1 border text-center">
-            <input
-              className=""
-              type="checkbox"
-              checked={pd['dataTable']}
-              value=""
-              id=""
-            />
-          </div>
         </div>
       ));
 
@@ -147,35 +132,88 @@ class User_permission extends Component {
   render() {
     return (
       <div className="align-items-center">
+        <div>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-toggle="modal"
+            data-target="#exampleModalCenter"
+          >
+            שמירת שינויים
+          </button>
+          <div
+            class="modal fade"
+            id="exampleModalCenter"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">
+                    {' '}
+                    שמירת שינויים
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">האם אתה בטוח לביצוע השינויים</div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    ביטול
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-dismiss="modal"
+                  >
+                    שמור
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <br></br>
         <div className="row bg-light text-dark">
-          <div className="col-1 border border-dark text-center">משתמש/ id</div>
-          <div className="col-1 border border-dark text-center">
-            פיצ'רים/משתמש
-          </div>
+          <div className="col-1 border border-dark text-center">ת.ז</div>
+          <div className="col-1 border border-dark text-center">שם משתמש</div>
+          <div className="col-1 border border-dark text-center">שם פרטי</div>
+          <div className="col-1 border border-dark text-center">שם משפחה</div>
           <div className="col-1 border border-dark text-center">צופה</div>
           <div className="col-1 border border-dark text-center">עורך</div>
           <div className="col-1 border border-dark text-center">הדפסת גרף</div>
           <div className="col-1 border border-dark text-center">
-            הורדת תצוגה pdf
+            ייצוא תצוגה pdf
           </div>
           <div className="col-1 border border-dark text-center">
-            הורדת תצוגה תמונה
+            {' '}
+            ייצוא לקובץ jpg{' '}
           </div>
           <div className="col-1 border border-dark text-center">
-            הורדתה לקובץ CSV
+            ייצוא לקובץ CSV
           </div>
           <div className="col-1 border border-dark text-center">
-            הורדה לקובץ XCL
-          </div>
-          <div className="col-1 border border-dark text-center">
-            הצגת טבלת נתונים
+            ייצוא לקובץ XCL
           </div>
         </div>
 
         {/* Pagination */}
         <br></br>
         {this.state.postData}
+
         {console.log(this.state.perPage)}
         <ReactPaginate
           previousLabel={'<<'}

@@ -5,3 +5,4 @@ export const GET_ERRORS = 'get_errors';
 export const CLEAR_ERRORS = 'clear_errors';
 export const LOADING = 'loading';
 export const FETCH_STATISTICS = 'fetch_statistics';
+export const CREATE_USER_SUCCESS = 'create_user_success';

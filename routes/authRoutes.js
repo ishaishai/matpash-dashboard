@@ -3,7 +3,7 @@ const authCtrl = require('../controllers/authController');
 const requireToken = require('../middlewares/requireToken');
 
 router.post('/login', authCtrl.login);
-router.post('/register', authCtrl.registerUser);
+router.post('/register', requireToken, authCtrl.registerUser);
 router.get('/current_user', requireToken, authCtrl.currentUser);
 router.get('/logout', authCtrl.logout);
 

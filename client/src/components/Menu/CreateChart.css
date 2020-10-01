@@ -40,7 +40,7 @@
 }
 .title input {
   direction: RTL;
-  width: 50%;
+  width: 150px;
   border: 2px solid black;
   border-radius: 4px;
   float: right;
@@ -48,6 +48,10 @@
 }
 .title Button {
   float: left;
+}
+
+.title label {
+  text-align: right;
 }
 
 .sendDataBtn {
@@ -71,8 +75,18 @@
   float: left;
 }
 
-.navBar-Color
-{
-  background-color:#219ebc;
+.navBar-Color {
+  background-color: #219ebc;
   color: white;
+}
+
+.dropdown {
+  direction: RTL;
+  width: 150px;
+  float: right;
+  height: 30px;
+}
+
+.list-item {
+  text-align: right;
 }

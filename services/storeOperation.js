@@ -1,9 +1,13 @@
-const {usersQuery} = require('../db');
+const { usersQuery } = require('../db');
 
 module.exports = async operation => {
   switch (operation.type) {
     case 'login':
       await store(operation.username, 'התחברות למערכת');
+      return;
+
+    case 'register':
+      await store(operation.username, 'יצירת משתמש חדש');
       return;
 
     case 'graph_creation':
@@ -25,6 +29,7 @@ module.exports = async operation => {
     case 'dashboard_deletion':
       await store(operation.username, 'מחיקת דשבורד');
       return;
+
     default:
       return;
   }

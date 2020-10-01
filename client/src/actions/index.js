@@ -6,6 +6,7 @@ import {
   GET_ERRORS,
   LOADING,
   LOG_OUT,
+  CREATE_USER_SUCCESS,
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -38,13 +39,12 @@ export const logout = () => {
   };
 };
 
-export const createUser = (user, history) => async dispatch => {
-  dispatch({ type: LOADING, payload: true });
+export const createUser = user => async dispatch => {
+  dispatch({ type: CREATE_USER, payload: true });
   try {
     const response = await axios.post('/api/register', user);
 
-    history.push('/');
-    dispatch({ type: CREATE_USER, payload: response.data });
+    dispatch({ type: CREATE_USER_SUCCESS });
   } catch (error) {
     dispatch(getErrors(error.response.data));
   }

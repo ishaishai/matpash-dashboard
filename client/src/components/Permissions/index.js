@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Users from './users_table';
 import User_permission from './user_permission';
 import User_view_permission from './user_view_permission';
-import { Tabs, TabList, Tab } from 'react-tabs';
+import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import 'bootstrap-v4-rtl';
 import './index.scss';
 import './style.css';
@@ -10,6 +10,9 @@ import './style.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <Router>
@@ -19,13 +22,13 @@ class App extends Component {
           </nav>
           <div className="container-fluid">
             <Switch>
-              <Route path="/Permissions/viewPerms">
+              <Route path="/viewPerms">
                 <User_view_permission />
               </Route>
-              <Route path="/Permissions/users">
+              <Route path="/users">
                 <Users />
               </Route>
-              <Route path="/Permissions/perms">
+              <Route path="/perms">
                 <User_permission />
               </Route>
             </Switch>
@@ -65,7 +68,7 @@ class NavTabs extends Component {
           <Tab>
             <Link
               className="navbar bg-primary text-white border border-bottom-0 rounded-top "
-              to="/Permissions/users"
+              to="/users"
             >
               משתמשים
             </Link>
@@ -73,7 +76,7 @@ class NavTabs extends Component {
           <Tab>
             <Link
               className="navbar bg-primary text-white border border-bottom-0 rounded-top "
-              to="/Permissions/perms"
+              to="/perms"
             >
               הרשאות משתמשים
             </Link>
@@ -81,7 +84,7 @@ class NavTabs extends Component {
           <Tab>
             <Link
               className="navbar bg-primary text-white border border-bottom-0 rounded-top"
-              to="/Permissions/viewPerms"
+              to="/viewPerms"
             >
               הרשאות צפיה בדשבורד
             </Link>

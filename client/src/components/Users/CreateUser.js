@@ -3,17 +3,13 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { createUser, clearErrors } from '../../actions/index';
 import { Field, reduxForm } from 'redux-form';
+import Loader from '../Loader';
 import { formFields, formSelectionFields } from './formFields';
 import FormField from './FormField';
 
 const renderFormFields = () =>
-  formFields.map(({ name, label}) => (
-    <Field
-      key={name}
-      name={name}
-      label={label}
-      component={FormField}
-    />
+  formFields.map(({ name, label }) => (
+    <Field key={name} name={name} label={label} component={FormField} />
   ));
 
 const renderSelectionFields = () =>
@@ -40,6 +36,7 @@ const CreateUser = ({
   invalid,
   createUser,
   errors,
+  user,
   clearErrors,
   history,
 }) => {
@@ -48,6 +45,10 @@ const CreateUser = ({
     clearErrors();
     createUser(formValues, history);
   };
+
+  if (user.isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="container" dir="rtl" style={{ marginTop: '50px' }}>
@@ -63,10 +64,15 @@ const CreateUser = ({
         >
           צור משתמש
         </button>
-        {errors &&
+        {
+          /* {errors.error &&
           Object.keys(errors).map(key => (
             <div className="ui error message" key={key}>{<p>{errors[key]}</p>}</div>
-          ))}
+          ))} */
+          user.success && (
+            <div className="ui message">{<p>המשתמש נוצר בהצלחה</p>}</div>
+          )
+        }
       </form>
     </div>
   );
@@ -118,9 +124,10 @@ const validate = ({
   return errors;
 };
 
-const mapStateToProps = ({ errors, clearErrors, form }) => ({
+const mapStateToProps = ({ errors, clearErrors, form, user }) => ({
   errors,
   clearErrors,
+  user,
   formValues: form.createUserForm.values,
 });
 

@@ -1,4 +1,5 @@
 const db = require('../config/dbConfig');
+const { DashboardDBpool } = require('../db/index');
 const { dashboarddbpool, maindbpool, usersdbpool } = db;
 
 exports.getDashboardById = async (req, res) => {
@@ -578,5 +579,18 @@ exports.addNewGraphToDashboard = async (req, res) => {
       error: err.message,
     });
     console.log(err);
+  }
+};
+
+exports.getDashboardsPrivilages = async (req, res) => {
+  try {
+    const dashboardsPriviledges = await (
+      await DashboardDBpool.query(
+        `SELECT * FROM public."dashboardPriviledgesTable";`
+      )
+    ).rows;
+    return res.status(200).json({ dashboardsPriviledges });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 };

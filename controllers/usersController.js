@@ -10,3 +10,12 @@ exports.getUsers = async (req, res) => {
     res.status(404).json({ error });
   }
 };
+
+exports.getPermissions = async (req, res) => {
+  try {
+    const permissions = await userService.getPermissions();
+    res.status(200).json({ permissions });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
