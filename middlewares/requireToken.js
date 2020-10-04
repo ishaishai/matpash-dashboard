@@ -4,7 +4,7 @@ const { JWT_SECRET } = require('../config/keys');
 module.exports = async (req, res, next) => {
   const token = req.cookies.token || '';
   if (!token) {
-    return res.status(401).json({});
+    return res.status(401).json('Invalid token');
   }
 
   try {
@@ -12,6 +12,6 @@ module.exports = async (req, res, next) => {
     req.user = decodedToken.user;
     return next();
   } catch (error) {
-    return res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json('Invalid token');
   }
 };

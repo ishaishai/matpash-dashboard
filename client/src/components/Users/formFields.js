@@ -4,21 +4,11 @@ export const formFields = [
   { label: 'שם פרטי', name: 'firstName' },
   { label: 'שם משפחה', name: 'lastName' },
   { label: 'ת.ז', name: 'id' },
-  { label: 'תפקיד', name: 'role'},
+  { label: 'תפקיד', name: 'role' },
+  { label: 'ארגון', name: 'organization' },
 ];
 
 export const formSelectionFields = [
-  {
-    label: 'ארגון',
-    name: 'organization',
-    placeholder: 'בחר ארגון',
-    options: [
-      { value: 'מת"ק עזה' },
-      { value: 'מנהא"ז' },
-      { value: 'מטה' },
-      { value: 'אחר' },
-    ],
-  },
   {
     label: 'הרשאות',
     name: 'permissions',

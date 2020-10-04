@@ -6,8 +6,8 @@ class UserService {
     const {
       rows,
     } = await usersQuery(
-      `SELECT "id", "username", "password" FROM public."usersInfoTable" WHERE "username"= $1`,
-      [username]
+      `SELECT "id", "username", "password", "permissions" FROM public."usersInfoTable" WHERE "username"= $1`,
+      [username],
     );
 
     return rows[0];
@@ -17,8 +17,8 @@ class UserService {
     const {
       rows,
     } = await usersQuery(
-      'SELECT "id", "username", "password" FROM public."usersInfoTable" WHERE "id"= $1',
-      [id]
+      'SELECT "id", "username", "password" ,"permissions" FROM public."usersInfoTable" WHERE "id"= $1',
+      [id],
     );
 
     return rows[0];

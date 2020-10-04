@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const keys = require('../config/keys');
 const storeOperation = require('../services/storeOperation');
 const UserService = require('../services/userService');
+const { use } = require('passport');
 
 const userService = new UserService();
 
@@ -13,12 +14,12 @@ exports.login = async (req, res) => {
     const user = await userService.findByUsername(username);
 
     if (!user) {
-      return res.status(400).send({ username: 'שם משתמש אינו קיים' });
+      return res.status(400).send('שם משתמש אינו קיים');
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ password: 'סיסמא שגויה' });
+      return res.status(400).json('סיסמא שגויה');
     }
 
     const accessToken = generateAccessToken(user);
@@ -26,7 +27,11 @@ exports.login = async (req, res) => {
 
     await storeOperation({ type: 'login', username });
 
-    return res.json({ id: user.id, username: user.username });
+    return res.json({
+      id: user.id,
+      username: user.username,
+      permissions: user.permissions,
+    });
   } catch (error) {
     return res.status(400).json({ error });
   }
@@ -74,8 +79,14 @@ exports.logout = async (req, res) => {
 };
 
 function generateAccessToken(user) {
-  const options = { expiresIn: '1h' };
-  const payload = { user: { id: user.ID, username: user.username } };
+  const options = { expiresIn: '3h' };
+  const payload = {
+    user: {
+      id: user.ID,
+      username: user.username,
+      permissions: user.permissions,
+    },
+  };
 
   const accessToken = jwt.sign(payload, keys.JWT_SECRET, options);
 

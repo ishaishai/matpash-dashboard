@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom';
-import { login, clearErrors } from '../../actions';
+import { withRouter} from 'react-router-dom';
+import { login} from '../../actions';
 import './styles.scss';
 import logo from '../../assets/Matpash.png';
 
-const Login = ({ login, errors, clearErrors, isLoading, history }) => {
+const Login = ({ login, error, isLoading, history }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = e => {
     e.preventDefault();
-    clearErrors();
     if (username && password) {
       login({ username, password }, history);
     }
@@ -40,9 +39,6 @@ const Login = ({ login, errors, clearErrors, isLoading, history }) => {
               placeholder="שם משתמש"
               required
             />
-            {errors?.username && (
-              <h4 className="ui red header">{errors.username}</h4>
-            )}
           </div>
           <div className="field">
             <input
@@ -55,8 +51,8 @@ const Login = ({ login, errors, clearErrors, isLoading, history }) => {
               required
             />
           </div>
-          {errors?.password && (
-            <h4 className="ui red header">{errors.password}</h4>
+          {error && error !== 'Invalid token' && (
+            <h4 className="ui red header">{error}</h4>
           )}
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <button
@@ -73,11 +69,11 @@ const Login = ({ login, errors, clearErrors, isLoading, history }) => {
   );
 };
 
-const mapStateToProps = ({ auth, errors }) => ({
+const mapStateToProps = ({ auth }) => ({
   isLoading: auth.isLoading,
-  errors,
+  error: auth.error,
 });
 
-export default connect(mapStateToProps, { login, clearErrors })(
+export default connect(mapStateToProps, { login })(
   withRouter(Login)
 );

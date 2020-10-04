@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { createUser, clearErrors } from '../../actions/index';
+import validate from './validation';
 import { Field, reduxForm } from 'redux-form';
 import Loader from '../Loader';
 import { formFields, formSelectionFields } from './formFields';
@@ -35,18 +36,15 @@ const CreateUser = ({
   pristine,
   invalid,
   createUser,
-  errors,
-  user,
-  clearErrors,
+  users,
   history,
 }) => {
   const handleSubmit = e => {
     e.preventDefault();
-    clearErrors();
     createUser(formValues, history);
   };
 
-  if (user.isLoading) {
+  if (users.isLoading) {
     return <Loader />;
   }
 
@@ -64,73 +62,25 @@ const CreateUser = ({
         >
           צור משתמש
         </button>
-        {
-          /* {errors.error &&
-          Object.keys(errors).map(key => (
-            <div className="ui error message" key={key}>{<p>{errors[key]}</p>}</div>
-          ))} */
-          user.success && (
-            <div className="ui message">{<p>המשתמש נוצר בהצלחה</p>}</div>
-          )
-        }
+        {users.success && (
+          <div className="ui message">{<p>המשתמש נוצר בהצלחה</p>}</div>
+        )}
+        {users.errors &&
+          Object.keys(users.errors).map(key => (
+            <div className="ui error message" key={key}>
+              {<p>{users.errors[key]}</p>}
+            </div>
+          ))}
       </form>
     </div>
   );
 };
 
-const validate = ({
-  username,
-  firstName,
-  lastName,
-  id,
-  password,
-  organization,
-  permissions,
-}) => {
-  const errors = {};
-  if (!username) {
-    errors.username = 'שדה חובה';
-  } else if (username.length < 4) {
-    errors.username = 'חייב להכיל לפחות 5 תווים';
-  }
-  if (!password) {
-    errors.password = 'שדה חובה';
-  } else if (password.length < 6) {
-    errors.password = 'חייב להכיל לפחות 6 תווים';
-  }
-  if (!firstName) {
-    errors.firstName = 'שדה חובה';
-  } else if (firstName.length < 2) {
-    errors.firstName = 'חייב להכיל לפחות 2 תווים';
-  }
-  if (!lastName) {
-    errors.lastName = 'שדה חובה';
-  } else if (lastName.length < 2) {
-    errors.lastName = 'חייב להכיל לפחות 2 תווים';
-  }
-  if (!id) {
-    errors.id = 'שדה חובה';
-  } else if (id.length !== 9) {
-    errors.id = 'חייב להכיל 9 תווים';
-  } else if (!/^\d+$/.test(id)) {
-    errors.id = 'חייב להכיל ספרות בלבד';
-  }
-  if (organization === 'בחר ארגון') {
-    errors.role = 'בחר ארגון';
-  }
-  if (permissions === 'בחר הרשאה') {
-    errors.role = 'בחר הרשאה';
-  }
-  return errors;
-};
-
-const mapStateToProps = ({ errors, clearErrors, form, user }) => ({
-  errors,
-  clearErrors,
-  user,
+const mapStateToProps = ({ form, users }) => ({
+  users,
   formValues: form.createUserForm.values,
 });
 
 export default reduxForm({ form: 'createUserForm', validate })(
-  connect(mapStateToProps, { createUser, clearErrors })(withRouter(CreateUser))
+  connect(mapStateToProps, { createUser })(withRouter(CreateUser)),
 );
