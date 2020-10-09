@@ -1,0 +1,102 @@
+SQL statements by DB
+
+MainDB:
+Holds all the parsered data from the excel files.
+
+DashboardsDB:
+
+-- Table: public.graphsInfoTable
+
+-- DROP TABLE public."graphsInfoTable";
+
+CREATE TABLE public."graphsInfoTable"
+(
+    index integer NOT NULL,
+    "Type" text COLLATE pg_catalog."default" NOT NULL,
+    "Title" text COLLATE pg_catalog."default" NOT NULL,
+    "Subtitle" text COLLATE pg_catalog."default",
+    "xAxisTitle" text COLLATE pg_catalog."default",
+    "yAxisTitle" text COLLATE pg_catalog."default",
+    "xAxisColumn" text COLLATE pg_catalog."default",
+    "yAxisColumn" text COLLATE pg_catalog."default",
+    "xAxisCatagoryRange" text COLLATE pg_catalog."default" NOT NULL,
+    "yAxisCatagoryRange" text COLLATE pg_catalog."default" NOT NULL,
+    "Legend" boolean,
+    "SeriesNames" text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "graphsInfoTable_INDEX_key" UNIQUE ("index")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."graphsInfoTable"
+    OWNER to postgres;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Table: public. dashboardPriviledgesTable
+
+DROP TABLE public."dashboardPriviledgesTable";
+
+CREATE TABLE public."dashboardPriviledgesTable"
+(
+    "userId" text NOT NULL,
+    "dashboard1" text COLLATE pg_catalog."default",
+    CONSTRAINT "dashboardPriviledgesTable_USERID_key" UNIQUE ("userId")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."dashboardPriviledgesTable"
+    OWNER to postgres;
+
+
+UsersDB:
+
+
+drop table if exists "usersPriviledgesTable";
+drop table if exists "eventsTable";
+drop table if exists "usersInfoTable";
+create table "usersInfoTable" ("username" text NOT NULL UNIQUE,
+								"password" text NOT NULL,
+								"id" text NOT NULL PRIMARY KEY UNIQUE,
+								"firstName" text NOT NULL,
+								"lastName" text NOT NULL,
+								"address" text,
+								"dateOfBirth" text NOT NULL,
+								"role" text NOT NULL,
+								"organization" text);
+
+create table "usersPriviledgesTable" ("id" text NOT NULL,
+								"admin" boolean NOT NULL,
+								"view" boolean NOT NULL,
+								"edit" boolean NOT NULL,
+								"print" boolean NOT NULL,
+								"pdf" boolean NOT NULL,
+								"image" boolean NOT NULL,
+								"csv" boolean NOT NULL,
+								"xlsx" boolean NOT NULL,
+								"dataTable" boolean NOT NULL,
+								CONSTRAINT fk_id FOREIGN KEY("id") 
+  								REFERENCES "usersInfoTable"("ID"));
+
+
+create table "eventsTable" ("username" text NOT NULL,
+								"act" text NOT NULL,
+								"date" text NOT NULL,
+								CONSTRAINT fk_username FOREIGN KEY("username") 
+  								REFERENCES "usersInfoTable"("username"));
+
+
+
+
