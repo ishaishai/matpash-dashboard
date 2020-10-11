@@ -1,6 +1,6 @@
 const { spawn } = require('child_process');
 
-class TableService {
+class ExcelService {
   runExcelCheck(path) {
     return new Promise((resolve, reject) => {
       const python = spawn('python', ['excelCheck.py', path]);
@@ -25,4 +25,4 @@ class TableService {
   }
 }
 
-module.exports = TableService;
+module.exports = ExcelService;
