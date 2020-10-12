@@ -1,25 +1,28 @@
-import React, { useState, useCallback } from "react";
-import { Tabs, Tab, Dropdown, DropdownButton, Button } from "react-bootstrap";
-import ResponsiveGrid from "./ResponsiveGrid";
+import React, { useState, useCallback } from 'react';
+import { connect } from 'react-redux';
+import { Tabs, Tab, Dropdown, DropdownButton, Button } from 'react-bootstrap';
+import ResponsiveGrid from './ResponsiveGrid';
 
-const DashboardTabs = () => {
+const DashboardTabs = ({ permissions }) => {
+  console.log('permissions:', permissions);
+
   let tabsInfo = [
-    { title: "home", eventKey: "home" },
-    { title: "home2", eventKey: "home2" },
+    { title: 'home', eventKey: 'home' },
+    { title: 'home2', eventKey: 'home2' },
   ];
 
   let dashboardsNames = [
-    { name: "dashboard1", id: "1" },
-    { name: "dashboard2", id: "2" },
-    { name: "dashboard3", id: "3" },
-    { name: "dashboard4", id: "4" },
+    { name: 'dashboard1', id: '1' },
+    { name: 'dashboard2', id: '2' },
+    { name: 'dashboard3', id: '3' },
+    { name: 'dashboard4', id: '4' },
   ];
 
   let layoutAfterChange = null;
 
-  const clickAddTabHandler = (e) => {
-    if (e === "addTab") {
-      tabsInfo.push({ title: "home3", eventKey: "home3" });
+  const clickAddTabHandler = e => {
+    if (e === 'addTab') {
+      tabsInfo.push({ title: 'home3', eventKey: 'home3' });
       setTabs(NavTabs);
     }
   };
@@ -37,9 +40,9 @@ const DashboardTabs = () => {
 
   const handleDashboard = () => {
     setTimeout(() => {
-      window.dispatchEvent(new Event("resize"), 2000);
+      window.dispatchEvent(new Event('resize'), 2000);
     });
-    console.log("a");
+    console.log('a');
   };
 
   const handleDashboardPick = (name, id) => {
@@ -52,7 +55,10 @@ const DashboardTabs = () => {
     <div className="dashboardDropDown">
       <DropdownButton id="dropdown" title="Dashboards">
         {dashboardsNames.map((dashboard, i) => (
-          <Dropdown.Item key={dashboard.id} onClick={() => handleDashboardPick(dashboard.name, dashboard.id)}>
+          <Dropdown.Item
+            key={dashboard.id}
+            onClick={() => handleDashboardPick(dashboard.name, dashboard.id)}
+          >
             {dashboard.name}
           </Dropdown.Item>
         ))}
@@ -62,7 +68,7 @@ const DashboardTabs = () => {
 
   const [dashboards, setDashboards] = useState(dashboardDropDown);
 
-  const setLayout = useCallback((event) => {
+  const setLayout = useCallback(event => {
     layoutAfterChange = event;
   }, []);
 
@@ -76,22 +82,30 @@ const DashboardTabs = () => {
       <Button className="saveLayoutBtn" onClick={saveLayout}>
         Save Layout
       </Button>
-      <Tabs className="Tab" defaultActiveKey={"home"} onSelect={clickAddTabHandler}>
+      <Tabs
+        className="Tab"
+        defaultActiveKey={'home'}
+        onSelect={clickAddTabHandler}
+      >
         {tabsInfo.map((tab, i) => (
           <Tab
             id={tab.title}
             key={i}
             title={
               <div>
-                <i>{tab.title}</i>{" "}
-                <span className="xBtn" onClick={(e) => removeTabHandler(e, tab.title)}>
-                  {" "}
-                  x{" "}
+                <i>{tab.title}</i>{' '}
+                <span
+                  className="xBtn"
+                  onClick={e => removeTabHandler(e, tab.title)}
+                >
+                  {' '}
+                  x{' '}
                 </span>
               </div>
             }
             eventKey={tab.eventKey}
-            onEnter={handleDashboard}>
+            onEnter={handleDashboard}
+          >
             <ResponsiveGrid onLayoutChange={setLayout} />
           </Tab>
         ))}
@@ -105,4 +119,10 @@ const DashboardTabs = () => {
   return <div>{tabs}</div>;
 };
 
-export default DashboardTabs;
+const mapStateToProps = ({
+  auth: {
+    user: { permissions },
+  },
+}) => ({ permissions });
+
+export default connect(mapStateToProps)(DashboardTabs);

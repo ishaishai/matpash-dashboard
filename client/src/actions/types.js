@@ -11,3 +11,7 @@ export const GET_ERRORS = 'get_errors';
 export const CLEAR_ERRORS = 'clear_errors';
 export const LOADING = 'loading';
 export const FETCH_STATISTICS = 'fetch_statistics';
+
+export const CHECK_EXCEL_LOADING = 'check_excel_loading';
+export const CHECK_EXCEL_SUCCESS = 'check_excel_success';
+export const CHECK_EXCEL_ERROR = 'check_excel_error';

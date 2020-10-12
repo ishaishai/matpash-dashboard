@@ -13,6 +13,7 @@ import CreateChart from './Menu/CreateChart';
 import Tabs from './Dashboard/Tabs';
 import Login from './Login/Login';
 import Permissions from './Permissions/index';
+import Admin from './Admin';
 import ProtectedRoute from './ProtectedRoute';
 
 const App = ({ fetchUser, auth }) => {
@@ -54,6 +55,12 @@ const App = ({ fetchUser, auth }) => {
             path="/permissions"
             exact
             component={Permissions}
+          />
+          <ProtectedRoute
+            isLoggedIn={auth.user}
+            path="/admin"
+            exact
+            component={Admin}
           />
           <Route path="/login" component={Login} />
         </Switch>
