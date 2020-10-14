@@ -1,0 +1,79 @@
+.row {
+  margin: 0;
+}
+
+.title {
+  padding: 10px 10px 0 0;
+}
+
+.navBar-Color {
+  background-color: #219ebc;
+  color: white;
+}
+
+.form-row {
+  align-items: center;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  margin-top: 15px;
+  width: 100%;
+  background-color: rgb(237, 241, 247);
+  padding: 10px 0 10px 0px;
+  border: 1px solid lightblue;
+  border-radius: 2%;
+}
+
+.title-input {
+  margin: 10px 0px 0px;
+  direction: rtl;
+}
+.chart-demo-col {
+  padding: 0;
+}
+.chart-demo-col > div {
+  margin: 15px 0 0 20px;
+  border: 1px solid lightblue;
+  border-radius: 2%;
+  padding: 0;
+}
+
+.add-graph-btn {
+  margin: 10px 0px 0px;
+  height: 40px;
+}
+.form-label {
+  line-height: 2rem;
+}
+.FormLabel {
+  display: block;
+  padding-right: 5px;
+  text-align: center;
+}
+.dropdown-btn {
+  direction: RTL;
+  float: none;
+}
+.col {
+  text-align: center;
+}
+.choose-dash-btn {
+  margin-right: 20px;
+}
+
+.add-column-btn {
+  width: 70%;
+}
+
+.color-picker {
+  height: 34px;
+  width: 20%;
+  float: right;
+}
+
+.user-inputs-col {
+  padding: 0;
+}
+.upload-picture {
+  margin-right: 100px;
+}
