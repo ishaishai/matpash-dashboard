@@ -1,78 +1,9 @@
-.CreateChart li {
-  /* margin:5px; */
-  padding: 5px;
-  float: left;
-  font-size: large;
-}
-
-.CreateChart ul {
-  list-style: none;
-}
-
-.chartWrapDemo {
-  width: 700px;
-  /* max-width: 500px; */
-  position: relative;
-  left: 30%;
-}
-
-.column {
-  float: right;
-  display: inline-flex;
-  padding: 5px;
-  margin: 5px;
-  height: 480px;
-  width: 400px;
+.row {
+  margin: 0;
 }
 
 .title {
-  float: right;
-  margin-right: 10px;
-}
-
-.buttonDesign {
-  width: 100%;
-}
-
-.title span {
-  float: right;
-  margin: 5px;
-}
-.title input {
-  direction: RTL;
-  width: 150px;
-  border: 2px solid black;
-  border-radius: 4px;
-  float: right;
-  height: 30px;
-}
-.title Button {
-  float: left;
-}
-
-.title label {
-  text-align: right;
-}
-
-.sendDataBtn {
-  background-color: green;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 80px;
-  width: 80px;
-}
-
-.vl {
-  border-left: 1px solid #9a9a9a;
-  height: 400px;
-  width: 10px;
-  float: right;
-}
-
-.titleButton {
-  background-color: blue;
-  float: left;
+  padding: 10px 10px 0 0;
 }
 
 .navBar-Color {
@@ -80,13 +11,69 @@
   color: white;
 }
 
-.dropdown {
-  direction: RTL;
-  width: 150px;
-  float: right;
-  height: 30px;
+.form-row {
+  align-items: center;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  margin-top: 15px;
+  width: 100%;
+  background-color: rgb(237, 241, 247);
+  padding: 10px 0 10px 0px;
+  border: 1px solid lightblue;
+  border-radius: 2%;
 }
 
-.list-item {
-  text-align: right;
+.title-input {
+  margin: 10px 0px 0px;
+  direction: rtl;
+}
+.chart-demo-col {
+  padding: 0;
+}
+.chart-demo-col > div {
+  margin: 15px 0 0 20px;
+  border: 1px solid lightblue;
+  border-radius: 2%;
+  padding: 0;
+}
+
+.add-graph-btn {
+  margin: 10px 0px 0px;
+  height: 40px;
+}
+.form-label {
+  line-height: 2rem;
+}
+.FormLabel {
+  display: block;
+  padding-right: 5px;
+  text-align: center;
+}
+.dropdown-btn {
+  direction: RTL;
+  float: none;
+}
+.col {
+  text-align: center;
+}
+.choose-dash-btn {
+  margin-right: 20px;
+}
+
+.add-column-btn {
+  width: 70%;
+}
+
+.color-picker {
+  height: 34px;
+  width: 20%;
+  float: right;
+}
+
+.user-inputs-col {
+  padding: 0;
+}
+.upload-picture {
+  margin-right: 100px;
 }

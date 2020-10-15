@@ -79,10 +79,10 @@ exports.logout = async (req, res) => {
 };
 
 function generateAccessToken(user) {
-  const options = { expiresIn: '3h' };
+  const options = { expiresIn: '2h' };
   const payload = {
     user: {
-      id: user.ID,
+      id: user.id,
       username: user.username,
       permissions: user.permissions,
     },

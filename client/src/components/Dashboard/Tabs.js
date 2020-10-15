@@ -1,122 +1,144 @@
-import React, { useState, useCallback } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Tabs, Tab, Dropdown, DropdownButton, Button } from 'react-bootstrap';
 import ResponsiveGrid from './ResponsiveGrid';
+import axios from 'axios';
+import CreateChart from '../Menu/CreateChart';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-const DashboardTabs = ({ permissions }) => {
-  console.log('permissions:', permissions);
+const DashboardTabs = props => {
+  const [layoutAfterChange, setLayoutAfterChange] = useState(null);
+  let [dashboardID, setDashboardID] = useState(null);
 
-  let tabsInfo = [
-    { title: 'home', eventKey: 'home' },
-    { title: 'home2', eventKey: 'home2' },
-  ];
+  const [dashboardNames, setDashboardNames] = useState([]);
+  const [isViewer, setIsViewer] = useState(() => {
+    if (props.permissions == 'צופה') {
+      return false;
+    } else {
+      return true;
+    }
+  });
 
-  let dashboardsNames = [
-    { name: 'dashboard1', id: '1' },
-    { name: 'dashboard2', id: '2' },
-    { name: 'dashboard3', id: '3' },
-    { name: 'dashboard4', id: '4' },
-  ];
+  const fetchDashboardNames = async () => {
+    const response = await axios.get('/api/dashboard/get-dashboard-names/tabs');
+    const dashboardNames = response.data.dashboardIdList;
+    let list = [...response.data.dashboardIdList];
 
-  let layoutAfterChange = null;
+    if (list.length != 0) {
+      let dash = list.map(obj => ({
+        name: 'dashboard' + obj,
+        id: obj,
+      }));
 
-  const clickAddTabHandler = e => {
-    if (e === 'addTab') {
-      tabsInfo.push({ title: 'home3', eventKey: 'home3' });
-      setTabs(NavTabs);
+      setDashboardNames(dashboardNames);
+      console.log(dash);
+      handleDashboardPick(dash ? dash[0].id : null);
+    } else {
+      setDashboardNames([]);
+      handleDashboardPick(null);
+
+      setIsViewer(false); //if there are no dashboards hide delete dashboard and save layout buttons
     }
   };
 
-  const removeTabHandler = (event, title) => {
-    event.stopPropagation();
-    // let obj = tabsInfo.find((o) => o.title == title);
-
-    tabsInfo = tabsInfo.filter(function (el) {
-      return el.title !== title;
-    });
-
-    setTabs(NavTabs);
-  };
+  useEffect(() => {
+    fetchDashboardNames();
+  }, []);
 
   const handleDashboard = () => {
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'), 2000);
     });
-    console.log('a');
   };
 
-  const handleDashboardPick = (name, id) => {
-    console.log(id);
-    tabsInfo.push({ title: name, eventKey: name });
-    setTabs(NavTabs);
+  const setLayout = event => {
+    setLayoutAfterChange(event);
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 100);
   };
 
-  const dashboardDropDown = () => (
-    <div className="dashboardDropDown">
-      <DropdownButton id="dropdown" title="Dashboards">
-        {dashboardsNames.map((dashboard, i) => (
-          <Dropdown.Item
-            key={dashboard.id}
-            onClick={() => handleDashboardPick(dashboard.name, dashboard.id)}
-          >
-            {dashboard.name}
-          </Dropdown.Item>
-        ))}
-      </DropdownButton>
-    </div>
+  let grid;
+  const [responsiveGrid, setResponsiveGrid] = useState(
+    <ResponsiveGrid onLayoutChange={setLayout} dashboardID={null} />,
   );
 
-  const [dashboards, setDashboards] = useState(dashboardDropDown);
+  const handleDashboardPick = dashboardID => {
+    setSelectedDashboard(dashboardID);
+    grid = (
+      <ResponsiveGrid onLayoutChange={setLayout} dashboardID={dashboardID} />
+    );
 
-  const setLayout = useCallback(event => {
-    layoutAfterChange = event;
-  }, []);
+    console.log(grid);
+    setResponsiveGrid(grid);
+  };
 
-  const saveLayout = () => {
+  const saveLayout = async () => {
     console.log(layoutAfterChange);
+    try {
+      const response = await axios.post('/api/dashboard/update', {
+        layout_grid: layoutAfterChange,
+      });
+      const { data } = response.data;
+      alert('!התבנית נשמרה');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const NavTabs = () => (
+  const [selectedDashboard, setSelectedDashboard] = useState(null);
+
+  const deleteDashboardHandler = async () => {
+    let result = window.confirm('האם אתה בטוח?');
+    if (result) {
+      const result = await axios.delete(
+        '/api/dashboard/delete-dashboard-by-id/' + selectedDashboard,
+      );
+      alert('!הדשבורד נמחק');
+    }
+
+    // setResponsiveGrid(<ResponsiveGrid onLayoutChange={setLayout} dashboardID={dashboardID} />);
+
+    // setResponsiveGrid(<ResponsiveGrid onLayoutChange={setLayout} dashboardID={"1"} />);  להחזיר לדשבורד 1
+
+    window.location.href = '/'; // לחזור אל הדף והוא טוען את דשבורד 1
+  };
+
+  return (
     <div>
-      {dashboards}
-      <Button className="saveLayoutBtn" onClick={saveLayout}>
-        Save Layout
-      </Button>
-      <Tabs
-        className="Tab"
-        defaultActiveKey={'home'}
-        onSelect={clickAddTabHandler}
-      >
-        {tabsInfo.map((tab, i) => (
-          <Tab
-            id={tab.title}
-            key={i}
-            title={
-              <div>
-                <i>{tab.title}</i>{' '}
-                <span
-                  className="xBtn"
-                  onClick={e => removeTabHandler(e, tab.title)}
+      <div className="btnWrapper">
+        <div className="dashboardDropDown">
+          <DropdownButton id="dropdown" title="דשבורדים">
+            {dashboardNames.map(dashboard => {
+              return (
+                <Dropdown.Item
+                  key={dashboard}
+                  onClick={() => handleDashboardPick(dashboard)}
                 >
-                  {' '}
-                  x{' '}
-                </span>
-              </div>
-            }
-            eventKey={tab.eventKey}
-            onEnter={handleDashboard}
+                  {dashboard}
+                </Dropdown.Item>
+              );
+            })}
+          </DropdownButton>
+        </div>
+        {isViewer ? (
+          <Button className="saveLayoutBtn" onClick={saveLayout}>
+            שמור תבנית
+          </Button>
+        ) : null}
+        {isViewer ? (
+          <Button
+            className="saveLayoutBtn"
+            variant="outline-danger"
+            onClick={deleteDashboardHandler}
           >
-            <ResponsiveGrid onLayoutChange={setLayout} />
-          </Tab>
-        ))}
-        <Tab className="addTabBtn" title="+" eventKey="addTab"></Tab>
-      </Tabs>
+            מחיקת דשבורד
+          </Button>
+        ) : null}
+      </div>
+      {responsiveGrid}
     </div>
   );
-
-  const [tabs, setTabs] = useState(NavTabs);
-
-  return <div>{tabs}</div>;
 };
 
 const mapStateToProps = ({

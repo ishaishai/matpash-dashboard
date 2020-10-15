@@ -17,49 +17,60 @@ require('highcharts/modules/exporting')(Highcharts);
 const defaultContextMenuButtons = Highcharts.getOptions().exporting.buttons
   .contextButton.menuItems;
 
-function ResponsiveGrid() {
+function ResponsiveGrid(props) {
   const ResponsiveGridLayout = WidthProvider(Responsive);
   const [highChartsOptions, setHighChartsOptions] = useState([]);
 
   // let chartRef = []; // Create array of refs for each chart
   const chartRef = useMemo(
     () => highChartsOptions.map(_i => React.createRef()),
-    []
+    [],
   ); // Create array of refs for each chart
 
-  const deleteChart = useCallback(id => {
-    setHighChartsOptions(prevCharts => {
-      return prevCharts.filter((chart, index) => {
-        return index !== id;
-      });
-    });
-  }, []);
-
+  const deleteChart = async id => {
+    try {
+      const response = await axios.delete(
+        '/api/dashboard/remove-graph-from-dashboard/' +
+          props.dashboardID +
+          '/' +
+          id,
+      );
+      const { data } = response.data;
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+    getDashboard();
+  };
   // chartRef = useMemo(() => highChartsOptions.map((_i) => React.createRef()), []);
   const onResizeStop = useCallback(
     (event, index) => {
       const chartId = index.i.slice(-1);
 
-      console.log(chartRef);
+      // console.log(chartRef);
       // chartRef[chartId].current.chart.reflow();
       setTimeout(() => {
         window.dispatchEvent(new Event('resize'));
       });
     },
-    [chartRef]
+    [chartRef],
   );
 
   const getDashboard = async () => {
-    const result = await axios.get(
-      '/api/dashboard/get-by-id/1'
-    );
-    const { dashb } = result.data.dashboard.graphList;
+    if (props.dashboardID != null) {
+      const result = await axios.get(
+        '/api/dashboard/get-by-id/' + props.dashboardID,
+      );
+      const { dashb } = result.data.dashboard.graphList;
 
-    setHighChartsOptions(result.data.dashboard.graphList);
+      console.log(props.dashboardID);
+      setHighChartsOptions(result.data.dashboard.graphList);
 
-    console.log(result.data.dashboard.graphlist);
+      // console.log(result.data.dashboard.graphlist);
 
-    return result.data.dashboard.graphList;
+      return result.data.dashboard.graphList;
+    }
+    return null;
   };
 
   // Create array of refs for each chart
@@ -67,20 +78,30 @@ function ResponsiveGrid() {
     getDashboard();
   }, []);
 
+  useEffect(() => {
+    console.log(props.dashboardID);
+    getDashboard();
+  }, [props.dashboardID]);
+
   return (
     <div>
       <ResponsiveGridLayout
         onResizeStop={onResizeStop}
         className="layout"
-        compactType="horizontal"
+        //compactType="false" - for free use (need to find the right attribute)
+        onLayoutChange={props.onLayoutChange}
       >
         {highChartsOptions.map(MappedChart => (
           <div
-            data-grid={{ x: 0, y: 0, w: 3, h: 3 }}
-            key={'chart-' + MappedChart.index}
+            data-grid={{
+              x: MappedChart.options.layout.xPos,
+              y: MappedChart.options.layout.yPos,
+              w: MappedChart.options.layout.width,
+              h: MappedChart.options.layout.height,
+            }}
+            key={MappedChart.index}
             className="chartWrap"
           >
-            {console.log(MappedChart)}
             <Chart
               ref={chartRef[MappedChart.index]}
               className="chart"
@@ -98,6 +119,9 @@ function ResponsiveGrid() {
                 },
                 title: {
                   text: MappedChart.options.title.text,
+                },
+                subtitle: {
+                  text: MappedChart.options.subtitle.text,
                 },
                 tooltip: MappedChart.options.tooltip, ///get prop of tooltip
                 plotOptions: {
@@ -142,7 +166,7 @@ function ResponsiveGrid() {
                     contextButton: {
                       menuItems: [
                         {
-                          text: 'Delete',
+                          text: 'מחיקת גרף',
                           onclick: () => {
                             deleteChart(MappedChart.index);
                           },
@@ -157,7 +181,7 @@ function ResponsiveGrid() {
           </div>
         ))}
       </ResponsiveGridLayout>
-      <Route path="/CreateChart" exact render={() => <CreateChart />} />
+      {/* <Route path="/CreateChart" exact render={() => <CreateChart />} /> */}
     </div>
   );
 }
