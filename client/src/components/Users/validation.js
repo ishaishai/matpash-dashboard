@@ -1,0 +1,57 @@
+export default ({
+  username,
+  firstName,
+  lastName,
+  id,
+  password,
+  organization,
+  role,
+  permissions,
+}) => {
+  const errors = {};
+  if (!id) {
+    errors.id = 'שדה חובה';
+  } else if (id.length !== 9) {
+    errors.id = 'חייב להכיל 9 תווים';
+  } else if (!/^\d+$/.test(id)) {
+    errors.id = 'חייב להכיל ספרות בלבד';
+  }
+
+  if (!username) {
+    errors.username = 'שדה חובה';
+  } else if (username.length < 5) {
+    errors.username = 'חייב להכיל לפחות 5 תווים';
+  }
+  if (!password) {
+    errors.password = 'שדה חובה';
+  } else if (password.length < 6) {
+    errors.password = 'חייב להכיל לפחות 6 תווים';
+  }
+  if (!firstName) {
+    errors.firstName = 'שדה חובה';
+  } else if (firstName.length < 2) {
+    errors.firstName = 'חייב להכיל לפחות 2 תווים';
+  }
+  if (!lastName) {
+    errors.lastName = 'שדה חובה';
+  } else if (lastName.length < 2) {
+    errors.lastName = 'חייב להכיל לפחות 2 תווים';
+  }
+  if (!role) {
+    errors.role = 'שדה חובה';
+  } else if (role.length < 2) {
+    errors.role = 'חייב להכיל לפחות 2 תווים';
+  }
+
+  if (!organization) {
+    errors.organization = 'שדה חובה';
+  } else if (organization.length < 2) {
+    errors.organization = 'חייב להכיל לפחות 2 תווים';
+  }
+
+  if (!permissions) {
+    errors.permissions = 'בחר הרשאה';
+  }
+
+  return errors;
+};
