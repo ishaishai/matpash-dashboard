@@ -23,6 +23,7 @@ exports.getDashboardById = async (req, res) => {
     )
       throw new Error('user has no permisson to dashboard');
     else if (result.rows[0][`dashboard${id}`] == '') {
+
       res.status(200).json({
         msg: 'ok',
         dashboard: dashboardToReturn,
@@ -45,6 +46,8 @@ exports.getDashboardById = async (req, res) => {
     result = await dashboarddbpool.query(queryPullGraphs);
 
     const graphList = result.rows;
+
+
 
     for (graph of graphList) {
       const graphToAdd = { index: graph.index };
@@ -73,6 +76,7 @@ exports.getDashboardById = async (req, res) => {
                 '<td style="padding:0"><b>{point.y:.3f} %</b></td></tr><br/>'
               : '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                 '<td style="padding:0"><b>{point.y:.3f} </b></td></tr><br/>',
+
           footerFormat: '</table>',
           shared: true,
           useHTML: true,
@@ -236,6 +240,7 @@ exports.getDashboardById = async (req, res) => {
             graphToAdd.options.sum += Object.values(obj).map(Number)[0];
           }
 
+
           let colorArrayIndex = 0;
           for (obj of result.rows) {
             // console.log(
@@ -246,7 +251,7 @@ exports.getDashboardById = async (req, res) => {
               sliced: false,
               name: pieSeriesToAdd.name,
               y: parseInt(Object.values(obj)[0]),
-              color: pieColorsArray[colorArrayIndex++],
+              color: pieColorsArray[colorArrayIndex++]
               //parseFloat(Object.values(obj)[0] / graphToAdd.options.sum) * 100, //change this
             });
           }
@@ -258,6 +263,7 @@ exports.getDashboardById = async (req, res) => {
                 ? parseInt(Object.values(obj)[0])
                 : parseFloat(Object.values(obj)[0]),
             );
+
           }
           lineSeriesToAdd.data = lineTempDataToAdd;
         }
@@ -326,7 +332,7 @@ exports.getDashboardById = async (req, res) => {
 exports.getDashboardNames = async (req, res) => {
   const page = req.params.page;
   const userId = req.user.id; //should get from token.
-  console.log('user id:');
+  console.log("user id:")
   console.log(req.user);
   try {
     //this will get you a number. if there are 2 dashboards then 2. build strings like 'Dash 1' 'Dash 2'.
@@ -336,16 +342,10 @@ exports.getDashboardNames = async (req, res) => {
 
     let nameList = Object.entries(result.rows[0])
       .filter(([key, value]) => {
-        if (key !== 'userId' && value != null && page == 'tabs') {
-          console.log(key);
-          return true;
-        } else if (key !== 'userId' && value != null && page == 'create') {
-          console.log(key);
-          return true;
-        } else if (key !== 'userId' && req.user.permissions == 'מנהל') {
-          console.log(key);
-          return true;
-        } else return false;
+        if (key !== 'userId' && value != null && page == 'tabs') { console.log(key); return true; }
+        else if (key !== 'userId' && value != null && page == 'create') { console.log(key); return true; }
+        else if (key !== 'userId' && req.user.permissions == 'מנהל') { console.log(key); return true; }
+        else return false;
       })
       .map(name => name[0].substring(9));
     res.status(200).json({
@@ -381,9 +381,8 @@ exports.deleteDashboardById = async (req, res) => {
 
     await dashboarddbpool.query(queryDeleteGraphs); //complete query.
 
-    await dashboarddbpool.query(
-      `ALTER TABLE public."dashboardPriviledgesTable" DROP COLUMN "dashboard${id}";`,
-    );
+
+    await dashboarddbpool.query(`ALTER TABLE public."dashboardPriviledgesTable" DROP COLUMN "dashboard${id}";`)
     // await dashboarddbpool.query(
     //   `update public."dashboardPriviledgesTable" set dashboard${id} = '';`,
     // ); //complete query.
@@ -449,10 +448,12 @@ exports.deleteGraphFromDashboard = async (req, res) => {
     const queryDeleteGraph = `DELETE FROM public."graphsInfoTable" WHERE "graphsInfoTable"."index"=${graph_id};`;
 
     await dashboarddbpool.query(queryDeleteGraph); //complete query.
+
     await storeOperation({
       type: 'graph_deletion',
       username: req.user.username,
     });
+
 
     res.status(200).json({
       msg: 'graph removed from dashbard!',
@@ -511,6 +512,7 @@ exports.updateDashboardById = async (req, res) => {
   const layoutObjectList = req.body.layout_grid;
   // //each object in layoutObjectList is {layoutObject}
   try {
+
     for (let layout of layoutObjectList) {
       ///iterate through the layoutObjectList and update each graph with the new layout
       result = await dashboarddbpool.query(`UPDATE public."graphsInfoTable"
@@ -523,6 +525,7 @@ exports.updateDashboardById = async (req, res) => {
       username: req.user.username,
     });
 
+
     res.status(200).json({
       msg: 'ok',
     });
@@ -533,6 +536,7 @@ exports.updateDashboardById = async (req, res) => {
     console.log(err);
   }
 };
+
 
 exports.addNewGraphToDashboard = async (req, res) => {
   const { dashboardId, graph } = req.body;
@@ -554,6 +558,7 @@ exports.addNewGraphToDashboard = async (req, res) => {
 
     //next needed to update series for dashboard (for each graph so still in iteration)
     //pull graph series object and then use next statement
+
 
     for (let serie of graph.series) {
       const queryInsertGraphSeries = `INSERT INTO public."dashboard${dashboardId}Series"(index, "serieName", "serieRange", color) VALUES ((select max(index) from public."graphsInfoTable"), '${serie.serieName}', '', '${serie.color}');`;
@@ -603,6 +608,7 @@ exports.addNewGraphToDashboard = async (req, res) => {
       type: 'graph_creation',
       username: req.user.username,
     });
+
 
     res.status(200).json({
       msg: 'graph added!',
