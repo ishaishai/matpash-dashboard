@@ -18,6 +18,10 @@ module.exports = async operation => {
       await store(operation.username, 'מחיקת גרף');
       return;
 
+    case 'dashboard_selection':
+      await store(operation.username, 'שליפת דשבורד');
+      return;
+      
     case 'dashboard_creation':
       await store(operation.username, 'יצירת דשבורד');
       return;
