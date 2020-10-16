@@ -1,4 +1,5 @@
 const db = require('../config/dbConfig');
+const storeOperation = require('../services/storeOperation');
 const { dashboarddbpool, maindbpool, usersdbpool } = db;
 
 exports.getDashboardById = async (req, res) => {
@@ -22,6 +23,9 @@ exports.getDashboardById = async (req, res) => {
     )
       throw new Error('user has no permisson to dashboard');
     else if (result.rows[0][`dashboard${id}`] == '') {
+      
+    await storeOperation({ type: 'dashboard_selection', username: req.user.username });
+
       res.status(200).json({
         msg: 'ok',
         dashboard: dashboardToReturn,
@@ -306,6 +310,9 @@ exports.getDashboardById = async (req, res) => {
       dashboardToReturn.graphList.push(graphToAdd);
     }
 
+    
+    await storeOperation({ type: 'dashboard_selection', username: req.user.username });
+
     res.status(200).json({
       msg: 'ok',
       dashboard: dashboardToReturn,
@@ -343,7 +350,8 @@ exports.getDashboardNames = async (req, res) => {
         } else return false;
       })
       .map(name => name[0].substring(9));
-    res.status(200).json({
+
+      res.status(200).json({
       dashboardIdList: nameList,
     });
   } catch (err) {
@@ -386,6 +394,9 @@ exports.deleteDashboardById = async (req, res) => {
     const queryDeleteDashSeriesTable = `DROP TABLE public."dashboard${id}Series";`;
 
     await dashboarddbpool.query(queryDeleteDashSeriesTable); //complete query.
+
+    
+    await storeOperation({ type: 'dashboard_deletion', username: req.user.username });
 
     res.status(200).json({
       msg: 'dashboard deleted!',
@@ -440,6 +451,9 @@ exports.deleteGraphFromDashboard = async (req, res) => {
 
     await dashboarddbpool.query(queryDeleteGraph); //complete query.
 
+    
+    await storeOperation({ type: 'graph_deletion', username: req.user.username });
+
     res.status(200).json({
       msg: 'graph removed from dashbard!',
     });
@@ -476,7 +490,10 @@ exports.addNewDashboard = async (req, res) => {
       ON DELETE CASCADE
       )`);
 
-    res.status(200).json({
+    
+    await storeOperation({ type: 'dashboard_creation', username: req.user.username });
+
+      res.status(200).json({
       msg: 'dashboard added',
       dashboardId: index,
     });
@@ -498,6 +515,9 @@ exports.updateDashboardById = async (req, res) => {
           SET width=${layout.w}, height=${layout.h}, "xPos"=${layout.x}, "yPos"=${layout.y} 
           WHERE "graphsInfoTable"."index" = ${layout.i};`); //complete query.
     }
+
+    
+    await storeOperation({ type: 'dashboard_update', username: req.user.username });
 
     res.status(200).json({
       msg: 'ok',
@@ -574,6 +594,9 @@ exports.addNewGraphToDashboard = async (req, res) => {
 
     //use the graph string and update each user that has access to that dashboard
     dashboarddbpool.query(queryInsertGraphToDashboard);
+
+    
+    await storeOperation({ type: 'graph_creation', username: req.user.username });
 
     res.status(200).json({
       msg: 'graph added!',
