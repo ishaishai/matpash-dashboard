@@ -311,11 +311,6 @@ exports.getDashboardById = async (req, res) => {
       dashboardToReturn.graphList.push(graphToAdd);
     }
 
-    await storeOperation({
-      type: 'dashboard_selection',
-      username: req.user.username,
-    });
-
     res.status(200).json({
       msg: 'ok',
       dashboard: dashboardToReturn,
