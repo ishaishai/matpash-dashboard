@@ -20,7 +20,7 @@ app.use('/api/statistics', require('./routes/statisticsRoutes'));
 app.use('/api/users', require('./routes/usersRoutes'));
 app.use('/api/permissions', require('./routes/permissionsRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
-app.use('/tables', require('./routes/tables.route'));
+app.use('/api/tables', require('./routes/tables.route'));
 app.use('/api/dashboard', require('./routes/dashboard.route'));
 
 app.get('/', (req, res) => {
