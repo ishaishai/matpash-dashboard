@@ -53,11 +53,11 @@ const CreateChart = props => {
           let chart = this;
           for (let btntmp of btn) {
             if (
-              btntmp.id == 'area' ||
-              btntmp.id == 'pie' ||
-              btntmp.id == 'bar' ||
-              btntmp.id == 'line' ||
-              btntmp.id == 'column'
+              btntmp.id === 'area' ||
+              btntmp.id === 'pie' ||
+              btntmp.id === 'bar' ||
+              btntmp.id === 'line' ||
+              btntmp.id === 'column'
             ) {
               btntmp.addEventListener('click', () => {
                 Type = btntmp.id;
@@ -104,7 +104,7 @@ const CreateChart = props => {
       {
         name: '1',
         data:
-          type != 'pie'
+          type !== 'pie'
             ? [5, 3, 4, 7, 2]
             : [
                 {
@@ -155,7 +155,7 @@ const CreateChart = props => {
       xAxisTitle: `${periodTableSelected}.A1`,
       xAxisColumn: `${periodTableSelected}.A1`,
       xAxisCatagoryRange:
-        type != 'pie'
+        type !== 'pie'
           ? `${endPeriodSelected}$${startPeriodSelected}`
           : `${startPeriodSelected}`,
       series: graphSeries,
@@ -227,7 +227,7 @@ const CreateChart = props => {
     const dashboards = response.data.dashboardIdList;
     console.log(response.data);
     //need to add if עורך so no new dashboard addition
-    if(props.permissions == 'מנהל'){
+    if(props.permissions === 'מנהל'){
       setDashboardNames([...dashboards, 'דשבורד חדש']);
     }else{
       if(dashboards == ''){
@@ -306,7 +306,7 @@ const CreateChart = props => {
   };
 
   useEffect(() => {
-    if (periodTableSelected != '') {
+    if (periodTableSelected !== '') {
       fetchPeriodColumn();
     }
   }, [periodTableSelected]);
@@ -319,7 +319,7 @@ const CreateChart = props => {
   };
 
   useEffect(() => {
-    if (startPeriodSelected != '') fetchToPeriodColumn();
+    if (startPeriodSelected !== '') fetchToPeriodColumn();
   }, [startPeriodSelected]);
 
   const HandleFromPeriodSelection = event => {
@@ -353,9 +353,9 @@ const CreateChart = props => {
     console.log(graphSeries);
   }, [graphSeries]);
   const handleCrossData = () => {
-    if (crossTableSelected == '') {
+    if (crossTableSelected === '') {
       alert('בחר טבלה');
-    } else if (crossColumnSelected == '') {
+    } else if (crossColumnSelected === '') {
       alert('בחר עמודה');
     } else {
       let seriename = `${crossTableSelected}.${
@@ -401,21 +401,21 @@ const CreateChart = props => {
   const handleGraphInfo = async event => {
     /////////////add try catch
 
-    if (dropdownSelection == '') {
+    if (dropdownSelection === '') {
       alert('יש לבחור דשבורד');
-    } else if (periodTableSelected.length == 0) {
+    } else if (periodTableSelected.length === 0) {
       alert('יש לבחור טבלה עבור תקופה');
-    } else if (startPeriodSelected.length == 0) {
+    } else if (startPeriodSelected.length === 0) {
       alert('יש לבחור את תחילת התקופה הרצויה');
-    } else if (type != 'pie' && endPeriodSelected.length == 0) {
+    } else if (type != 'pie' && endPeriodSelected.length === 0) {
       alert(' יש לבחור את סוף התקופה');
-    } else if (graphSeries.length == 0) {
+    } else if (graphSeries.length === 0) {
       alert('יש להוסיף עמודות מידע');
     } else {
       console.log('creating graph...');
       let newDashboardResponse = null;
       console.log(graphToAdd.graph);
-      if (graphToAdd.dashboardID == 'דשבורד חדש') {
+      if (graphToAdd.dashboardID === 'דשבורד חדש') {
         const newDashboardResponse = await axios.post(
           '/api/dashboard/add-new-dashboard/',
         );
@@ -516,7 +516,7 @@ const CreateChart = props => {
                   type=""
                   variant="outline-primary"
                   title={
-                    dropdownSelection == '' ? 'DropDown' : dropdownSelection
+                    dropdownSelection === '' ? 'DropDown' : dropdownSelection
                   }
                 >
                   {dashboardNames.map((dashboard, i) => (
@@ -548,7 +548,7 @@ const CreateChart = props => {
                     type=""
                     variant="outline-primary"
                     title={
-                      periodTableSelected == '' ? 'בחר' : periodTableSelected
+                      periodTableSelected === '' ? 'בחר' : periodTableSelected
                     }
                   >
                     {tableNames.map((dashboard, i) => (
@@ -571,7 +571,7 @@ const CreateChart = props => {
                     type=""
                     variant="outline-primary"
                     title={
-                      startPeriodSelected == '' ? 'בחר' : startPeriodSelected
+                      startPeriodSelected === '' ? 'בחר' : startPeriodSelected
                     }
                   >
                     {periodColumnFromRange.map((dashboard, i) => (
@@ -596,7 +596,7 @@ const CreateChart = props => {
                         type=""
                         variant="outline-primary"
                         title={
-                          endPeriodSelected == '' ? 'בחר' : endPeriodSelected
+                          endPeriodSelected === '' ? 'בחר' : endPeriodSelected
                         }
                       >
                         {periodColumnToRange.map((dashboard, i) => (
@@ -623,7 +623,7 @@ const CreateChart = props => {
                     type=""
                     variant="outline-primary"
                     title={
-                      crossTableSelected == '' ? 'בחר' : crossTableSelected
+                      crossTableSelected === '' ? 'בחר' : crossTableSelected
                     }
                   >
                     {tableNames.map((dashboard, i) => (
@@ -644,7 +644,7 @@ const CreateChart = props => {
                     type=""
                     variant="outline-primary"
                     title={
-                      crossColumnSelected == '' ? 'בחר' : crossColumnSelected
+                      crossColumnSelected === '' ? 'בחר' : crossColumnSelected
                     }
                   >
                     {crossColumns.map((columnObject, i) => (

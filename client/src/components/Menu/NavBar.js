@@ -5,8 +5,8 @@ import { Navbar, Nav } from 'react-bootstrap';
 import './CreateChart.css';
 
 const NavBar = (props, { logout }) => {
-  const [adminNav, setAdminNav] = useState(() => {
-    if (props.permissions == 'מנהל') {
+  const [adminNav, ] = useState(() => {
+    if (props.permissions === 'מנהל') {
       return (
         <Nav className="ml-auto justify-content-lg-end">
           <Nav.Link href="/api/logout" onClick={() => logout()}>
@@ -20,7 +20,7 @@ const NavBar = (props, { logout }) => {
           <Nav.Link href="/">עבור לדשבורד</Nav.Link>
         </Nav>
       );
-    } else if (props.permissions == 'עורך') {
+    } else if (props.permissions === 'עורך') {
       return (
         <Nav className="ml-auto justify-content-lg-end">
           <Nav.Link href="/api/logout" onClick={() => logout()}>
@@ -42,7 +42,6 @@ const NavBar = (props, { logout }) => {
     }
   });
 
-  console.log(props.permissions);
   return (
     <Navbar
       bg="primary"

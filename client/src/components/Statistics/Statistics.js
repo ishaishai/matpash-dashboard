@@ -54,7 +54,7 @@ const tableConfig = {
 const Statistics = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [, setSelectedRow] = useState(null);
 
   const fetchStatistics = async () => {
     const response = await axios.get('/api/statistics');

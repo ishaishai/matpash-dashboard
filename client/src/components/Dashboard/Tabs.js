@@ -1,15 +1,11 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Tabs, Tab, Dropdown, DropdownButton, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Dropdown, DropdownButton, Button } from 'react-bootstrap';
 import ResponsiveGrid from './ResponsiveGrid';
 import axios from 'axios';
-import CreateChart from '../Menu/CreateChart';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 const DashboardTabs = props => {
-  const [layoutAfterChange, setLayoutAfterChange] = useState(null);
-  let [dashboardID, setDashboardID] = useState(null);
-
+  const [layoutAfterChange, setLayoutAfterChange] = useState(null)
   const [dashboardNames, setDashboardNames] = useState([]);
   const [isViewer, setIsViewer] = useState(() => {
     if (props.permissions == 'צופה') {

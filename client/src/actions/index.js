@@ -2,7 +2,6 @@ import axios from 'axios';
 import {
   LOG_OUT,
   CREATE_USER_SUCCESS,
-  CREATE_USER_FAILURE,
   CREATE_USER_ERROR,
   CREATE_USER_LOADING,
   FETCH_USER_LOADING,
@@ -48,7 +47,7 @@ export const createUser = user => async dispatch => {
   dispatch({ type: CREATE_USER_LOADING, payload: true });
 
   try {
-    const response = await axios.post('/api/register', user);
+    await axios.post('/api/register', user);
 
     dispatch({ type: CREATE_USER_SUCCESS });
   } catch (error) {

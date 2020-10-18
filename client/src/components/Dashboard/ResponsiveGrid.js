@@ -1,16 +1,8 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import Chart from './Charts';
-import HighchartsOptions from './HighchartsOptions';
 import Highcharts from 'highcharts';
-import NavBar from '../Menu/NavBar';
-// import {Button} from "@material-ui/core";
-import Button from 'react-bootstrap/Button';
-// import Route from "react-router-dom";
-import CreateChart from '../Menu/CreateChart';
-import { Link, Route, useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { map } from 'jquery';
 
 require('highcharts/modules/exporting')(Highcharts);
 

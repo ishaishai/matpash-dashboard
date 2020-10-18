@@ -49,7 +49,7 @@ export default ({
     errors.organization = 'חייב להכיל לפחות 2 תווים';
   }
 
-  if (!permissions) {
+  if (!permissions || permissions === 'בחר הרשאה') {
     errors.permissions = 'בחר הרשאה';
   }
 
