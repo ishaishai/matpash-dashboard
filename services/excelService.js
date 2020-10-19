@@ -1,9 +1,10 @@
 const { spawn } = require('child_process');
 
 class ExcelService {
-  runExcelCheck(path) {
+  runExcelCheck(filename) {
+    console.log('excel service:', filename)
     return new Promise((resolve, reject) => {
-      const python = spawn('python', ['excelCheck.py', path]);
+      const python = spawn('python', ['python/excelCheck.py', filename]);
       let error;
       let dataToSend;
 
