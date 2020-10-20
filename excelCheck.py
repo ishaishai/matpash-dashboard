@@ -1,28 +1,33 @@
 import pandas as pd
+pd.options.mode.chained_assignment = None
+import warnings
+warnings.simplefilter("ignore")
 from datetime import datetime,date
 import json
 import sys
 import os, time
 
-filename = sys.argv[1]
-excelname = filename
-response = {'status': None, 'errors': []}
+filepath = sys.argv[1]
+filename = sys.argv[2]
+
+excelname = filepath
+response = {"status": None, "errors": []}
 
 try:
-    print(excelname)
-    xls = pd.ExcelFile(excelname)
+    # print(filepath)
+    xls = pd.ExcelFile(filepath)
 except:
-    response['status'] = 'failure'
-    response['errors'].append('הקובץ לא קיים')
+    response["status"] = "failure"
+    response["errors"].append("הקובץ לא קיים")
     print(response)
     sys.exit()
 
 list_of_sheets = xls.sheet_names
-writer = pd.ExcelWriter(os.path.join('Exceloutput', excelname))
+writer = pd.ExcelWriter(os.path.join('Exceloutput', filename))
 
 file_path = os.path.join('Exceloutput', f'{filename}.txt')
 
-print(file_path)
+# print(file_path)
 def checkIfFileExists():
     infoData = format(datetime.now().strftime("%Y-%m-%d %H:%M"))
     if os.path.exists(file_path):
@@ -49,8 +54,8 @@ def exportExcel(df, nameSheet):
     try:
         df.to_excel(writer, sheet_name=nameSheet, header=None)
     except:
-        response['status'] = 'failure'
-        response['errors'].append('שם הגיליון ארוך יותר מ-31 תווים')
+        response["status"] = "failure"
+        response["errors"].append("שם הגיליון ארוך יותר מ-31 תווים")
         writeToJson("שם הגיליון ארוך יותר מ-31 תווים " + nameSheet)
 
 
@@ -266,8 +271,8 @@ def OnlychangeColomnsName(dataframe, sheetname):
     try:
         dataframe.to_excel(writer, sheet_name=sheetname, index=False)
     except:
-        response['status'] = 'failure'
-        response['errors'].append('שם הגיליון ארוך יותר מ-31 תווים')
+        response["status"] = "failure"
+        response["errors"].append("שם הגיליון ארוך יותר מ-31 תווים")
         writeToJson("שם הגיליון ארוך יותר מ-31 תווים " + sheetname)
 
 
@@ -385,13 +390,13 @@ def readSheets(list_of_sheets, excel_name):
             try:
                 dataframe.to_excel(writer, sheet_name=sheetname, index=False)
             except:
-                response['status'] = 'failure'
-                response['errors'].append('שם הגיליון ארוך יותר מ-31 תווים')
+                response["status"] = "failure"
+                response["errors"].append("שם הגיליון ארוך יותר מ-31 תווים")
                 writeToJson("שם הגיליון ארוך יותר מ-31 תווים " + sheetname)
 
         else:
-            response['status'] = 'failure'
-            response['errors'].append("בגיליון" + "-" + list_of_sheets[i] + " לא קיים/צוין פורמט תקין")
+            response["status"] = "failure"
+            response["errors"].append("בגיליון" + "-" + list_of_sheets[i] + " לא קיים/צוין פורמט תקין")
             writeToJson("בגיליון" + "-" + list_of_sheets[i] + " לא קיים/צוין פורמט תקין")
 
 
@@ -408,13 +413,13 @@ dateInFile = flag[len(flag)-2].replace('"', "")
 try:
     time.strptime(dateInFile, '%Y-%m-%d')
     writeToJson("Success")
+    response["status"] = "success"
     # print(json.dumps("Success", ensure_ascii=False))
-    response['status'] = 'success'
-    print(response)
+    print(json.dumps(response))
 except:
     writeToJson("Error")
-    response['status'] = 'failure'
+    response["status"] = "failure"
     # print(json.dumps("Error", ensure_ascii=False))
-    print(response)
+    print(json.dumps(response))
 
 

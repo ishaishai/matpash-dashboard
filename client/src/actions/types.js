@@ -15,3 +15,4 @@ export const FETCH_STATISTICS = 'fetch_statistics';
 export const CHECK_EXCEL_LOADING = 'check_excel_loading';
 export const CHECK_EXCEL_SUCCESS = 'check_excel_success';
 export const CHECK_EXCEL_ERROR = 'check_excel_error';
+export const RESET_RESULTS = 'reset_results';

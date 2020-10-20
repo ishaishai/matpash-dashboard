@@ -11,9 +11,8 @@ exports.checkExcel = async (req, res) => {
       return res.status(400).send('File upload error');
     }
     try {
-      const { filename } = req.file;
-      console.log(req.file);
-      const data = await excelService.runExcelCheck(filename);
+      const { path, originalname } = req.file;
+      const data = await excelService.runExcelCheck(path, originalname);
       return res.send(data);
     } catch (error) {
       return res.status(500).json({ error });
