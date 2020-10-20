@@ -1,36 +1,49 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { checkExcel } from '../actions';
+import { uploadExcelFile, resetResults } from '../actions';
 import { validateFile } from '../utils';
+import Loader from './Loader';
 
-const Admin = ({ result, error, checkExcel }) => {
+const Admin = ({ result, loading, resetResults, error, uploadExcelFile }) => {
   const [file, setFile] = useState(null);
-  const [fileFormatError, setfileFormatError] = useState(null);
+  const [fileFormatError, setfileFormatError] = useState(false);
 
   const handlSubmit = e => {
     e.preventDefault();
-    //checkExcel(file);
-  };
-
-  const handleFile = e => {
-    const file = e.target.files[0];
-
-    if (validateFile(file.name)) {
-      setfileFormatError(null);
-      setFile(file);
-    } else {
-      setfileFormatError('קובץ בפורמט לא תקין, אנא בחר קובץ אקסל');
-      setFile(null);
+    if (file && !fileFormatError) {
+      uploadExcelFile(file);
     }
   };
 
-  const succes = result === 'success';
-  
+  const handleFile = e => {
+    resetResults();
+
+    const file = e.target.files[0];
+
+    if (!validateFile(file.name)) {
+      setfileFormatError(true);
+      setFile(null);
+    } else {
+      setfileFormatError(false);
+      setFile(file);
+    }
+  };
+
+  const mapErrors = errors =>
+    errors.map(err => <li style={{ margin: '10px' }}>{err}</li>);
+
+  const success = result?.status === 'success';
+  const failure = result?.status === 'failure';
+
+  if (loading) {
+    return <Loader message=".אנא המתן, פעולה זו עלולה להמשך מספר דקות" />;
+  }
+
   return (
     <div className="container" dir="rtl" style={{ marginTop: '30px' }}>
       <h3 class="ui dividing header">בדיקת קובץ אקסל</h3>
       <form
-        className={`ui form ${succes ? 'success' : 'error'}`}
+        className={`ui form ${success ? 'success' : 'error'}`}
         onSubmit={handlSubmit}
       >
         <div className="inline field">
@@ -54,19 +67,13 @@ const Admin = ({ result, error, checkExcel }) => {
         {fileFormatError && (
           <div className="ui error message">
             <div className="header">פורמט לא תקין</div>
-            <p>{fileFormatError}</p>
+            <p>{'קובץ בפורמט לא תקין, אנא בחר קובץ אקסל'}</p>
           </div>
         )}
         {error && (
           <div className="ui error message">
             <div className="header">קובץ אקסל לא תקין</div>
             <p>{error}</p>
-          </div>
-        )}
-        {result === 'success' && (
-          <div className="ui success message">
-            <div className="header">קובץ תקין</div>
-            <p>הקובץ בפורמט תקין וניתן להעלאה</p>
           </div>
         )}
         <div className="inline field">
@@ -79,10 +86,34 @@ const Admin = ({ result, error, checkExcel }) => {
           </button>
         </div>
       </form>
+      {success && (
+        <div className="ui success message">
+          <div className="header">קובץ תקין</div>
+          <p>הקובץ בפורמט תקין וניתן להעלאה</p>
+        </div>
+      )}
+      {failure && (
+        <div className="ui error message">
+          <div className="header">קובץ אקסל לא תקין</div>
+          <ul>{mapErrors(result.errors)}</ul>
+        </div>
+      )}
+      <h3 class="ui dividing header" style={{ marginTop: '50px' }}>
+        העלאת קובץ אקסל
+      </h3>
+      <button className={`ui primary button`} disabled={!success} type="submit">
+        העלה קובץ
+      </button>
     </div>
   );
 };
 
-const mapStateToProps = ({ admin: { result, error } }) => ({ result, error });
+const mapStateToProps = ({ admin: { result, error, loading } }) => ({
+  result,
+  error,
+  loading,
+});
 
-export default connect(mapStateToProps, { checkExcel })(Admin);
+export default connect(mapStateToProps, { uploadExcelFile, resetResults })(
+  Admin,
+);

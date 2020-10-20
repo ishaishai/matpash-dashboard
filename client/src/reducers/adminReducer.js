@@ -2,6 +2,7 @@ import {
   CHECK_EXCEL_ERROR,
   CHECK_EXCEL_LOADING,
   CHECK_EXCEL_SUCCESS,
+  RESET_RESULTS,
 } from '../actions/types';
 
 const initialState = {
@@ -28,6 +29,8 @@ export default (state = initialState, action) => {
         ...initialState,
         error: payload,
       };
+    case RESET_RESULTS:
+      return initialState;
     default:
       return state;
   }

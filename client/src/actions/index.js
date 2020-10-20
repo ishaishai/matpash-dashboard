@@ -10,6 +10,7 @@ import {
   CHECK_EXCEL_LOADING,
   CHECK_EXCEL_ERROR,
   CHECK_EXCEL_SUCCESS,
+  RESET_RESULTS,
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -57,14 +58,25 @@ export const createUser = user => async dispatch => {
 
 export const fetchStatistics = () => async dispatch => {};
 
-export const checkExcel = excelFile => async dispatch => {
+export const uploadExcelFile = excelFile => async dispatch => {
   dispatch({ type: CHECK_EXCEL_LOADING });
 
   try {
-    const response = await axios.post('/api/upload/check-excel');
+    const formData = new FormData();
+    formData.append('excel-file', excelFile);
+    const response = await axios.post(
+      '/api/upload/check-excel',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      },
+    );
     dispatch({ type: CHECK_EXCEL_SUCCESS, payload: response.data });
   } catch (error) {
-    console.log(error.response.data);
     dispatch({ type: CHECK_EXCEL_ERROR, payload: error.response.data });
   }
 };
+
+export const resetResults = () => ({ type: RESET_RESULTS })

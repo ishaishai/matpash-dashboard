@@ -2,6 +2,7 @@
 
 ## install:
 ### inside the project directory: `npm install`
+### inside the project directory: `pip install -r requirements.txt`
 ### inside the client directory: `npm install`
 
 ## run client & server:
