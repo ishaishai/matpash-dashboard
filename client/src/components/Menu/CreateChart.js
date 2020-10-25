@@ -230,7 +230,7 @@ const CreateChart = props => {
     if(props.permissions === 'מנהל'){
       setDashboardNames([...dashboards, 'דשבורד חדש']);
     }else{
-      if(dashboards == ''){
+      if(dashboards === ''){
         alert('למשתמש אין גישה לשום דשבורד - הינך מועבר לדף הבית');
         window.location.href="/"
       }
@@ -281,7 +281,7 @@ const CreateChart = props => {
   };
 
   useEffect(() => {
-    if (crossTableSelected != '') {
+    if (crossTableSelected !== '') {
       fetchCrossColumn();
     }
   }, [crossTableSelected]);
@@ -383,7 +383,7 @@ const CreateChart = props => {
       };
     });
 
-    if (type == 'pie') {
+    if (type === 'pie') {
       setEndPeriodSelected('');
       setShown(false);
     } else {
@@ -407,7 +407,7 @@ const CreateChart = props => {
       alert('יש לבחור טבלה עבור תקופה');
     } else if (startPeriodSelected.length === 0) {
       alert('יש לבחור את תחילת התקופה הרצויה');
-    } else if (type != 'pie' && endPeriodSelected.length === 0) {
+    } else if (type !== 'pie' && endPeriodSelected.length === 0) {
       alert(' יש לבחור את סוף התקופה');
     } else if (graphSeries.length === 0) {
       alert('יש להוסיף עמודות מידע');

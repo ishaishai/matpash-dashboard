@@ -8,7 +8,7 @@ const DashboardTabs = props => {
   const [layoutAfterChange, setLayoutAfterChange] = useState(null)
   const [dashboardNames, setDashboardNames] = useState([]);
   const [isViewer, setIsViewer] = useState(() => {
-    if (props.permissions == 'צופה') {
+    if (props.permissions === 'צופה') {
       return false;
     } else {
       return true;
@@ -20,14 +20,13 @@ const DashboardTabs = props => {
     const dashboardNames = response.data.dashboardIdList;
     let list = [...response.data.dashboardIdList];
 
-    if (list.length != 0) {
+    if (list.length !== 0) {
       let dash = list.map(obj => ({
         name: 'dashboard' + obj,
         id: obj,
       }));
 
       setDashboardNames(dashboardNames);
-      console.log(dash);
       handleDashboardPick(dash ? dash[0].id : null);
     } else {
       setDashboardNames([]);
@@ -64,8 +63,6 @@ const DashboardTabs = props => {
     grid = (
       <ResponsiveGrid onLayoutChange={setLayout} dashboardID={dashboardID} />
     );
-
-    console.log(grid);
     setResponsiveGrid(grid);
   };
 

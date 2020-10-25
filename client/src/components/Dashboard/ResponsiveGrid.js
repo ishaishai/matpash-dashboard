@@ -28,7 +28,6 @@ function ResponsiveGrid(props) {
           id,
       );
       const { data } = response.data;
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -54,8 +53,6 @@ function ResponsiveGrid(props) {
         '/api/dashboard/get-by-id/' + props.dashboardID,
       );
       const { dashb } = result.data.dashboard.graphList;
-
-      console.log(props.dashboardID);
       setHighChartsOptions(result.data.dashboard.graphList);
 
       // console.log(result.data.dashboard.graphlist);
@@ -71,7 +68,6 @@ function ResponsiveGrid(props) {
   }, []);
 
   useEffect(() => {
-    console.log(props.dashboardID);
     getDashboard();
   }, [props.dashboardID]);
 

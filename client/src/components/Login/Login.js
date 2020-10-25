@@ -25,6 +25,7 @@ const Login = ({ login, error, isLoading, history }) => {
           src={logo}
           height={200}
           width={150}
+          alt="app-logo"
           style={{ marginBottom: '40px' }}
         ></img>
         <h1 style={{ marginBottom: '40px' }}> ברוכים הבאים </h1>

@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import Loader from './Loader';
 
 const ProtectedRoute = ({ isLoggedIn, ...props }) => {
-  if (isLoggedIn == null) {
+  if (isLoggedIn === null) {
     return <Loader />;
   }
 
