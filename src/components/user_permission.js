@@ -86,7 +86,6 @@ class User_permission extends Component {
         const updatedUsersIdskeys = Object.keys(this.state.updatedUsersIds);
         const usersPermissionsDataToSave = this.state.usersPermissionsData.filter((pd) =>  updatedUsersIdskeys.includes(pd.id) == true );
 
-        console.log("handleSave");
         console.log("updatedUsersIds",this.state.updatedUsersIds);
         console.log("usersPermissionsDataToSave",usersPermissionsDataToSave);
         //https://blog.logrocket.com/how-to-make-http-requests-like-a-pro-with-axios/
@@ -111,7 +110,7 @@ class User_permission extends Component {
       return (
         <div className="align-items-center">
             <div>
-                <button type="button" className="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter">
+                <button type="button" className="btn btn-secondary bg-success" data-toggle="modal" data-target="#exampleModalCenter">
                 שמירת שינויים
                 </button>
                 <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -127,8 +126,8 @@ class User_permission extends Component {
                             האם לבצע שינויים?
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">ביטול</button>
-                                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.handleSave}>שמור</button>
+                                <button type="button" className="btn btn-secondary bg-danger" data-dismiss="modal">ביטול</button>
+                                <button type="button" className="btn btn-secondary bg-success" data-dismiss="modal" onClick={this.handleSave}>שמור</button>
                             </div>
                         </div>
                     </div>
@@ -136,27 +135,29 @@ class User_permission extends Component {
             </div>
             <br></br>
             <div className="row bg-light text-dark">
-                <div className="col-1 border border-dark text-center">שם משתמש</div> 
-                <div className="col-1 border border-dark text-center">צופה</div> 
-                <div className="col-1 border border-dark text-center">עורך</div>
-                <div className="col-1 border border-dark text-center">הדפסת גרף</div>
-                <div className="col-1 border border-dark text-center">ייצוא תצוגה pdf</div>
-                <div className="col-1 border border-dark text-center"> ייצוא לקובץ jpg </div>
-                <div className="col-1 border border-dark text-center">ייצוא לקובץ CSV</div>
-                <div className="col-1 border border-dark text-center">ייצוא לקובץ XCL</div>
+                <div className="col border border-dark text-center">שם משתמש</div> 
+                <div className="col border border-dark text-center">צופה</div> 
+                <div className="col border border-dark text-center">אדמין</div> 
+                <div className="col border border-dark text-center">עורך</div>
+                <div className="col border border-dark text-center">הדפסת גרף</div>
+                <div className="col border border-dark text-center">ייצוא תצוגה pdf</div>
+                <div className="col border border-dark text-center"> ייצוא לקובץ jpg </div>
+                <div className="col border border-dark text-center">ייצוא לקובץ CSV</div>
+                <div className="col border border-dark text-center">ייצוא לקובץ XCL</div>
             </div>
             <br></br>
             {
                 page.map((pd) => 
                   <div id={pd.id} key={pd.id} className="row">
-                    <div className="col-1 border text-center">{pd['id']}</div>
-                   <div className="col-1 border text-center"><input className="" type="checkbox" checked={pd['view']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'view',e)}/></div>
-                   <div className="col-1 border text-center"><input className="" type="checkbox" checked={pd['edit']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'edit',e)}/></div>
-                   <div className="col-1 border text-center"><input className="" type="checkbox" checked={pd['print']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'print',e)}/></div>
-                   <div className="col-1 border text-center"><input className="" type="checkbox" checked={pd['pdf']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'pdf',e)}/></div>
-                   <div className="col-1 border text-center"><input className="" type="checkbox" checked={pd['image']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'image',e)}/></div>
-                   <div className="col-1 border text-center"><input className="" type="checkbox" checked={pd['csv']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'csv',e)}/></div>
-                   <div className="col-1 border text-center"><input className="" type="checkbox" checked={pd['xlsx']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'xlsx',e)}/></div>
+                    <div className="col border text-center">{pd['id']}</div>
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['admin']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'admin',e)}/></div>
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['view']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'view',e)}/></div>
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['edit']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'edit',e)}/></div>
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['print']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'print',e)}/></div>
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['pdf']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'pdf',e)}/></div>
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['image']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'image',e)}/></div>
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['csv']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'csv',e)}/></div>
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['xlsx']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'xlsx',e)}/></div>
                 </div>)
 
               //{console.log(this.state.perPage)}

@@ -8,7 +8,8 @@ import User_view_permission from "./components/user_view_permission";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import 'bootstrap-v4-rtl';
 import './scss/index.scss';
-import './scss/style.css'
+import './scss/style.css';
+import $ from 'jquery';
 
 import {BrowserRouter as Router,Switch,Route,Link} from "react-router-dom";
 
@@ -31,6 +32,7 @@ class App extends Component {
                 <Route path="/viewPerms">
                   <User_view_permission />
                 </Route>
+                
                 <Route path="/users">
                   <Users/>
                 </Route>

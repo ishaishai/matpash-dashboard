@@ -37,12 +37,8 @@ class Users extends Component {
         })
   }
 
-
   searchData() {
-
     const url = "http://localhost:5000/users/search/"+this.state.currentPage+"?str="+this.state.searchStr;
-    console.log("url", url);
-
     axios.get(url)
     .then(res =>{
         console.log("searchData from server:",res);
@@ -53,12 +49,10 @@ class Users extends Component {
             data: res.data.users
         },() => {
             // this.props.usersInfoCallback(this.state.sourceData);
-            console.log("pagecount: ",this.state.pageCount)
+           // console.log("pagecount: ",this.state.pageCount)
         })
     })
   }
-
-
 
   handlePageClick(e){
       const selectedPage = e.selected + 1 ;
@@ -85,29 +79,29 @@ class Users extends Component {
                 
                 <br></br>
                 <div className="row bg-light text-dark">
-                    <div className="col-1 border border-dark text-center">#</div> 
-                    <div className="col-1 border border-dark text-center">שם משתמש</div> 
-                    <div className="col-1 border border-dark text-center"> ת״ז</div>
-                    <div className="col-1 border border-dark text-center">  שם פרטי	</div>
-                    <div className="col-1 border border-dark text-center">שם משפחה	</div>
-                    <div className="col-1 border border-dark text-center"> כתובת</div>
-                    <div className="col-1 border border-dark text-center"> תאריך לידה	</div>
-                    <div className="col-1 border border-dark text-center">תפקיד</div>
-                    <div className="col-1 border border-dark text-center">ארגון</div>
+                    <div className="col border border-dark text-center">#</div> 
+                    <div className="col border border-dark text-center">שם משתמש</div> 
+                    <div className="col border border-dark text-center"> ת״ז</div>
+                    <div className="col border border-dark text-center">  שם פרטי	</div>
+                    <div className="col border border-dark text-center">שם משפחה	</div>
+                    <div className="col border border-dark text-center"> כתובת</div>
+                    <div className="col border border-dark text-center"> תאריך לידה	</div>
+                    <div className="col border border-dark text-center">תפקיד</div>
+                    <div className="col border border-dark text-center">ארגון</div>
                 </div>
               {/* {this.state.postData} */ }
             {
-                page.map((pd)=>
+                page.map((pd,i)=>
                     <div id={pd.id} key={pd.id}  className="row ">
-                        <div className="col-1 border text-center">{}</div>
-                        <div className="col-1 border text-center">{pd['username']}</div>
-                        <div className="col-1 border text-center">{pd['id']}</div>
-                        <div className="col-1 border text-center">{pd['firstName']}</div>
-                        <div className="col-1 border text-center">{pd['lastName']}</div>
-                        <div className="col-1 border text-center">{pd['address']}</div>
-                        <div className="col-1 border text-center">{pd['dateOfBirth']}</div>
-                        <div className="col-1 border text-center">{pd['role']}</div>
-                        <div className="col-1 border text-center">{pd['organization']}</div>
+                        <div className="col border text-center">{this.state.perPage-(this.state.perPage-i)}</div>
+                        <div className="col border text-center">{pd['username']}</div>
+                        <div className="col border text-center">{pd['id']}</div>
+                        <div className="col border text-center">{pd['firstName']}</div>
+                        <div className="col border text-center">{pd['lastName']}</div>
+                        <div className="col border text-center">{pd['address']}</div>
+                        <div className="col border text-center">{pd['dateOfBirth']}</div>
+                        <div className="col border text-center">{pd['role']}</div>
+                        <div className="col border text-center">{pd['organization']}</div>
                     </div>
                 )
             }
