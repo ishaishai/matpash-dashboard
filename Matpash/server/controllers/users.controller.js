@@ -29,7 +29,7 @@ exports.search = async(req, res)=>{
     const str = req.query.str.toLowerCase();
     const search_phrase = str+"%";
 
-
+    
     let countRes = await usersdbpool.query('SELECT count(*) from public."usersInfoTable" where lower(username) like $1::text ;',[search_phrase])
     const totalCount = countRes.rows[0].count;
 

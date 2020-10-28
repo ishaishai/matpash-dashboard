@@ -23,7 +23,7 @@ exports.getPermission = async(req, res)=>{
 async function updateSingleUserPermissions(updateValuesArray)
 {
     try {
-        const res = await usersdbpool.query('UPDATE public."usersPriviledgesTable" set  "admin"=true, "view"=$2, "edit"=$3,  "print"=$4,  "pdf"=$5, "image"=$6,  "csv"=$7,  "xlsx"=$8,  "dataTable"=$9 where id=$1;',updateValuesArray);
+        const res = await usersdbpool.query('UPDATE public."usersPriviledgesTable" set  "admin"=$2, "view"=$3, "edit"=$4,  "print"=$5,  "pdf"=$6, "image"=$7,  "csv"=$8,  "xlsx"=$9,  "dataTable"=$10 where id=$1;',updateValuesArray);
         return true;
     } catch(e){
         return false;
@@ -38,7 +38,7 @@ exports.updatePermissions = async(req, res)=>{
     let updatesResults = {};
     let isUpdateSuccess = false;
     for(var i=0; i < userToUpdate.length ; i++) {
-        updateValuesArray = [userToUpdate[i]['id'], userToUpdate[i]['view'], userToUpdate[i]['edit'], userToUpdate[i]['print'],userToUpdate[i]['pdf'], userToUpdate[i]['image'], userToUpdate[i]['csv'],userToUpdate[i]['xlsx'],userToUpdate[i]['dataTable']];
+        updateValuesArray = [userToUpdate[i]['id'], userToUpdate[i]['view'],userToUpdate[i]['admin'],userToUpdate[i]['edit'], userToUpdate[i]['print'],userToUpdate[i]['pdf'], userToUpdate[i]['image'], userToUpdate[i]['csv'],userToUpdate[i]['xlsx'],userToUpdate[i]['dataTable']];
         isUpdateSuccess = await updateSingleUserPermissions(updateValuesArray);
         updatesResults[userToUpdate[i]['id']] = isUpdateSuccess;
     }
@@ -48,10 +48,6 @@ exports.updatePermissions = async(req, res)=>{
     });
 
 }
-
-
-
-
 
 
 exports.userinfo = async(req, res)=>{

@@ -4,6 +4,9 @@ const ViewPermissionContoller = require('../controllers/viewPermission.controlle
 const router = express.Router();
 
 router.get('/getViewPermission', ViewPermissionContoller.getViewPermission);
+
+router.post('/saveViewPermission',ViewPermissionContoller.saveViewPermission);
+
 router.get('/userinfo/:userid', usersContoller.userinfo);
 
 module.exports = router;
