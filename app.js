@@ -23,10 +23,19 @@ app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/tables', require('./routes/tables.route'));
 app.use('/api/dashboard', require('./routes/dashboard.route'));
 
-app.get('/', (req, res) => {
-  res.send('matpash-server');
-});
+if (process.env.NODE_ENV === 'production') {
+  // Serve up production assets
+  app.use(express.static('client/build'));
 
-app.listen(5000, () => {
-  console.log('Server has started on port 5000');
+  // Serve up the index.html
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, async () => {
+  console.log(`Server listening on port ${PORT}`);
 });
