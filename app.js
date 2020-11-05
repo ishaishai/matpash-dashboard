@@ -13,6 +13,11 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
+if (process.env.NODE_ENV !== 'production') {
+  // Dont use logger in production mode
+  app.use(morgan('tiny'));
+}
+
 // Load routes
 app.use('/api/', require('./routes/authRoutes'));
 app.use('/api/statistics', require('./routes/statisticsRoutes'));
@@ -22,11 +27,6 @@ app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/tables', require('./routes/tables.route'));
 app.use('/api/dashboard', require('./routes/dashboard.route'));
 app.use('/api/view', require('./routes/viewRoutes'));
-
-if (process.env.NODE_ENV !== 'production') {
-  // Dont use logger in production mode
-  app.use(morgan('tiny'));
-}
 
 if (process.env.NODE_ENV === 'production') {
   // Serve up production assets

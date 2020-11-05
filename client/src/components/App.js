@@ -21,6 +21,7 @@ const App = ({ fetchUser, auth }) => {
     fetchUser();
   }, [fetchUser]);
 
+  console.log('App')
   return (
     <div style={{ height: '100vh' }}>
       <BrowserRouter>
