@@ -23,9 +23,8 @@ const Login = ({ login, error, isLoading, history }) => {
       <div className="sign-in ui big form">
         <img
           src={logo}
-          height={200}
-          width={150}
-          alt="app-logo"
+          height={250}
+          width={300}
           style={{ marginBottom: '40px' }}
         ></img>
         <h1 style={{ marginBottom: '40px' }}> ברוכים הבאים </h1>
@@ -52,6 +51,7 @@ const Login = ({ login, error, isLoading, history }) => {
               required
             />
           </div>
+          
           {error && error !== 'Invalid token' && (
             <h4 className="ui red header">{error}</h4>
           )}

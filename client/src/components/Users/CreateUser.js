@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { createUser } from '../../actions/index';
+import { createUser, clearErrors } from '../../actions/index';
 import validate from './validation';
 import { Field, reduxForm } from 'redux-form';
 import Loader from '../Loader';

@@ -3,6 +3,7 @@ import { Responsive, WidthProvider } from 'react-grid-layout';
 import Chart from './Charts';
 import Highcharts from 'highcharts';
 import axios from 'axios';
+import "./ResponsiveGrid.css";
 
 require('highcharts/modules/exporting')(Highcharts);
 
@@ -12,12 +13,14 @@ const defaultContextMenuButtons = Highcharts.getOptions().exporting.buttons
 function ResponsiveGrid(props) {
   const ResponsiveGridLayout = WidthProvider(Responsive);
   const [highChartsOptions, setHighChartsOptions] = useState([]);
+  const highChartsOptionsRef = React.useRef('highChartsOptions');
+
 
   // let chartRef = []; // Create array of refs for each chart
   const chartRef = useMemo(
     () => highChartsOptions.map(_i => React.createRef()),
     [],
-  ); // Create array of refs for each chart
+  ); // Create array   of refs for each chart
 
   const deleteChart = async id => {
     try {
@@ -28,6 +31,7 @@ function ResponsiveGrid(props) {
           id,
       );
       const { data } = response.data;
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +41,6 @@ function ResponsiveGrid(props) {
   const onResizeStop = useCallback(
     (event, index) => {
       const chartId = index.i.slice(-1);
-
       // console.log(chartRef);
       // chartRef[chartId].current.chart.reflow();
       setTimeout(() => {
@@ -48,24 +51,28 @@ function ResponsiveGrid(props) {
   );
 
   const getDashboard = async () => {
+    setHighChartsOptions([]);
     if (props.dashboardID != null) {
       const result = await axios.get(
         '/api/dashboard/get-by-id/' + props.dashboardID,
       );
-      const { dashb } = result.data.dashboard.graphList;
+      
+      
       setHighChartsOptions(result.data.dashboard.graphList);
 
       // console.log(result.data.dashboard.graphlist);
-
-      return result.data.dashboard.graphList;
     }
     return null;
   };
 
+  useEffect(() => {
+    highChartsOptionsRef.current = highChartsOptions;
+
+  },[highChartsOptions]);
+
+
   // Create array of refs for each chart
-  useMemo(() => {
-    getDashboard();
-  }, []);
+
 
   useEffect(() => {
     getDashboard();
@@ -102,8 +109,8 @@ function ResponsiveGrid(props) {
                   zoomType: MappedChart.options.chart.zoomType,
                 },
                 legend: {
-                  align: 'center',
-                  enabled: true,
+                  ...MappedChart.options.legend,
+                  rtl: true,
                 },
                 title: {
                   text: MappedChart.options.title.text,
@@ -111,7 +118,10 @@ function ResponsiveGrid(props) {
                 subtitle: {
                   text: MappedChart.options.subtitle.text,
                 },
-                tooltip: MappedChart.options.tooltip, ///get prop of tooltip
+                tooltip: {
+                  ...MappedChart.options.tooltip,
+                 
+                 }, 
                 plotOptions: {
                   column: {
                     pointPadding: 0.2,
@@ -138,7 +148,6 @@ function ResponsiveGrid(props) {
                   data: obj.data,
                   color: obj.colr,
                 })),
-
                 xAxis: {
                   categories: MappedChart.options.xAxis.catagories,
                   labels: {
@@ -147,18 +156,30 @@ function ResponsiveGrid(props) {
                     },
                     type: MappedChart.options.xAxis.type,
                   },
+                },     
+                credits:  {
+                  enabled: false,
                 },
-
+                lang: {
+                  printChart: "<p style='text-align:right'>הדפסת גרף</p>",
+                  downloadPNG:  "<p style='text-align:right'>PNG-הורדה כ</p>",
+                  downloadPDF: "<p style='text-align:right'>PDF-הורדה כ </p>",
+                  downloadJPEG: "<p style='text-align:right'>JPEG-הורד כ</p>",
+                  downloadSVG: "<p style='text-align:right'>SVG-הורדה כ </p>",
+                  viewFullscreen:  "<p style='text-align:right'>צפייה במסך מלא</p>"
+                },
                 exporting: {
                   buttons: {
                     contextButton: {
-                      menuItems: [
+                      
+                      menuItems: [ (props.permissions!='צופה') ? 
                         {
-                          text: 'מחיקת גרף',
+                          text: "<p style='text-align:right'>מחיקת גרף </p>",
                           onclick: () => {
                             deleteChart(MappedChart.index);
-                          },
-                        },
+                          } 
+                        } : null,
+                        ,
                         ...defaultContextMenuButtons,
                       ],
                     },

@@ -160,3 +160,28 @@ nav > div.nav-tabs > a:hover{
       .react-tabs__tab-panel--selected {
         display: block;
       }
+      div.dropdown button span{
+        /* overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    float: left !important;
+    text-align: center !;
+    padding-right: 6px;
+    margin-right: -6px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+     */
+        text-align: center !important;
+      }
+      /* div.dropdown div.dropdown-menu, .dropdown-item {
+        color: #fff !important;
+        background-color: #007bff!important;
+      } */
+      .dropdown-item:hover{
+        color: #111 !important;
+        background-color: #fff !important;
+      }
+      
+      /**/
+     

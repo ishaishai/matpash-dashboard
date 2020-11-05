@@ -26,7 +26,6 @@ exports.login = async (req, res) => {
     res.cookie('token', accessToken, { httpOnly: true });
 
     await storeOperation({ type: 'login', username });
-
     return res.json({
       id: user.id,
       username: user.username,

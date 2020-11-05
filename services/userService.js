@@ -2,13 +2,13 @@ const { usersQuery, DashboardDBpool } = require('../db');
 
 class UserService {
   async findByUsername(username) {
-    console.log('AFASFASF');
     const {
       rows,
     } = await usersQuery(
       `SELECT "id", "username", "password", "permissions" FROM public."usersInfoTable" WHERE "username"= $1`,
       [username],
     );
+
 
     return rows[0];
   }
@@ -83,10 +83,8 @@ class UserService {
 
     //insert into users priviledges also
     await usersQuery(`INSERT INTO public."usersPriviledgesTable"(
-      id, admin, view, edit, print, pdf, image, csv, xlsx, "dataTable")
-      VALUES ('${id}', ${permissions == 'מנהל' ? true : false}, true, ${
-      permissions == 'מנהל' ? true : permissions == 'עורך' ? true : false
-    }, false, false, false, false, false, false);`);
+      id, print, pdf, image)
+      VALUES ('${id}', false, false, false);`);
 
     //insert into dashboard priviledges also
     await DashboardDBpool.query(`INSERT INTO public."dashboardPriviledgesTable"(
@@ -96,7 +94,7 @@ class UserService {
 
   async getPermissions() {
     const { rows } = await usersQuery(
-      `SELECT "id","username","firstName","lastName","admin", "view", "edit", "print", "pdf", "image", "csv", "xlsx", "dataTable"
+      `SELECT "id","username","firstName","lastName","print", "pdf", "image"
 	    FROM public."usersPriviledgesTable" join public."usersInfoTable" using(id);`
     );
     return rows;

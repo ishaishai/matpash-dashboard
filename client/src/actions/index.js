@@ -30,7 +30,6 @@ export const login = (user, history) => async dispatch => {
 
   try {
     const response = await axios.post('/api/login', user);
-
     dispatch({ type: FETCH_USER_SUCCESS, payload: response.data });
     history.push('/');
   } catch (error) {

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import Users from "./users_table";
 import User_permission from "./user_permission";
 import User_view_permission from "./user_view_permission";
@@ -22,15 +23,6 @@ class Header extends Component {
                     <div className="col-8">
                         <a href="#" className="btn btn-lg bg-primary text-white btn-outline-primary" > מתפ״ש - מערכת הרשאות משתמשים </a>
                     </div>
-                    {/* <div className="col-4 text-white">
-                        <ul className="avt nav-justified" >
-                            <li className="text-center">
-                                <span className="avatar avatar-96 img-circle  bg-primary">F</span>
-                                <img src="..." alt="..." className="rounded-0"/>
-                                <p>avatar</p>
-                            </li>
-                        </ul> 
-                    </div> */}
                 </div>
             </div>
             <nav>
@@ -40,9 +32,6 @@ class Header extends Component {
                         <a className="nav-item nav-link btn-outline-primary" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">הרשאות משתמשים</a>
                         <a className="nav-item nav-link btn-outline-primary" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">הרשאות צפיה בדשבורד</a>
                     </div>
-                    {/* href="/users/getall"
-                    href="/permissions/getPermission"
-                    href="/views/getViewPermission" */}
                 </nav>
                 <div className="tab-content" id="nav-tabContent">
                     <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">

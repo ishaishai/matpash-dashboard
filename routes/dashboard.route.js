@@ -1,5 +1,5 @@
 const express = require('express');
-const dashboardContoller = require('../controllers/dashboard.controller');
+const dashboardContoller = require('../controllers/dashboardController');
 const router = express.Router();
 const requireToken = require('../middlewares/requireToken');
 

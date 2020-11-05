@@ -9,7 +9,6 @@
 
 .chartWrap > div {
   height: 100%;
-  border-radius: 8%;
 }
 
 .layout {
@@ -47,3 +46,35 @@
   margin-left: 5px;
   margin-top: 5px;
 }
+
+
+
+.dropDownContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  margin-top: 15px;
+  width: 100%;
+  background-color: rgb(237, 241, 247);
+}
+
+.formGroup {
+  width: 100%;
+  float: right;
+}
+
+.chooseDashboardLabel {
+  text-align: right;
+}
+
+
+.btnWrapper{
+   display: inline-block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.deleteDashboardBtn{
+  float:right
+}
+

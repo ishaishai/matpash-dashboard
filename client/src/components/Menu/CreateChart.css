@@ -3,6 +3,7 @@
 }
 
 .title {
+  display: inline-block;
   padding: 10px 10px 0 0;
 }
 
@@ -24,10 +25,16 @@
   border-radius: 2%;
 }
 
+.dash-title-input {
+  margin-bottom: 2px;
+  direction: rtl;
+}
+
 .title-input {
   margin: 10px 0px 0px;
   direction: rtl;
 }
+
 .chart-demo-col {
   padding: 0;
 }
@@ -51,8 +58,13 @@
   text-align: center;
 }
 .dropdown-btn {
-  direction: RTL;
+  direction: rtl;
   float: none;
+}
+.btn-outline-primary::after {
+  float: left;
+  margin-top: 0.7em;
+  margin-right: 1.5em;
 }
 .col {
   text-align: center;
@@ -76,4 +88,36 @@
 }
 .upload-picture {
   margin-right: 100px;
+}
+
+.dropdown-item {
+  text-align: right !important;
+}
+
+.list-group {
+  margin-top: 2%;
+  width: 50%;
+  float: left;
+  margin-left: 10%;
+}
+
+.list-group-item {
+  text-align: right !important;
+  display: inline-block !important;
+  position: absolute;
+  width: 70%;
+}
+
+.color-picked {
+  width: 20px;
+}
+
+.button-danger {
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+}
+
+.dropdown-toggle {
+  width: 100% !important;
 }

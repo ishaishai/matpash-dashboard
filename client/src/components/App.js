@@ -12,7 +12,7 @@ import NavBar from './Menu/NavBar';
 import CreateChart from './Menu/CreateChart';
 import Tabs from './Dashboard/Tabs';
 import Login from './Login/Login';
-import Permissions from './Permissions/index';
+import Permissions from './Permissions/Permissions';
 import Admin from './Admin';
 import ProtectedRoute from './ProtectedRoute';
 
