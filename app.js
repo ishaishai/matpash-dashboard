@@ -7,7 +7,6 @@ const morgan = require('morgan');
 const app = express();
 
 // Middlewares
-app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -22,6 +21,12 @@ app.use('/api/permissions', require('./routes/permissionsRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/tables', require('./routes/tables.route'));
 app.use('/api/dashboard', require('./routes/dashboard.route'));
+app.use('/api/view', require('./routes/viewRoutes'));
+
+if (process.env.NODE_ENV !== 'production') {
+  // Dont use logger in production mode
+  app.use(morgan('tiny'));
+}
 
 if (process.env.NODE_ENV === 'production') {
   // Serve up production assets
