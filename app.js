@@ -7,16 +7,12 @@ const morgan = require('morgan');
 const app = express();
 
 // Middlewares
+app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-
-if (process.env.NODE_ENV !== 'production') {
-  // Dont use logger in production mode
-  app.use(morgan('tiny'));
-}
 
 // Load routes
 app.use('/api/', require('./routes/authRoutes'));

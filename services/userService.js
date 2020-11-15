@@ -9,7 +9,6 @@ class UserService {
       [username],
     );
 
-
     return rows[0];
   }
 
@@ -78,7 +77,7 @@ class UserService {
         role,
         organization,
         permissions,
-      ]
+      ],
     );
 
     //insert into users priviledges also
@@ -95,7 +94,7 @@ class UserService {
   async getPermissions() {
     const { rows } = await usersQuery(
       `SELECT "id","username","firstName","lastName","print", "pdf", "image"
-	    FROM public."usersPriviledgesTable" join public."usersInfoTable" using(id);`
+	    FROM public."usersPriviledgesTable" join public."usersInfoTable" using(id);`,
     );
     return rows;
   }

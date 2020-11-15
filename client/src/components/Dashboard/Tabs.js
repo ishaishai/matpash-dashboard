@@ -11,7 +11,7 @@ const DashboardTabs = props => {
   const [dashboardNames, setDashboardNames] = useState(null);
   const [currentDashName,setCurrentDashName] = useState('');
   const [isViewer, setIsViewer] = useState(() => {
-    if (props.permissions == 'צופה') {
+    if (props.permissions === 'צופה') {
       return false;
     } else {
       return true;

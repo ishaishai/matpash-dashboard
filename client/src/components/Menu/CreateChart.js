@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './CreateChart.css';
 import Chart from '../Dashboard/Charts';
 import Highcharts from 'highcharts';
+import { SketchPicker } from 'react-color';
 import {
   Button,
   Form,
