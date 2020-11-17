@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { uploadExcelFile, resetResults } from '../actions';
+import { uploadExcelFile, saveExcelFile, resetResults } from '../actions';
 import { validateFile } from '../utils';
 import Loader from './Loader';
 
-const Admin = ({ result, loading, resetResults, error, uploadExcelFile }) => {
+const Admin = ({ result, loading, resetResults, error, uploadExcelFile, saveExcelFile }) => {
   const [file, setFile] = useState(null);
   const [fileFormatError, setfileFormatError] = useState(false);
 
@@ -28,6 +28,10 @@ const Admin = ({ result, loading, resetResults, error, uploadExcelFile }) => {
       setFile(file);
     }
   };
+
+  const handleSaveExcel = () => {
+    saveExcelFile(file.name);
+  }
 
   const mapErrors = errors =>
     errors.map(err => <li style={{ margin: '10px' }}>{err}</li>);
@@ -98,12 +102,22 @@ const Admin = ({ result, loading, resetResults, error, uploadExcelFile }) => {
           <ul>{mapErrors(result.errors)}</ul>
         </div>
       )}
-      <h3 class="ui dividing header" style={{ marginTop: '50px' }}>
+      <h3 className="ui dividing header" style={{ marginTop: '50px' }}>
         העלאת קובץ אקסל
       </h3>
-      <button className={`ui primary button`} disabled={!success} type="submit">
+      <button
+        className={`ui primary button`}
+        disabled={!success}
+        onClick={handleSaveExcel}
+      >
         העלה קובץ
       </button>
+      {result === 'OK' && (
+        <div className="ui success message">
+          <div className="header">הקובץ נשמר</div>
+          <p>קובץ האקסל נשמר בהצלחה</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -114,6 +128,6 @@ const mapStateToProps = ({ admin: { result, error, loading } }) => ({
   loading,
 });
 
-export default connect(mapStateToProps, { uploadExcelFile, resetResults })(
+export default connect(mapStateToProps, { uploadExcelFile, saveExcelFile, resetResults })(
   Admin,
 );

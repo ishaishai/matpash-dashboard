@@ -20,15 +20,14 @@ exports.checkExcel = async (req, res) => {
   });
 };
 
-exports.upload = async (req, res) => {
+exports.saveExcel = async (req, res) => {
+  const { fileName } = req.body;
   try {
-    let xlsxFile = req.files.file;
-    await xlsxFile.mv('tmpFiles/' + xlsxFile.name);
-    let workBook = xlsx.readFile('tmpFiles/' + xlsxFile.name);
+    let workBook = xlsx.readFile(`Exceloutput/${fileName}`);
 
     let ans = await xlsxParser.parseExcelWorkBook(workBook);
-    if (ans == 1) {
-      res.status(200).send({ response: 'OK' });
+    if (ans === 1) {
+      res.status(200).send('OK');
     }
   } catch (error) {
     console.error(error.message);

@@ -27,7 +27,6 @@ app.use('/api/view', require('./routes/viewRoutes'));
 if (process.env.NODE_ENV === 'production') {
   // Serve up production assets
   app.use(express.static('client/build'));
-
   // Serve up the index.html
   const path = require('path');
   app.get('*', (req, res) => {

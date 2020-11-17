@@ -16,3 +16,7 @@ export const CHECK_EXCEL_LOADING = 'check_excel_loading';
 export const CHECK_EXCEL_SUCCESS = 'check_excel_success';
 export const CHECK_EXCEL_ERROR = 'check_excel_error';
 export const RESET_RESULTS = 'reset_results';
+
+export const SAVE_EXCEL_LOADING = 'save_excel_loading'
+export const SAVE_EXCEL_SUCCESS = 'save_excel_success'
+export const SAVE_EXCEL_ERROR = 'save_excel_error';

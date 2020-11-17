@@ -10,6 +10,9 @@ import {
   CHECK_EXCEL_LOADING,
   CHECK_EXCEL_ERROR,
   CHECK_EXCEL_SUCCESS,
+  SAVE_EXCEL_LOADING,
+  SAVE_EXCEL_SUCCESS,
+  SAVE_EXCEL_ERROR,
   RESET_RESULTS,
 } from './types';
 
@@ -63,19 +66,26 @@ export const uploadExcelFile = excelFile => async dispatch => {
   try {
     const formData = new FormData();
     formData.append('excel-file', excelFile);
-    const response = await axios.post(
-      '/api/upload/check-excel',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }
+    const response = await axios.post('/api/upload/check-excel', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
       },
-    );
+    });
     dispatch({ type: CHECK_EXCEL_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: CHECK_EXCEL_ERROR, payload: error.response.data });
   }
 };
 
-export const resetResults = () => ({ type: RESET_RESULTS })
+export const saveExcelFile = fileName => async dispatch => {
+  dispatch({ type: SAVE_EXCEL_LOADING });
+
+  try {
+    const response = await axios.post(`/api/upload/save-excel`, { fileName });
+    dispatch({ type: SAVE_EXCEL_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({ type: SAVE_EXCEL_ERROR, payload: error.response.data });
+  }
+};
+
+export const resetResults = () => ({ type: RESET_RESULTS });
