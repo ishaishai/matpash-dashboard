@@ -4,21 +4,44 @@ const { usersdbpool } = db;
 
 //const qr =  'SELECT * FROM (select "id","username" from public."usersInfoTable") as tmp JOIN public."usersPriviledgesTable" using("id");';
 
-exports.getPermission = async(req, res)=>{
+const getUserGraphPermissions = async (req,res) => {
+    console.log(req.user.id);
+    try { 
+            result = await usersdbpool.query(`select "print","pdf","image" from public."usersPriviledgesTable" where "id" = '${req.user.id}'`);
+            console.log("in get user graph permissions");
+            console.log(result.rows[0]);
+                //tbList = result.rows.map( t=> t.table_name)
+            res.status(200).json({
+                msg: 'ok',
+                userPriviledges: result.rows[0],
+            });
+        } catch(err) {
+            res.status(404).json({
+                error: err
+            })
+        }
+}
+
+const getAllPermissions = async (req,res) => {
     usersdbpool.query(`select * from (select "id","username","permissions" from public."usersInfoTable") as a join public."usersPriviledgesTable" using(id) where "id" != '000000000'`)
-    .then(result =>{
-        const pageCount = Math.ceil(result.rows.length/15);
-        //tbList = result.rows.map( t=> t.table_name)
-        res.status(200).json({
-            msg: 'ok',
-            users: result.rows,
-            pagecount: pageCount
-        })
-    }).catch(err =>{
-        res.status(404).json({
-            error: err
-        })
-    })
+        .then(result =>{
+            const pageCount = Math.ceil(result.rows.length/15);
+            //tbList = result.rows.map( t=> t.table_name)
+            res.status(200).json({
+                msg: 'ok',
+                users: result.rows,
+                pagecount: pageCount
+            })
+        }).catch(err =>{
+            res.status(404).json({
+                error: err
+            })
+        });
+}
+
+exports.getPermission = async(req, res)=>{
+    const page = req.params.page;
+    (page=="userpermissions") ? getAllPermissions(req,res) : getUserGraphPermissions(req,res);
 }
 
 async function updateSingleUserPermissions(updateValuesArray)

@@ -5,6 +5,7 @@ const storeOperation = require('../services/storeOperation');
 exports.getDashboardById = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id; //** here need to get user id from token.
+  console.log(req.user);  
   const dashboardToReturn = {
     id: id,
     graphList: [],
@@ -348,7 +349,7 @@ exports.getDashboardNames = async (req, res) => {
       .filter(([key, value]) => {
         if (key !== 'userId' && value != null && page == 'tabs') { return true; }
         else if (key !== 'userId' && value != null && page == 'create') { return true; }
-        else if (key !== 'userId' && req.user.permissions == 'מנהל') { return true; }
+        //else if (key !== 'userId' && req.user.permissions == 'מנהל') { return true; }
         else return false;
       })
       .map(name => name[0].substring(9));

@@ -47,7 +47,7 @@ class User_view_permission extends Component {
      }
      axios({
          method: 'post',
-         url: 'http://localhost:5000/api/view/saveViewPermission',
+         url: '/api/view/saveViewPermission',
          data: { 
            data: saveData,
           permissionsIds: this.state.changedPermissionsIds
@@ -110,7 +110,7 @@ class User_view_permission extends Component {
 
     receivedData() {
       
-      const url = "http://localhost:5000/api/view/getViewPermission?page="+this.state.currentPage;
+      const url = "/api/view/getViewPermission?page="+this.state.currentPage;
       axios.get(url)
       .then(res =>{
         for(var i  =0; i < res.data.users.length; i++)
@@ -160,7 +160,7 @@ class User_view_permission extends Component {
                     <button type="button" className="btn btn-secondary bg-success" data-toggle="modal" data-target="#exampleModalCenter">
                     שמירת שינויים
                     </button>
-                    <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div className="modal-dialog modal-dialog-centered" role="document">
                             <div className="modal-content">
                                 <div className="modal-header">

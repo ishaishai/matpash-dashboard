@@ -38,7 +38,7 @@ class Users extends Component {
   }
 
   searchData() {
-    const url = "http://localhost:5000/api/users/search/"+this.state.currentPage+"?str="+this.state.searchStr;
+    const url = "/api/users/search/"+this.state.currentPage+"?str="+this.state.searchStr;
     axios.get(url)
     .then(res =>{
         console.log("searchData from server:",res);
