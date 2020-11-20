@@ -5,17 +5,13 @@ import Highcharts from 'highcharts';
 import axios from 'axios';
 import "./ResponsiveGrid.css";
 
-require('highcharts/modules/exporting')(Highcharts);
 
-const defaultContextMenuButtons = Highcharts.getOptions().exporting.buttons
-  .contextButton.menuItems;
-
-function ResponsiveGrid(props) {
+const ResponsiveGrid = (props) => {
+  console.log(props);
   const ResponsiveGridLayout = WidthProvider(Responsive);
   const [highChartsOptions, setHighChartsOptions] = useState([]);
   const highChartsOptionsRef = React.useRef('highChartsOptions');
-
-
+  
   // let chartRef = []; // Create array of refs for each chart
   const chartRef = useMemo(
     () => highChartsOptions.map(_i => React.createRef()),
@@ -71,12 +67,10 @@ function ResponsiveGrid(props) {
   },[highChartsOptions]);
 
 
-  // Create array of refs for each chart
-
-
   useEffect(() => {
     getDashboard();
   }, [props.dashboardID]);
+
 
   return (
     <div>
@@ -171,7 +165,6 @@ function ResponsiveGrid(props) {
                 exporting: {
                   buttons: {
                     contextButton: {
-                      
                       menuItems: [ (props.permissions!='צופה') ? 
                         {
                           text: "<p style='text-align:right'>מחיקת גרף </p>",
@@ -180,7 +173,7 @@ function ResponsiveGrid(props) {
                           } 
                         } : null,
                         ,
-                        ...defaultContextMenuButtons,
+                        ...Object.values(props.userGraphOptions),
                       ],
                     },
                   },

@@ -51,7 +51,7 @@ class NavTabs extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      selectedIndex: []
+      selectedIndex: 0
     };
     this.handleSelect = this.handleSelect.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
@@ -70,7 +70,7 @@ class NavTabs extends React.Component {
     console.log("BAB");
     return (
       <Tabs
-        selectedIndex={this.state.selectedIndex}
+        selectedIndex = {this.state.selectedIndex}
         onSelect={this.handleSelect} style={{textAlign: "right",marginTop: "10px"}} >
         <TabList style={{direction: "rtl",display:"inline-block"}}>
           <Tab><Link  className="navbar bg-primary text-white border border-bottom-0 rounded-top " to="/users" >משתמשים</Link></Tab>

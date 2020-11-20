@@ -6,7 +6,7 @@ import ReactPaginate from 'react-paginate';
 import {DropdownButton,Dropdown} from 'react-bootstrap';
 import '../Menu/CreateChart.css';
 import { Alert, AlertTitle } from '@material-ui/lab';
-
+import { connect } from 'react-redux';
 
 class User_permission extends Component {
     constructor(props) {
@@ -34,7 +34,7 @@ class User_permission extends Component {
       
   }
     receivedData = async() => {
-        await axios.get("http://localhost:5000/api/permissions/getPermission")
+        await axios.get("/api/permissions/getPermission/userpermissions")
             .then(res => {
                 console.log(res.data);
                 this.setState({
@@ -125,7 +125,7 @@ class User_permission extends Component {
         console.log("usersPermissionsDataToSave",usersPermissionsDataToSave);
         axios({
             method: 'post',
-            url: 'http://localhost:5000/api/permissions/updatePermissions',
+            url: '/api/permissions/updatePermissions',
             data: usersPermissionsDataToSave
           }).then(res => {
             console.log("response from server ",res.data);
@@ -156,7 +156,7 @@ class User_permission extends Component {
                 <button type="button" className="btn btn-secondary bg-success" data-toggle="modal" data-target="#exampleModalCenter">
                 שמירת שינויים
                 </button>
-                <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -245,6 +245,12 @@ class User_permission extends Component {
         </div>
       );
     }
-  }
+  };
   
-  export default User_permission;
+  const mapStateToProps = ({
+    auth: {
+      user
+    },
+  }) => ({ user });
+  export default connect(mapStateToProps)(User_permission);
+  
