@@ -5,7 +5,8 @@ const storeOperation = require('../services/storeOperation');
 exports.getDashboardById = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id; //** here need to get user id from token.
-  console.log(req.user);  
+  const username = req.user.username;
+  
   const dashboardToReturn = {
     id: id,
     graphList: [],
@@ -13,7 +14,7 @@ exports.getDashboardById = async (req, res) => {
 
   try {
     //that gives you list of numbers like '1,2,3', or empty if user or dashboard doesnt exist.
-    const queryPullDashboard = `select dashboard${id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."userId" = '${userId}'`;
+    const queryPullDashboard = `select dashboard${id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."username" = '${username}'`;
    
     let result = await dashboarddbpool.query(queryPullDashboard); //complete query.
   
@@ -337,18 +338,22 @@ exports.getDashboardById = async (req, res) => {
 
 exports.getDashboardNames = async (req, res) => {
   const page = req.params.page;
-  const userId = req.user.id; 
   const dashboardNamesKV = [];
+  const username = req.user.username;
+  
+
+  const userId = req.user.id; 
+
 
   try {
     //this will get you a number. if there are 2 dashboards then 2. build strings like 'Dash 1' 'Dash 2'.
     const result = await dashboarddbpool.query(
-      `select * from public."dashboardPriviledgesTable" where "userId"='${userId}'`,
+      `select * from public."dashboardPriviledgesTable" where "username"='${username}'`,
     ); //complete query.
     let nameList = Object.entries(result.rows[0])
       .filter(([key, value]) => {
-        if (key !== 'userId' && value != null && page == 'tabs') { return true; }
-        else if (key !== 'userId' && value != null && page == 'create') { return true; }
+        if (key !== 'username' && value != null && page == 'tabs') { return true; }
+        else if (key !== 'username' && value != null && page == 'create') { return true; }
         //else if (key !== 'userId' && req.user.permissions == 'מנהל') { return true; }
         else return false;
       })
@@ -376,10 +381,11 @@ exports.deleteDashboardById = async (req, res) => {
   const { id } = req.params;
 
   const userId = req.user.id; //should get from token.
+  const username = req.user.username;
 
   try {
     //that gives you list of numbers like '1,2,3', or empty if user or dashboard doesnt exist.
-    const queryPullDashboard = `select dashboard${id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."userId" = '${userId}'`;
+    const queryPullDashboard = `select dashboard${id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."username" = '${username}'`;
 
     let result = await dashboarddbpool.query(queryPullDashboard); //complete query.
 
@@ -427,10 +433,11 @@ exports.deleteGraphFromDashboard = async (req, res) => {
   const { dashboard_id, graph_id } = req.params;
 
   const userId = req.user.id; //should get from token.
+  const username = req.user.username;
 
   try {
     //that gives you list of numbers like '1,2,3', or empty if user or dashboard doesnt exist.
-    const queryPullDashboard = `select dashboard${dashboard_id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."userId" = '${userId}'`;
+    const queryPullDashboard = `select dashboard${dashboard_id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."username" = '${username}'`;
 
     const result = await dashboarddbpool.query(queryPullDashboard); //complete query.
 
@@ -453,7 +460,7 @@ exports.deleteGraphFromDashboard = async (req, res) => {
 
     //just create new string without the wanted graph and use the following update to erase existence
     await dashboarddbpool.query(
-      `update public."dashboardPriviledgesTable" set dashboard${dashboard_id} = '${graphsExtracted}'WHERE "userId" in (select "userId" from public."dashboardPriviledgesTable" where "dashboard${dashboard_id}" is NOT NULL);`,
+      `update public."dashboardPriviledgesTable" set dashboard${dashboard_id} = '${graphsExtracted}'WHERE "username" in (select "username" from public."dashboardPriviledgesTable" where "dashboard${dashboard_id}" is NOT NULL);`,
     ); //complete query.
 
     //delete all series data for the target graph
@@ -483,8 +490,6 @@ exports.deleteGraphFromDashboard = async (req, res) => {
 };
 
 exports.addNewDashboard = async (req, res) => {
-  const userId = req.user.id; //should get from token.
-  console.log(req.body);
   const dashboardName = req.body.dashboardName;
   try {
     //first get the next dashboard id.
@@ -563,7 +568,9 @@ exports.updateDashboardById = async (req, res) => {
 exports.addNewGraphToDashboard = async (req, res) => {
   const { dashboardId, graph } = req.body;
 
-  const userId = req.user.id; //should get from token.
+  const userId = req.user.id; //should get from token
+  const username = req.user.username;
+
   try {
     //get all graphs in current dashboard '1,2,3'
 
@@ -593,17 +600,17 @@ exports.addNewGraphToDashboard = async (req, res) => {
 
     const index = result.rows[0].index;
 
-    //get all editor and root users
+    //get all  users
     result = await usersdbpool.query(
-      `select "usersPriviledgesTable"."id" from "public"."usersPriviledgesTable" where "admin"=true;`,
+      `select "username" from "public"."usersInfoTable" where "permissions"='מנהל';`,
     );
 
-    let usersId = result.rows.map(idObj => `'${idObj.id}'`);
+    let usersNames = result.rows.map(usernameObj => `'${usernameObj.username}'`);
 
-    usersId = usersId.join(',');
+    usersNames = usersNames.join(',');
 
     result = await dashboarddbpool.query(
-      `select "dashboard${dashboardId}" from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."userId" in (${usersId})`,
+      `select "dashboard${dashboardId}" from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."username" in (${usersNames})`,
     );
 
     let newGraphList = result.rows[0][`dashboard${dashboardId}`];
@@ -613,12 +620,12 @@ exports.addNewGraphToDashboard = async (req, res) => {
       newGraphList = index;
       queryInsertGraphToDashboard = `UPDATE public."dashboardPriviledgesTable"
         SET "dashboard${dashboardId}"='${newGraphList}'
-        WHERE "userId" in (select "userId" from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."userId" in (${usersId}))`;
+        WHERE "username" in (select "username" from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."username" in (${usersNames}))`;
     } else {
       newGraphList += `,${index}`;
       queryInsertGraphToDashboard = `UPDATE public."dashboardPriviledgesTable"
         SET "dashboard${dashboardId}"='${newGraphList}'
-        WHERE "userId" in (select "userId" from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."dashboard${dashboardId}" is not null)`;
+        WHERE "username" in (select "username" from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."dashboard${dashboardId}" is not null)`;
     }
 
     //console.log(newGraphList)

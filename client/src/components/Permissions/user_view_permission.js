@@ -10,7 +10,7 @@ class User_view_permission extends Component {
     this.state = {
       success: false,
       data: [],
-      changedPermissionsIds: [],
+      changedPermissionsUsernames: [],
       currentPage: 1,
       perPage: 0,
       totalCount: 0,
@@ -39,7 +39,7 @@ class User_view_permission extends Component {
       console.log("handleSave", this.state);
       let saveData = this.state.data;
       
-      console.log("permissions ids",this.state.changedPermissionsIds);
+      console.log("permissions ids",this.state.changedPermissionsUsernames);
      console.log("saveData", saveData);
       
      for(let user of saveData) {
@@ -50,7 +50,7 @@ class User_view_permission extends Component {
          url: '/api/view/saveViewPermission',
          data: { 
            data: saveData,
-          permissionsIds: this.state.changedPermissionsIds
+          permissionsUsernames: this.state.changedPermissionsUsernames
          }
        }).then(res => {
          this.setState({success: true});
@@ -67,18 +67,18 @@ class User_view_permission extends Component {
 
 
 
-    handleOnChange(userid, selected){
+    handleOnChange(username, selected){
       //console.log("this.state.data", this.state.data);
 
       let updatedData = this.state.data;
-      let permissionsIds = this.state.changedPermissionsIds;
-      if(permissionsIds && !permissionsIds.includes(userid)) {
-        permissionsIds.push(userid);
+      let permissionsUsernames = this.state.changedPermissionsUsernames;
+      if(permissionsUsernames && !permissionsUsernames.includes(username)) {
+        permissionsUsernames.push(username);
       }
 
       for(var i = 0 ; i < updatedData.length; i++)
       {
-        if( updatedData[i].userid == userid)
+        if( updatedData[i].username == username)
         {
           for(let k in updatedData[i].dashboards) 
              updatedData[i].dashboards[k].access = false;
@@ -101,7 +101,7 @@ class User_view_permission extends Component {
 
 
       this.setState({
-        changedPermissionsIds: permissionsIds,
+        changedPermissionsUsernames: permissionsUsernames,
         data: updatedData
       });
     
@@ -191,7 +191,7 @@ class User_view_permission extends Component {
             {/* {this.state.postData} */}
             {page.map((pd, i) => 
               
-              <div key={pd['userid']} className="row">
+              <div key={pd['username']} className="row">
                 {/* {console.log(pd)} */}
                   <div className="col border text-center ">
                    
@@ -201,12 +201,12 @@ class User_view_permission extends Component {
                       name="dashboard"
                       placeholder="לא נבחרה תיבת הסימון להרשאה"
                       buttonClass={""}
-                      handleOnChange={(selected) => this.handleOnChange(pd['userid'],selected)}
+                      handleOnChange={(selected) => this.handleOnChange(pd['username'],selected)}
                       ref={this.boxRef}
                       disabled
                     />
                   </div>
-                  <div className="col-lg-2 border text-center">{pd['userid']} </div>
+                  <div className="col-lg-2 border text-center">{pd['username']} </div>
               </div>
             )}
 

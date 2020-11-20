@@ -23,26 +23,25 @@ exports.getViewPermission = async(req, res)=>{
             }
         }
     }).then(()=> {//////get first all none manager users and then concat them and put in the first statement because these are two different dbs
-        usersdbpool.query(`select "id" from public."usersInfoTable" where "permissions"='מנהל'`)
+        usersdbpool.query(`select "username" from public."usersInfoTable" where "permissions"='מנהל'`)
         .then(result => {
             console.log(result.rows);
             for(let obj of result.rows) {
-                usersAdminStrList += `'${obj.id}',`;
+                usersAdminStrList += `'${obj.username}',`;
             }
             usersAdminStrList = usersAdminStrList.slice(0,-1);
             console.log(usersAdminStrList);
-
-            dashboarddbpool.query(`SELECT * from public."dashboardPriviledgesTable" where "userId" not in (${usersAdminStrList}) order by "userId" asc limit ${perPage} offset ${offset} ;`)
+            dashboarddbpool.query(`SELECT * from public."dashboardPriviledgesTable" where "username" not in (${usersAdminStrList}) order by "username" asc limit ${perPage} offset ${offset} ;`)
             .then(result =>{
                 
                 let resOutput = [];
                 let item = {};
-                let useridValue;
+                let usernameValue;
                 for(let i =0; i < result.rows.length; i++){
                     const dashNames = JSON.parse(JSON.stringify(dashNamesBool));
                     item= result.rows[i];
-                    useridValue = item["userId"] ;
-                    delete item["userId"]; 
+                    usernameValue = item["username"] ;
+                    delete item["username"]; 
                     console.log(dashNames);
                     for(let obj of Object.keys(item) ) {
                         console.log(item[obj]);
@@ -58,8 +57,9 @@ exports.getViewPermission = async(req, res)=>{
                         //console.log(Object.keys(obj));
                         ///dashDict[Object.keys(obj)] 
                     }
+                    console.log(dashNames);
 
-                    resOutput.push( {userid: useridValue,dashboards: dashNames } );
+                    resOutput.push( {username: usernameValue,dashboards: dashNames } );
                 }
 
                 res.status(200).json({
@@ -99,38 +99,34 @@ exports.saveViewPermission = async(req, res)=>{
 
     console.log('********saveViewPermission***********');
     const usersToUpdate = req.body.data;
-    const permissionsIds = req.body.permissionsIds;
-    let updateValuesArray = null;
+    const permissionsUsernames = req.body.permissionsUsernames;
     let updatesResults = {};
     let isUpdateSuccess = false;
 
    
 
-    let adminDashboardsResult = await dashboarddbpool.query(`SELECT * from public."dashboardPriviledgesTable" where "userId" = '000000000'`);
+    let adminDashboardsResult = await dashboarddbpool.query(`SELECT * from public."dashboardPriviledgesTable" where "username" = 'super'`);
 
     let adminDashs = adminDashboardsResult.rows[0];
 
     for(var i=0; i < usersToUpdate.length ; i++) {
         let updateStatement = `update public."dashboardPriviledgesTable" set `;
 
-        if(permissionsIds.includes(usersToUpdate[i].userid)) {
-            let userid = usersToUpdate[i].userid;
-            let dashboardsList;
-            let dashboardsValue;
+        if(permissionsUsernames.includes(usersToUpdate[i].username)) {
+            let username = usersToUpdate[i].username;
+
             console.log(adminDashs);
             for(let dashName of Object.keys(usersToUpdate[i].dashboards)) {
-                console.log(adminDashs[usersToUpdate[i].dashboards[dashName].key]);
-                console.log("access",usersToUpdate[i].dashboards[dashName].access);
                 updateStatement+=`"${usersToUpdate[i].dashboards[dashName].key}" = ${(usersToUpdate[i].dashboards[dashName].access) ? "'"+adminDashs[usersToUpdate[i].dashboards[dashName].key]+"'"  : null },`;
             }
             updateStatement = updateStatement.slice(0, -1);
            
-            updateStatement+= ` where "userId"='${userid}'`;
+            updateStatement+= ` where "username"='${username}'`;
             console.log(updateStatement);
             isUpdateSuccess = await updateSingleViewPermissions(updateStatement);
             
         }
-        updatesResults[usersToUpdate[i]['userid']] = isUpdateSuccess;
+        updatesResults[usersToUpdate[i]['username']] = isUpdateSuccess;
         
     }
   
@@ -145,7 +141,7 @@ exports.saveViewPermission = async(req, res)=>{
 
 exports.userinfo = async(req, res)=>{
     
-    usersdbpool.query('SELECT * from public."usersInfoTable" where id=$1;',[req.params.userid])
+    usersdbpool.query('SELECT * from public."usersInfoTable" where username=$1 and username!=$2;',[req.params.username,'super'])
     .then(result =>{
         //console.log(result);
         //tbList = result.rows.map( t=> t.table_name)
