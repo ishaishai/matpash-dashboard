@@ -142,6 +142,11 @@ const ResponsiveGrid = (props) => {
                   data: obj.data,
                   color: obj.colr,
                 })),
+                yAxis: {
+                  title: {
+                    text: "ערכים"
+                  }
+                },
                 xAxis: {
                   categories: MappedChart.options.xAxis.catagories,
                   labels: {
