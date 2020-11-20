@@ -15,7 +15,7 @@ class User_permission extends Component {
           success: false,
           offset: 0,
           usersPermissionsData: [],
-          updatedUsersIds: [],
+          updatedUsersNames: [],
           perPage: 15,
           currentPage: 0,
           mystyle: {
@@ -48,14 +48,14 @@ class User_permission extends Component {
         
         handleDropDown(event,pd) {
         let usersPerms = this.state.usersPermissionsData;
-        let prevUpdatedUsersIds = this.state.updatedUsersIds;
+        let prevupdatedUsersNames = this.state.updatedUsersNames;
         console.log(this.state.pageCount);
 
-        usersPerms.filter((user) => pd['id'] == user['id'])[0]['permissions'] = event.target.innerHTML;
-        if(!prevUpdatedUsersIds.includes(pd['id']))
-            prevUpdatedUsersIds.push(pd['id']);
+        usersPerms.filter((user) => pd['username'] == user['username'])[0]['permissions'] = event.target.innerHTML;
+        if(!prevupdatedUsersNames.includes(pd['username']))
+            prevupdatedUsersNames.push(pd['username']);
         this.setState({usersPermissionsData: usersPerms
-        ,updatedUsersIds: prevUpdatedUsersIds});
+        ,updatedUsersNames: prevupdatedUsersNames});
     }
     
     handlePageClick(e){
@@ -70,16 +70,16 @@ class User_permission extends Component {
         });
     };
 
-    handlePermissionChange(user_id,column_name,e) {
+    handlePermissionChange(username,column_name,e) {
         let usersData = this.state.usersPermissionsData;
-        let prevUpdatedUsersIds = this.state.updatedUsersIds;
-        console.log(user_id,column_name,e.target.checked);
+        let prevupdatedUsersNames = this.state.updatedUsersNames;
+        console.log(username,column_name,e.target.checked);
         
-        usersData.filter((user) => user.id==user_id)[0][column_name] = e.target.checked;
-        if(!prevUpdatedUsersIds.includes(user_id))
-            prevUpdatedUsersIds.push(user_id);
+        usersData.filter((user) => user.username==username)[0][column_name] = e.target.checked;
+        if(!prevupdatedUsersNames.includes(username))
+            prevupdatedUsersNames.push(username);
         this.setState({usersPermissionsData: usersData,
-            updatedUsersIds: prevUpdatedUsersIds});
+            updatedUsersNames: prevupdatedUsersNames});
     }
 
     // handleChange2(user_id,column_name,e){
@@ -95,10 +95,10 @@ class User_permission extends Component {
     //             const prevValue = pd[column_name];
     //             pd[column_name] = prevValue==true ? false : true;
     //             if(pd[column_name] != prevValue){
-    //                 this.state.updatedUsersIds[user_id]=1;
+    //                 this.state.updatedUsersNames[user_id]=1;
     //             }
     //         }
-    //         console.log(this.state.updatedUsersIds);
+    //         console.log(this.state.updatedUsersNames);
     //         console.log(column_name, pd[column_name]);
     //         return pd;
     //      } );
@@ -106,7 +106,7 @@ class User_permission extends Component {
     //      console.log(updatedUsersPermissionsData);
 
     //      this.setState({
-    //         updatedUsersIds: this.state.updatedUsersIds,
+    //         updatedUsersNames: this.state.updatedUsersNames,
     //     });
 
     //     //const updatedUsersPermissionsData = this.state.usersPermissionsData.map((pd) =>  pd.view = false );
@@ -117,11 +117,11 @@ class User_permission extends Component {
     // };
     handleSave(e){
 
-        const updatedUsersIdskeys = this.state.updatedUsersIds;
+        const updatedUsersNameskeys = this.state.updatedUsersNames;
         //ifuserPermissionsData is empty need to send a message 'no changes made'
-        const usersPermissionsDataToSave = this.state.usersPermissionsData.filter((pd) =>  updatedUsersIdskeys.includes(pd.id) == true );
+        const usersPermissionsDataToSave = this.state.usersPermissionsData.filter((pd) =>  updatedUsersNameskeys.includes(pd.username) == true );
         console.log(usersPermissionsDataToSave);
-        console.log("updatedUsersIds",this.state.updatedUsersIds);
+        console.log("updatedUsersNames",this.state.updatedUsersNames);
         console.log("usersPermissionsDataToSave",usersPermissionsDataToSave);
         axios({
             method: 'post',
@@ -131,7 +131,7 @@ class User_permission extends Component {
             console.log("response from server ",res.data);
             if(res.data.msg=="ok"){
                 this.setState({
-                    updatedUsersIds: [],
+                    updatedUsersNames: [],
                     success: true
                 });
                
@@ -187,10 +187,10 @@ class User_permission extends Component {
             <br></br>
             {
                 page.map((pd) => 
-                  <div id={pd.id} key={pd.id} className="row">
-                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['image']} value="" key="" onClick={(e) => this.handlePermissionChange(pd.id,'image',e)}/></div>
-                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['pdf']} value="" key="" onClick={(e) => this.handlePermissionChange(pd.id,'pdf',e)}/></div>
-                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['print']} value="" key="" onClick={(e) => this.handlePermissionChange(pd.id,'print',e)}/></div>
+                  <div id={pd.username} key={pd.username} className="row">
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['image']} value="" key="" onClick={(e) => this.handlePermissionChange(pd.username,'image',e)}/></div>
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['pdf']} value="" key="" onClick={(e) => this.handlePermissionChange(pd.username,'pdf',e)}/></div>
+                    <div className="col border text-center"><input className="" type="checkbox" checked={pd['print']} value="" key="" onClick={(e) => this.handlePermissionChange(pd.username,'print',e)}/></div>
                     <div className="col border text-center">
                         {/* <input className="" type="checkbox" checked={pd['admin']} value="" key="" onClick={(e) => this.handleChange2(pd.id,'admin',e)}/> */}
                         <DropdownButton
@@ -214,7 +214,7 @@ class User_permission extends Component {
                   ))}
                 </DropdownButton>
                     </div>
-                    <div className="col border text-center">{pd['id']}</div>
+                    <div className="col border text-center">{pd['username']}</div>
                 </div>)
 
               //{console.log(this.state.perPage)}

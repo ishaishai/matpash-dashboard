@@ -82,11 +82,8 @@ class Users extends Component {
                     <div className="col border border-dark text-center">הרשאות</div>
                     <div className="col border border-dark text-center">ארגון</div>
                     <div className="col border border-dark text-center">תפקיד</div>
-                    <div className="col border border-dark text-center"> תאריך לידה	</div>
-                    <div className="col border border-dark text-center"> כתובת</div>
                     <div className="col border border-dark text-center">שם משפחה	</div>
                     <div className="col border border-dark text-center">  שם פרטי	</div>
-                    <div className="col border border-dark text-center"> ת״ז</div>
                     <div className="col border border-dark text-center">שם משתמש</div> 
                     <div className="col border border-dark text-center">#</div> 
                 </div>
@@ -97,11 +94,8 @@ class Users extends Component {
                         <div className="col border text-center">{pd['permissions']}</div>
                         <div className="col border text-center">{pd['organization']}</div>
                         <div className="col border text-center">{pd['role']}</div>
-                        <div className="col border text-center">{pd['dateOfBirth']}</div>
-                        <div className="col border text-center">{pd['address']}</div>
                         <div className="col border text-center">{pd['lastName']}</div>
                         <div className="col border text-center">{pd['firstName']}</div>
-                        <div className="col border text-center">{pd['id']}</div>
                         <div className="col border text-center">{pd['username']}</div>
                         <div className="col border text-center">{this.state.perPage-(this.state.perPage-i)}</div>
                     </div>
