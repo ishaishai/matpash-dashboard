@@ -17,15 +17,13 @@ exports.getDashboardById = async (req, res) => {
     const queryPullDashboard = `select dashboard${id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."username" = '${username}'`;
    
     let result = await dashboarddbpool.query(queryPullDashboard); //complete query.
-  
-
+    console.log(result.rows[0][`dashboard${id}`]);
     if (
       result.rows[0][`dashboard${id}`] === null ||
       result.rows[0] === undefined
     )
       throw new Error('user has no permisson to dashboard');
     else if (result.rows[0][`dashboard${id}`] == '') {
-
       res.status(200).json({
         msg: 'ok',
         dashboard: dashboardToReturn,
@@ -379,28 +377,29 @@ exports.getDashboardNames = async (req, res) => {
 
 exports.deleteDashboardById = async (req, res) => {
   const { id } = req.params;
-
   const userId = req.user.id; //should get from token.
   const username = req.user.username;
 
   try {
     //that gives you list of numbers like '1,2,3', or empty if user or dashboard doesnt exist.
     const queryPullDashboard = `select dashboard${id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."username" = '${username}'`;
-
+    console.log(id);
     let result = await dashboarddbpool.query(queryPullDashboard); //complete query.
-
     if (result.rows.length === 0)
       throw new Error('user has no permisson to dashboard');
 
     let graphsExtracted = result.rows[0][`dashboard${id}`].split(',');
 
     graphsExtracted = graphsExtracted.map(num => `'${num}'`).join(',');
-
     //use the string of the numbers from orevious -> '1,2,3' and delete them from graphsInfoTable
-    const queryDeleteGraphs = `DELETE FROM public."graphsInfoTable" WHERE "index" in (${graphsExtracted})`;
 
-    await dashboarddbpool.query(queryDeleteGraphs); //complete query.
+    if(graphsExtracted!=`''`) {
+      const queryDeleteGraphs = `DELETE FROM public."graphsInfoTable" WHERE "index" in (${graphsExtracted})`;
+      
+      await dashboarddbpool.query(queryDeleteGraphs); //complete query.
+    }
 
+    console.log(`ALTER TABLE public."dashboardPriviledgesTable" DROP COLUMN "dashboard${id}";`);
     await dashboarddbpool.query(`ALTER TABLE public."dashboardPriviledgesTable" DROP COLUMN "dashboard${id}";`)
     // await dashboarddbpool.query(
     //   `update public."dashboardPriviledgesTable" set dashboard${id} = '';`,
@@ -566,14 +565,20 @@ exports.updateDashboardById = async (req, res) => {
 
 
 exports.addNewGraphToDashboard = async (req, res) => {
-  const { dashboardId, graph } = req.body;
-
+  let dashboardId = req.body.dashboardId;
+  const graph = req.body.graph;
+  console.log(dashboardId,graph);
   const userId = req.user.id; //should get from token
   const username = req.user.username;
 
   try {
     //get all graphs in current dashboard '1,2,3'
-
+    let queryGetDashboardIndex = `select "index" from public."dashboardNames" where name = '${dashboardId}'`;
+    let resultIndex = await dashboarddbpool.query(queryGetDashboardIndex);
+    console.log(resultIndex,"resultIndex");
+    if(resultIndex.rows[0]) {
+      dashboardId = resultIndex.rows[0].index;
+    }
     const queryInsertGraph = `INSERT INTO public."graphsInfoTable"(
       "index", "position", "width", "height", "xPos", "yPos", "layoutIndex", "type", "title", "subtitle", "xAxisTitle", "yAxisTitle", "xAxisColumn", "yAxisColumn",
       "xAxisCatagoryRange", "yAxisCatagoryRange", "legend")

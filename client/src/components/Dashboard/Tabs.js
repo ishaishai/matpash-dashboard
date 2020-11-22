@@ -94,6 +94,7 @@ const DashboardTabs = props => {
   
   const deleteDashboardHandler = async () => {
     let result = window.confirm('האם אתה בטוח?');
+    console.log(selectedDashboard);
     if (result) {
       const result = await axios.delete(
         '/api/dashboard/delete-dashboard-by-id/' + selectedDashboard,
