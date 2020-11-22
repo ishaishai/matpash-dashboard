@@ -49,6 +49,7 @@ const ResponsiveGrid = (props) => {
   const getDashboard = async () => {
     setHighChartsOptions([]);
     if (props.dashboardID != null) {
+      console.log("dashboardID: ",props.dashboardID);
       const result = await axios.get(
         '/api/dashboard/get-by-id/' + props.dashboardID,
       );
