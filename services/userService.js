@@ -5,7 +5,7 @@ class UserService {
     const {
       rows,
     } = await usersQuery(
-      `SELECT "id", "username", "password", "permissions" FROM public."usersInfoTable" WHERE "username"= $1`,
+      `SELECT "username", "password", "permissions" FROM public."usersInfoTable" WHERE "username"= $1`,
       [username],
     );
 
