@@ -12,17 +12,6 @@ class UserService {
     return rows[0];
   }
 
-  async findById(id) {
-    const {
-      rows,
-    } = await usersQuery(
-      'SELECT "id", "username", "password" ,"permissions" FROM public."usersInfoTable" WHERE "id"= $1',
-      [id],
-    );
-
-    return rows[0];
-  }
-
   async getAll() {
     const { rows } = await usersQuery(`SELECT * FROM public."usersInfoTable"`);
 
@@ -31,8 +20,8 @@ class UserService {
 
   async userPriviliedgesCreate(user) {
     console.log(`INSERT INTO public."usersPriviledgesTable"(
-      id, admin, view, edit, print, pdf, image, csv, xlsx, "dataTable")
-      VALUES ('${user.userid}', ${
+      username, admin, view, edit, print, pdf, image, csv, xlsx, "dataTable")
+      VALUES ('${user.username}', ${
       user.permission == 'מנהל' ? true : false
     }, true, ${
       user.permission == 'מנהל'
@@ -42,8 +31,8 @@ class UserService {
         : false
     }, false, false, false, false, false, false);`);
     await usersQuery(`INSERT INTO public."usersPriviledgesTable"(
-      id, admin, view, edit, print, pdf, image, csv, xlsx, "dataTable")
-      VALUES ('${user.userid}', ${
+      username, admin, view, edit, print, pdf, image, csv, xlsx, "dataTable")
+      VALUES ('${user.username}', ${
       user.permission == 'מנהל' ? true : false
     }, true, ${
       user.permission == 'מנהל'
@@ -55,7 +44,6 @@ class UserService {
   }
 
   async save({
-    id,
     username,
     firstName,
     lastName,
@@ -66,10 +54,9 @@ class UserService {
   }) {
     await usersQuery(
       `INSERT INTO public."usersInfoTable" 
-      ("id", "username", "firstName", "lastName", "password", "role", "organization","permissions")
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      ("username", "firstName", "lastName", "password", "role", "organization","permissions")
+      VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [
-        id,
         username,
         firstName,
         lastName,
@@ -82,19 +69,19 @@ class UserService {
 
     //insert into users priviledges also
     await usersQuery(`INSERT INTO public."usersPriviledgesTable"(
-      id, print, pdf, image)
-      VALUES ('${id}', false, false, false);`);
+      username, print, pdf, image)
+      VALUES ('${username}', false, false, false);`);
 
     //insert into dashboard priviledges also
     await DashboardDBpool.query(`INSERT INTO public."dashboardPriviledgesTable"(
-      "userId")
-      VALUES ('${id}'); `);
+      "username")
+      VALUES ('${username}'); `);
   }
 
   async getPermissions() {
     const { rows } = await usersQuery(
-      `SELECT "id","username","firstName","lastName","print", "pdf", "image"
-	    FROM public."usersPriviledgesTable" join public."usersInfoTable" using(id);`,
+      `SELECT "username","firstName","lastName","print", "pdf", "image"
+	    FROM public."usersPriviledgesTable" join public."usersInfoTable" using(username);`,
     );
     return rows;
   }
