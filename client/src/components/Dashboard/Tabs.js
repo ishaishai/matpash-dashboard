@@ -62,7 +62,7 @@ const DashboardTabs = props => {
     let grid;
     const graphPermissions = await getUserGraphPermissions();
     grid = (
-      <ResponsiveGrid userGraphOptions = {graphPermissions} permissions = {props.permissions}  onLayoutChange={setLayout} dashboardID={dashId} />
+      <ResponsiveGrid userGraphOptions = {graphPermissions} permissions = {props.user.permissions}  onLayoutChange={setLayout} dashboardID={dashId} />
     );
     setResponsiveGrid(grid);
     setSelectedDashboard(dashId);
