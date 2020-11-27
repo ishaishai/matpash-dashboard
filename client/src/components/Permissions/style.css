@@ -1,167 +1,176 @@
 /* http://jsfiddle.net/2Mf5v/ */
-nav > div.nav-tabs > a:hover{ 
-    text-decoration: none;
-    font-weight: bold;
-    border-radius:0px;
-    border-bottom-width: 4px;
-    border-bottom-style: solid;
-    color: #000 !important;
-    background-color: transparent !important;
-    }
+nav > div.nav-tabs > a:hover {
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 0px;
+  border-bottom-width: 4px;
+  border-bottom-style: solid;
+  color: #000 !important;
+  background-color: transparent !important;
+}
 
-    /* https://codesandbox.io/s/create-pagination-in-reactjs-mymrl?from-embed=&file=/src/styles.css:0-802*/
-    .pagination {
-        margin: 15px auto;
-        display: flex;
-        list-style: none;
-        outline: none;
-      }
-      .pagination > .active > a{
-        background-color: #007bff ;
-        border-color: #007bff ;
-        color: #fff;
-      }
-      .pagination > li > a{
-        border: 1px solid #007bff ;
-        padding: 5px 10px;
-        outline: none;
-        cursor: pointer;
-      }
-      .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus{
-        background-color: #007bff ;
-        border-color: #007bff;
-        outline: none ;
-      }
-      .pagination > li > a, .pagination > li > span{
-        color: #47ccde
-      }
-      .pagination > li:first-child > a, .pagination > li:first-child > span, .pagination > li:last-child > a, .pagination > li:last-child > span{
-       
-        border-top-left-radius: 0.25rem !important;
-        border-top-right-radius: 0.25rem !important;
-        border-bottom-left-radius: 0.25rem !important;
-         border-bottom-right-radius: 0.25rem !important;
-      }
-      .react-tabs {
-        -webkit-tap-highlight-color: transparent;
-      }
-      
-      .react-tabs__tab-list {
-        border-bottom: 1px solid #aaa;
-        margin: 0 0 10px;
-        padding: 0;
-      }
-      
-      .react-tabs__tab {
-        display: inline-block;
-        border: 1px solid transparent;
-        border-bottom: none;
-        bottom: -1px;
-        position: relative;
-        list-style: none;
-        padding: 6px 12px;
-        cursor: pointer;
-      }
-      
-      .react-tabs__tab--selected {
-        background: #fff;
-        border-color: #aaa;
-        color: black;
-        border-radius: 5px 5px 0 0;
-      }
-      
-      .react-tabs__tab--disabled {
-        color: GrayText;
-        cursor: default;
-      }
-      
-      .react-tabs__tab:focus {
-        box-shadow: 0 0 5px hsl(208, 99%, 50%);
-        border-color: hsl(208, 99%, 50%);
-        outline: none;
-      }
-      
-      .react-tabs__tab:focus:after {
-        content: "";
-        position: absolute;
-        height: 5px;
-        left: -4px;
-        right: -4px;
-        bottom: -5px;
-        background: #fff;
-      }
-      
-      .react-tabs__tab-panel {
-        display: none;
-      }
-      
-      .react-tabs__tab-panel--selected {
-        display: block;
-      }
-      
-      /* ******  Tabs
+/* https://codesandbox.io/s/create-pagination-in-reactjs-mymrl?from-embed=&file=/src/styles.css:0-802*/
+.pagination {
+  margin: 15px auto;
+  display: flex;
+  list-style: none;
+  outline: none;
+}
+.pagination > .active > a {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+.pagination > li > a {
+  border: 1px solid #007bff;
+  padding: 5px 10px;
+  outline: none;
+  cursor: pointer;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  background-color: #007bff;
+  border-color: #007bff;
+  outline: none;
+}
+.pagination > li > a,
+.pagination > li > span {
+  color: #47ccde;
+}
+.pagination > li:first-child > a,
+.pagination > li:first-child > span,
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-top-left-radius: 0.25rem !important;
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}
+.react-tabs {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.react-tabs__tab-list {
+  border-bottom: 1px solid #aaa;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.react-tabs__tab {
+  display: inline-block;
+  border: 1px solid transparent;
+  border-bottom: none;
+  bottom: -1px;
+  position: relative;
+  list-style: none;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.react-tabs__tab--selected {
+  background: #fff;
+  border-color: #aaa;
+  color: black;
+  border-radius: 5px 5px 0 0;
+}
+
+.react-tabs__tab--disabled {
+  color: GrayText;
+  cursor: default;
+}
+
+.react-tabs__tab:focus {
+  box-shadow: 0 0 5px hsl(208, 99%, 50%);
+  border-color: hsl(208, 99%, 50%);
+  outline: none;
+}
+
+.react-tabs__tab:focus:after {
+  content: '';
+  position: absolute;
+  height: 5px;
+  left: -4px;
+  right: -4px;
+  bottom: -5px;
+  background: #fff;
+}
+
+.react-tabs__tab-panel {
+  display: none;
+}
+
+.react-tabs__tab-panel--selected {
+  display: block;
+}
+
+/* ******  Tabs
         https://github.com/reactjs/react-tabs/blob/master/style/react-tabs.css
       ******/
 
-      .react-tabs {
-        -webkit-tap-highlight-color: transparent;
-      }
-      
-      .react-tabs__tab-list {
-        border-bottom: 1px solid #007bff;
-        margin: 0 0 10px;
-        padding: 0;
-      }
-      
-      .react-tabs__tab {
-        display: inline-block;
-        border: 1px solid transparent;
-        border-bottom: none;
-        bottom: -1px;
-        position: relative;
-        list-style: none;
-        padding: 6px 12px;
-        cursor: pointer;
-      }
-      
-      .react-tabs__tab--selected, li:hover {
-        background: #fff;
-        border: 2px solid #007bff;
-        border-bottom: 0 !important;
-        color: black;
-        border-radius: 5px 5px 0 0;
-      }
-      
-      .react-tabs__tab--disabled {
-        color: GrayText;
-        cursor: default;
-      }
-      
-      .react-tabs__tab:focus {
-        box-shadow: 0 0 5px hsl(208, 99%, 50%);
-        border-color: hsl(208, 99%, 50%);
-        outline: none;
-      }
-      
-      .react-tabs__tab:focus:after {
-        content: "";
-        position: absolute;
-        height: 5px;
-        left: -4px;
-        right: -4px;
-        bottom: -5px;
-        background: #fff;
-      }
-      
-      .react-tabs__tab-panel {
-        display: none;
-      }
-      
-      .react-tabs__tab-panel--selected {
-        display: block;
-      }
-      div.dropdown button span{
-        /* overflow: hidden;
+.react-tabs {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.react-tabs__tab-list {
+  border-bottom: 1px solid #007bff;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.react-tabs__tab {
+  display: inline-block;
+  border: 1px solid transparent;
+  border-bottom: none;
+  bottom: -1px;
+  position: relative;
+  list-style: none;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.react-tabs__tab--selected,
+li:hover {
+  background: #fff;
+  border: 2px solid #007bff;
+  border-bottom: 0 !important;
+  color: black;
+  border-radius: 5px 5px 0 0;
+}
+
+.react-tabs__tab--disabled {
+  color: GrayText;
+  cursor: default;
+}
+
+.react-tabs__tab:focus {
+  box-shadow: 0 0 5px hsl(208, 99%, 50%);
+  border-color: hsl(208, 99%, 50%);
+  outline: none;
+}
+
+.react-tabs__tab:focus:after {
+  content: '';
+  position: absolute;
+  height: 5px;
+  left: -4px;
+  right: -4px;
+  bottom: -5px;
+  background: #fff;
+}
+
+.react-tabs__tab-panel {
+  display: none;
+}
+
+.react-tabs__tab-panel--selected {
+  display: block;
+}
+div.dropdown button span {
+  /* overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
     float: left !important;
@@ -172,16 +181,15 @@ nav > div.nav-tabs > a:hover{
     overflow: hidden;
     text-overflow: ellipsis;
      */
-        text-align: center !important;
-      }
-      /* div.dropdown div.dropdown-menu, .dropdown-item {
+  text-align: center !important;
+}
+/* div.dropdown div.dropdown-menu, .dropdown-item {
         color: #fff !important;
         background-color: #007bff!important;
       } */
-      .dropdown-item:hover{
-        color: #111 !important;
-        background-color: #fff !important;
-      }
-      
-      /**/
-     
+.dropdown-item:hover {
+  color: #111 !important;
+  background-color: #fff !important;
+}
+
+/**/

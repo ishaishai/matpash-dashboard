@@ -7,7 +7,7 @@ router.get('/', usersCtrl.getPermissions);
 
 router.get('/getPermission/:page',requireToken,userPermissionContoller.getPermission);
 router.post('/updatePermissions', requireToken,userPermissionContoller.updatePermissions);
-router.get('/userinfo/:userid', requireToken,usersCtrl.userinfo);
+router.get(':userid', requireToken,usersCtrl.userinfo);
 
 
 module.exports = router;

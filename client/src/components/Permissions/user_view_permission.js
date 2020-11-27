@@ -184,7 +184,7 @@ class User_view_permission extends Component {
             <br></br>
             <div className="row">
               <div className="col border border-dark text-center">דשבורדים מורשים</div>   
-              <div className="col-lg-2 border border-dark text-center">ת״ז 	</div>   
+              <div className="col-lg-2 border border-dark text-center"> שם משתמש 	</div>   
             </div>
             {/* Pagination */}
            <br></br>
@@ -223,14 +223,9 @@ class User_view_permission extends Component {
                 containerClassName={"pagination"}
                 subContainerClassName={"pages pagination"}
                 activeClassName={"active"}/>
-                {!this.state.success &&<Alert style = {{visibility: "hidden", opacity: "0",transition: "visibility 0s 2s opacity 2s linear"}} severity="success">
-                    <AlertTitle>Success</AlertTitle>
-                    This is a success alert — <strong>check it out!</strong>
-                  </Alert>}
-                  {this.state.success && <Alert style = {{visibility: "visible",  opacity: "1",transition: "opacity 2s linear"}} severity="success">
-                    <AlertTitle>Success</AlertTitle>
-                    This is a success alert — <strong>check it out!</strong>
-                  </Alert>} 
+                
+                  {this.state.success &&  <div className="ui message green" style={{display: "inline-block"}}>{<p>שינויים נשמרו בהצלחה</p>}</div>}
+      
         </div>
         
       );

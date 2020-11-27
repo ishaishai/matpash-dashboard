@@ -46,11 +46,12 @@ exports.getPeriodStart = async (req, res) => {
    //should get from token.
   console.log('+' + tableName + '+');
   const firstColumnData = `select "A1" from public."${tableName}"`;
+  console.log(firstColumnData);
   const firstColumnName = `select "A1" from public."${tableName} - KV"`;
 
   try {
+    
     let resData = await maindbpool.query(firstColumnData);
-
     let resName = await maindbpool.query(firstColumnName);
     res.status(200).json({
       column: {
