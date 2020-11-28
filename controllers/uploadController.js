@@ -12,9 +12,7 @@ exports.checkExcel = async (req, res) => {
     }
     try {
       const { path, originalname } = req.file;
-      console.log("BAB");
       const data = await excelService.runExcelCheck(path, originalname);
-      console.log("caac");
       return res.send(data);
     } catch (error) {
       return res.status(500).json({ error });

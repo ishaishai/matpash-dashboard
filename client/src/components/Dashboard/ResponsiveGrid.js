@@ -145,9 +145,8 @@ const ResponsiveGrid = (props) => {
                 })),
                 yAxis: {
                   title: {
-                    text: ""
-                  },
-                  // min: 4500,
+                    text: "ערכים"
+                  }
                 },
                 xAxis: {
                   categories: MappedChart.options.xAxis.catagories,

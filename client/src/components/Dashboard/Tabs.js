@@ -159,12 +159,6 @@ const DashboardTabs = props => {
             }) : ''}
           </DropdownButton>
         </div>
-        <div className ="dashboard-title">
-          <hr/>
-            {currentDashName}
-            
-          <hr/>
-      </div>
         {isViewer ? (
           <Button className="saveLayoutBtn" onClick={saveLayout}>
             שמור תבנית
@@ -181,7 +175,12 @@ const DashboardTabs = props => {
         ) : null}
       </div>
       
-      
+      <div className ="dashboard-title">
+      <hr/>
+        {currentDashName}
+        
+      <hr/>
+      </div>
       {responsiveGrid}
     </div>
   );

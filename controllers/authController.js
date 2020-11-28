@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const keys = require('../config/keys');
 const storeOperation = require('../services/storeOperation');
 const UserService = require('../services/userService');
+const { use } = require('passport');
 
 const userService = new UserService();
 
@@ -26,6 +27,7 @@ exports.login = async (req, res) => {
 
     await storeOperation({ type: 'login', username });
     return res.json({
+      id: user.id,
       username: user.username,
       permissions: user.permissions,
     });
@@ -42,6 +44,12 @@ exports.registerUser = async (req, res) => {
 
     if (usernameExists) {
       return res.status(400).json({ username: 'שם משתמש תפוס' });
+    }
+
+    const userIdExists = await userService.findById(user.id);
+
+    if (userIdExists) {
+      return res.status(400).json({ id: 'ת.ז בשימוש' });
     }
 
     // Hash passwords before saving
@@ -73,6 +81,7 @@ function generateAccessToken(user) {
   const options = { expiresIn: '2h' };
   const payload = {
     user: {
+      id: user.id,
       username: user.username,
       permissions: user.permissions,
     },
