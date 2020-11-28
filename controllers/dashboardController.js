@@ -92,6 +92,11 @@ exports.getDashboardById = async (req, res) => {
           catagories: [],
           crosshair: true,
         },
+        yAxis: {
+          title: {
+            text: graph.yAxisTitle,
+          },
+        },
         legend: {
           layout: 'horizontal',
           align: 'center',
@@ -183,7 +188,7 @@ exports.getDashboardById = async (req, res) => {
       }
 
       //graphToAdd.xAxisCatagoryRange = tempxAxisCatagoryRange;
-      graphToAdd.options.xAxis.catagories = tempxAxisCatagoryRange;
+      graphToAdd.options.xAxis.catagories = (graph.flipXAxis) ? tempxAxisCatagoryRange.reverse():tempxAxisCatagoryRange;
       //console.log("---------- xAxisCatagoryRange: "+graphToAdd.xAxisCatagoryRange);
 
       //get all the series of dashboard and extract from it which series to the right graph by its index
@@ -568,7 +573,7 @@ exports.addNewGraphToDashboard = async (req, res) => {
   let dashboardId = req.body.dashboardId;
   const graph = req.body.graph;
   console.log(dashboardId,graph);
-  const userId = req.user.id; //should get from token
+
   const username = req.user.username;
 
   try {
@@ -581,11 +586,11 @@ exports.addNewGraphToDashboard = async (req, res) => {
     }
     const queryInsertGraph = `INSERT INTO public."graphsInfoTable"(
       "index", "position", "width", "height", "xPos", "yPos", "layoutIndex", "type", "title", "subtitle", "xAxisTitle", "yAxisTitle", "xAxisColumn", "yAxisColumn",
-      "xAxisCatagoryRange", "yAxisCatagoryRange", "legend")
+      "xAxisCatagoryRange", "yAxisCatagoryRange", "legend","flipXAxis")
       VALUES ((SELECT COALESCE(MAX(index),0)+1 from public."graphsInfoTable"), '0', 3, 
             3, 0,0, 1, '${graph.type}','${graph.title}',
-            '${graph.subtitle}', '${graph.xAxisTitle}', '', '${graph.xAxisColumn}', 
-            '', '${graph.xAxisCatagoryRange}', '', true);
+            '${graph.subtitle}', '${graph.xAxisTitle}', '${graph.yAxisTitle}', '${graph.xAxisColumn}', 
+            '', '${graph.xAxisCatagoryRange}', '', true,${graph.flip});
         `;
 
     await dashboarddbpool.query(queryInsertGraph);

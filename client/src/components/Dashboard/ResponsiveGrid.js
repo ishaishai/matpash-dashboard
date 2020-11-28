@@ -143,12 +143,8 @@ const ResponsiveGrid = (props) => {
                   data: obj.data,
                   color: obj.colr,
                 })),
-                yAxis: {
-                  title: {
-                    text: ""
-                  },
+                yAxis: MappedChart.options.yAxis,
                   // min: 4500,
-                },
                 xAxis: {
                   categories: MappedChart.options.xAxis.catagories,
                   labels: {
