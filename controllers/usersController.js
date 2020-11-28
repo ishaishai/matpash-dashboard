@@ -26,7 +26,7 @@ exports.getPermissions = async (req, res) => {
 
 exports.getall = async(req, res)=>{
   console.log('exports.getall');
-  usersdbpool.query(`SELECT * from public."usersInfoTable" where "username" != '000000000'`)//usersInfoTable
+  usersdbpool.query(`SELECT * from public."usersInfoTable" where "username" != 'super'`)//usersInfoTable
   .then(result =>{
       //console.log(result);
        

@@ -569,7 +569,7 @@ const CreateChart = props => {
           graph: graphToAdd.graph,
         },
       );
-      alertTimeout(true,'!הגרף נוצר','success');
+      alert('הגרף נוצר');
       window.location.href = '/create-chart';
     }
   };
