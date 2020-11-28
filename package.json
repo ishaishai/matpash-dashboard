@@ -31,7 +31,7 @@
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "npm run build --prefix client",
-    "prod": "NODE_ENV=production nodemon app.js"
+    "prod": "set NODE_ENV=production&&nodemon app.js"
   },
   "author": "",
   "license": "ISC"

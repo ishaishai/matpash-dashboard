@@ -33,11 +33,15 @@ const Admin = ({ result, loading, resetResults, error, uploadExcelFile, saveExce
     saveExcelFile(file.name);
   }
 
-  const mapErrors = errors =>
+  const mapErrors = errors =>{
+    console.log('mapErrors')
     errors.map(err => <li style={{ margin: '10px' }}>{err}</li>);
+  }
 
   const success = result?.status === 'success';
   const failure = result?.status === 'failure';
+  console.log('success', success)
+  console.log('failure', failure)
 
   if (loading) {
     return <Loader message=".אנא המתן, פעולה זו עלולה להמשך מספר דקות" />;
@@ -45,7 +49,7 @@ const Admin = ({ result, loading, resetResults, error, uploadExcelFile, saveExce
 
   return (
     <div className="container" dir="rtl" style={{ marginTop: '30px' }}>
-      <h3 class="ui dividing header">בדיקת קובץ אקסל</h3>
+      <h3 className="ui dividing header">בדיקת קובץ אקסל</h3>
       <form
         className={`ui form ${success ? 'success' : 'error'}`}
         onSubmit={handlSubmit}
