@@ -63,7 +63,7 @@ const CreateUser = ({
           צור משתמש
         </button>
         {users.success && (
-          <div className="ui message green">{<p>המשתמש נוצר בהצלחה</p>}</div>
+          <div className="ui message">{<p>המשתמש נוצר בהצלחה</p>}</div>
         )}
         {users.errors &&
           Object.keys(users.errors).map(key => (

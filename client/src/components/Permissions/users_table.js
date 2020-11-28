@@ -70,7 +70,7 @@ class Users extends Component {
   render() {
     const datas = this.state.data;
     const page = datas;//.slice(this.state.offset, this.state.offset + this.state.perPage);
-    console.log(page);
+
       return (
           <div className="align-items-center ">
                 <SearchBox
@@ -88,7 +88,7 @@ class Users extends Component {
                     <div className="col border border-dark text-center">#</div> 
                 </div>
               {/* {this.state.postData} */ }
-            {   
+            {
                 page.map((pd,i)=>
                     <div id={pd.id} key={pd.id}  className="row ">
                         <div className="col border text-center">{pd['permissions']}</div>

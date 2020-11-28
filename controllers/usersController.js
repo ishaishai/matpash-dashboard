@@ -26,7 +26,7 @@ exports.getPermissions = async (req, res) => {
 
 exports.getall = async(req, res)=>{
   console.log('exports.getall');
-  usersdbpool.query(`SELECT * from public."usersInfoTable" where "username" != 'super'`)//usersInfoTable
+  usersdbpool.query(`SELECT * from public."usersInfoTable" where "id" != '000000000'`)//usersInfoTable
   .then(result =>{
       //console.log(result);
        
@@ -48,17 +48,16 @@ exports.search = async(req, res)=>{
   console.log('page:', req.params.page);
   console.log('str: ',req.query);
   const str = req.query.str.toLowerCase();
-  const search_phrase = (str=='') ? "" : "lower(username) like '%"+str+"%' and ";
-  console.log(`SELECT count(*) from public."usersInfoTable" ${search_phrase} "username"!='super' ;`);
-  
-  let countRes = await usersdbpool.query(`SELECT count(*) from public."usersInfoTable" where ${search_phrase} "username"!='super' ;`);
-  const totalCount = countRes.rows.length;
+  const search_phrase = "%"+str+"%";
 
+  
+  let countRes = await usersdbpool.query(`SELECT count(*) from public."usersInfoTable" where lower(username) like '${search_phrase}' and "id"!='000000000' ;`)
+  const totalCount = countRes.rows.length;
 
   const perPage = 15;
   const offset = perPage *  (  parseInt(req.params.page) - 1 ) ;
   const pageCount = Math.ceil(totalCount/perPage);
-  usersdbpool.query(`SELECT * from public."usersInfoTable" where ${search_phrase} "username"!='super' limit ${perPage} offset ${offset} ;`)
+  usersdbpool.query(`SELECT * from public."usersInfoTable" where lower(username) like '${search_phrase}' and "id"!='000000000' limit ${perPage} offset ${offset} ;`)
   .then(result =>{
       res.status(200).json({
           msg: 'search',
@@ -103,8 +102,8 @@ exports.page = async(req, res)=>{
 
 exports.userinfo = async(req, res)=>{
   console.log('exports.userinfo');
-  console.log('username:', req.params.username);
-  usersdbpool.query('SELECT * from public."usersInfoTable" where username=$1;',[req.params.username])
+  console.log('userid:', req.params.userid);
+  usersdbpool.query('SELECT * from public."usersInfoTable" where id=$1;',[req.params.userid])
   .then(result =>{
       res.status(200).json({
           msg: 'ok',
