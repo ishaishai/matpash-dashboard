@@ -93,7 +93,7 @@ const DashboardTabs = props => {
 
   
   const deleteDashboardHandler = async () => {
-    let result = window.confirm('האם אתה בטוח?');
+    let result = window.confirm('האם באמת למחוק את הדשבורד הזה? פעולה זו בלתי הפיכה');
     console.log(selectedDashboard);
     if (result) {
       const result = await axios.delete(

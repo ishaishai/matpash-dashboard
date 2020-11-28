@@ -497,9 +497,11 @@ exports.addNewDashboard = async (req, res) => {
   const dashboardName = req.body.dashboardName;
   try {
     //first get the next dashboard id.
-    let result = await dashboarddbpool.query(`SELECT count(*) as index FROM information_schema.columns
-            WHERE table_schema = 'public'
-            AND table_name = 'dashboardPriviledgesTable';`); //complete query.
+    let result = await dashboarddbpool.query(`SELECT max("ordinal_position")+1 as index
+    FROM information_schema.columns
+   WHERE table_schema = 'public'
+     AND table_name   = 'dashboardPriviledgesTable'
+       ;`); //complete query.
     //then use that to create a new dashboard and its series table
     const index = result.rows[0].index;
 
