@@ -19,28 +19,9 @@ class UserService {
   }
 
   async userPriviliedgesCreate(user) {
-    console.log(`INSERT INTO public."usersPriviledgesTable"(
-      username, admin, view, edit, print, pdf, image, csv, xlsx, "dataTable")
-      VALUES ('${user.username}', ${
-      user.permission == 'מנהל' ? true : false
-    }, true, ${
-      user.permission == 'מנהל'
-        ? true
-        : user.permission == 'עורך'
-        ? true
-        : false
-    }, false, false, false, false, false, false);`);
     await usersQuery(`INSERT INTO public."usersPriviledgesTable"(
-      username, admin, view, edit, print, pdf, image, csv, xlsx, "dataTable")
-      VALUES ('${user.username}', ${
-      user.permission == 'מנהל' ? true : false
-    }, true, ${
-      user.permission == 'מנהל'
-        ? true
-        : user.permission == 'עורך'
-        ? true
-        : false
-    }, false, false, false, false, false, false);`);
+      username, print, pdf, image)
+      VALUES ('${user.username}', false, false, false);`);
   }
 
   async save({
