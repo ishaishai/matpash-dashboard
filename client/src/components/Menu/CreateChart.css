@@ -46,16 +46,25 @@
 }
 
 .add-graph-btn {
-  margin: 10px 0px 0px;
+  margin-top: 10%;
   height: 40px;
 }
 .form-label {
   line-height: 2rem;
 }
+.ytitle-input{
+  margin: 10px 0px 0px;
+  direction: rtl;
+  width: 50% !important;
+  display:inline-block !important;
+}
 .FormLabel {
   display: block;
   padding-right: 5px;
   text-align: center;
+}
+.PrivateSwitchBase-input-4 {
+  display: block;
 }
 .dropdown-btn {
   direction: rtl;

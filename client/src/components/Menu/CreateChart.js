@@ -14,10 +14,11 @@ import {
   Container,
   Row,
   ListGroup,
-  ListGroupItem
+  ListGroupItem,
 } from 'react-bootstrap';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { Checkbox } from '@material-ui/core';
 
 
 
@@ -56,6 +57,8 @@ const CreateChart = props => {
     alertText: '',
     alertShow: false
   });
+  const [flipXAxis,setFlipXAxis] = useState(false);
+  const [yAxisTitle,setYAxisTitle] = useState('');
   const [showDashboardNameLabel,setShowDashboardNameLabel] = useState(false);
   const [newDashboardName,setNewDashboardName] = useState('דשבורד');
   const [colDataList,setColDataList] = useState([]);
@@ -189,9 +192,11 @@ const CreateChart = props => {
   let graphToAdd = {
     dashboardID: dropdownSelection,
     graph: {
+      flip: flipXAxis,
       type: type,
       title: title,
       subtitle: subTitle,
+      yAxisTitle: yAxisTitle,
       xAxisTitle: `${periodTableSelected}.A1`,
       xAxisColumn: `${periodTableSelected}.A1`,
       xAxisCatagoryRange:
@@ -533,9 +538,11 @@ const CreateChart = props => {
     setType(event.target.id);
   };
 
-  const selectedTypeHandler = event => {
-    console.log('event');
-  };
+
+
+  const handleYAxisTitle = event => {
+    setYAxisTitle(event.target.value);
+  }
 
   const handleGraphInfo = async event => {
     if (dropdownSelection === 'בחירת דשבורד') {
@@ -599,7 +606,7 @@ const CreateChart = props => {
           variant={'dark'}
           className="justify-content-md-end navBar-Color"
         >
-          <Navbar.Brand>סוגי טבלה</Navbar.Brand>
+          
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav
@@ -652,6 +659,8 @@ const CreateChart = props => {
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
+          <Navbar.Brand>- סוגי טבלה</Navbar.Brand>
+
         </Navbar>
       </div>
       <Container fluid="true">
@@ -729,6 +738,8 @@ const CreateChart = props => {
                     ))}
                   </DropdownButton>
                 </Col>
+                </Row>
+                <Row className="form-row">
                 <Col>
                   <Form.Label className="FormLabel">
                    {piePeriodLabel}
@@ -778,11 +789,16 @@ const CreateChart = props => {
                     </div>
                   ) : null}
                 </Col>
+                <Col>
+                <Form.Label className="FormLabel">:להיפוך ציר הזמן  </Form.Label>
+                {/* <input className="xAxisFlip" type="checkbox" checked={flipXAxis} value="" key="" onClick={()=> setFlipXAxis(!flipXAxis)}/>:להיפוך ציר הזמן */}
+                <Checkbox className = "xAxisFlip" color = "primary" checked={flipXAxis} onChange={()=> setFlipXAxis(!flipXAxis)}/>
+                </Col>
               </Row>
               <Row className="form-row">
                 <Col>
                   <Form.Label className="FormLabel">
-                    :עמודות המידע להצלבה בחר טבלה עבור המידע
+                    :בחר טבלה עבור סדרת המידע
                   </Form.Label>
                   <DropdownButton
                     
@@ -842,6 +858,22 @@ const CreateChart = props => {
               </Row>
               <Row className="form-row" style={{ height: '108px' }}>
                 <Col className="form-col">
+                  <Form.Label className="FormLabel">
+                      :כותרת ציר אנכי
+                  </Form.Label>
+                  <Form.Control
+                    size="lg"
+                    placeholder="כותרת"
+                    onBlur={handleYAxisTitle}
+                    className="ytitle-input"
+                  />
+                </Col>
+              </Row>
+              <Row className="form-row" style={{ height: '108px' }}>
+                <Col className="form-col">
+                  <Form.Label className="FormLabel">
+                      :כותרת הגרף
+                  </Form.Label>
                   <Form.Control
                     size="lg"
                     placeholder="כותרת"
@@ -850,6 +882,9 @@ const CreateChart = props => {
                   />
                 </Col>
                 <Col>
+                  <Form.Label className="FormLabel">
+                      :תת כותרת הגרף
+                  </Form.Label>
                   <Form.Control
                     size="lg"
                     placeholder="תת כותרת"
@@ -876,11 +911,10 @@ const CreateChart = props => {
 
 
       <ListGroup style={{width: "40% !important"}}>
-
         {colDataList}
       </ListGroup>
       
-          <div className={(alertObj.alertType=="success") ? "ui message green" : "ui message red"} style={{display: (alertObj.alertShow) ? "inline-block" : "none"}}>{<p>{alertObj.alertText}</p>}</div>
+      <div className={(alertObj.alertType=="success") ? "ui message green" : "ui message red"} style={{display: (alertObj.alertShow) ? "inline-block" : "none"}}>{<p>{alertObj.alertText}</p>}</div>
       
     </div>
   );
