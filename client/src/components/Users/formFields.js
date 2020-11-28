@@ -12,6 +12,6 @@ export const formSelectionFields = [
     label: 'הרשאות',
     name: 'permissions',
     placeholder: 'בחר הרשאה',
-    options: [{ value: 'אדמין' }, { value: 'צופה' }, { value: 'עורך' }],
+    options: [{ value: 'מנהל' }, { value: 'צופה' }, { value: 'עורך' }],
   },
 ];
