@@ -20,6 +20,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 
 
+
 const hexToRgb = (hex) => {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
@@ -50,6 +51,11 @@ const CreateChart = props => {
     'column',
   ]);
 
+  const [alertObj,setAlertObj] = useState({
+    alertType: null,
+    alertText: '',
+    alertShow: false
+  });
   const [showDashboardNameLabel,setShowDashboardNameLabel] = useState(false);
   const [newDashboardName,setNewDashboardName] = useState('דשבורד');
   const [colDataList,setColDataList] = useState([]);
@@ -57,7 +63,6 @@ const CreateChart = props => {
   const [periodTableSelected, setPeriodTableSelected] = useState('');
   const [title, setTitle] = useState('');
   const [subTitle, setSubTitle] = useState('');
-  const [confirmButton, setConfirmButton] = useState(true);
   const [dropdownSelection, setDropdownSelection] = useState('בחירת דשבורד');
   const [tableNames, setTableNames] = useState([]);
   const [dashboardNames, setDashboardNames] = useState([]);
@@ -74,6 +79,7 @@ const CreateChart = props => {
   const graphSeriesRef = React.useRef(graphSeries);
   const colDataListRef = React.useRef(colDataList);
   const [color, setColor] = useState('#000000');
+  
   
   const [options, setOptions] = useState({
     id: 1,
@@ -250,7 +256,6 @@ const CreateChart = props => {
       setShowDashboardNameLabel(false);
     }
     setDropdownSelection(selectedDashboard);
-    setConfirmButton(false);
   };
 
   const handleEndPeriodSelection = event => {
@@ -452,9 +457,9 @@ const CreateChart = props => {
   const handleCrossData = () => {
     
     if (crossTableSelected === '') {
-      alert('בחר טבלה');
+      alertTimeout(true,'בחר טבלה להצלבה','fail');
     } else if (crossColumnSelected === '') {
-      alert('בחר עמודה');
+      alertTimeout(true,'בחר עמודה כסדרת מידע להצלבה','fail');
     } else {
       let item = <ListGroup.Item key={colDataList.length+1}>
                 <Button className = "button-danger" id={colDataList.length+1} variant="danger" onClick={(event) => deleteCrossColumnFromArray(event)}>הסר</Button>
@@ -483,9 +488,14 @@ const CreateChart = props => {
       };
 
       for(let tmpSerie of graphSeries) {
-        if(tmpSerie.serieName === serie.serieName || ColorsAreClose(tmpSerie.color, serie.color))  {
-          alert('העמודה שנבחרה להצלבה כבר נבחרה');
+        if(tmpSerie.serieName === serie.serieName)  {
+          console.log("AF");  
+          alertTimeout(true,"העמודה שנבחרה כבר הוספה",'fail');
           setCrossColumnSelected('');
+          return;
+        }
+        if(ColorsAreClose(tmpSerie.color, serie.color)) {
+          alertTimeout(true,"הצבע הנבחר דומה לצבע קודם שנבחר",'fail');
           return;
         }
       }
@@ -494,7 +504,7 @@ const CreateChart = props => {
       setColDataList(colDataList => [...colDataList,item]);
 
       setCrossColumnSelected('');
-      alert("!המידע נוסף לגרף בהצלחה")
+      alertTimeout(true,"עמודה להצלבה נוספה בהצלחה",'success');
 
     }
   };
@@ -528,17 +538,17 @@ const CreateChart = props => {
   };
 
   const handleGraphInfo = async event => {
-
-    if (dropdownSelection === '') {
-      alert('יש לבחור דשבורד');
+    if (dropdownSelection === 'בחירת דשבורד') {
+      alertTimeout(true,'יש לבחור דשבורד אליו יתווסף הגרף','fail');
     } else if (periodTableSelected.length === 0) {
-      alert('יש לבחור טבלה עבור תקופה');
+      alertTimeout(true,'יש לבחור טבלה עבור תקופה','fail');
     } else if (startPeriodSelected.length === 0) {
-      alert('יש לבחור את תחילת התקופה הרצויה');
+      alertTimeout(true,'יש לבחור את תחילת התקופה הרצויה','fail');
+      
     } else if (type != 'pie' && endPeriodSelected.length === 0) {
-      alert(' יש לבחור את סוף התקופה');
+      alertTimeout(true,' יש לבחור את סוף התקופה','fail');
     } else if (graphSeries.length === 0) {
-      alert('יש להוסיף עמודות מידע');
+      alertTimeout(true,'יש להוסיף עמודות מידע','fail');
     } else {
       console.log('creating graph...');
       let newDashboardResponse = null;
@@ -559,9 +569,26 @@ const CreateChart = props => {
           graph: graphToAdd.graph,
         },
       );
-      alert('!הגרף נוצר');
+      alert('הגרף נוצר');
       window.location.href = '/create-chart';
     }
+  };
+
+  const alertTimeout = (show,text,type) => {
+    setAlertObj({
+      alertShow: show,
+      alertText: text,
+      alertType: type
+    });
+    const sleep = m => new Promise(r => setTimeout(r, m));
+           (async () => {
+            await sleep(3500)
+            setAlertObj({
+              alertShow: false,
+              alertText: '',
+              alertType: "success"
+            });
+        })()        
   };
 
   return (
@@ -648,7 +675,7 @@ const CreateChart = props => {
                   type=""
                   variant="outline-primary"
                   title={
-                    dropdownSelection === '' ? 'DropDown' : dropdownSelection
+                    dropdownSelection
                   }
                 >
                   {dashboardNames.map((dashboard, i) => (
@@ -836,7 +863,6 @@ const CreateChart = props => {
                     type=""
                     className="add-graph-btn"
                     block="true"
-                    disabled={confirmButton}
                     onClick={handleGraphInfo}
                   >
                     הוסף גרף
@@ -849,12 +875,17 @@ const CreateChart = props => {
       </Container>
 
 
-      <ListGroup>
+      <ListGroup style={{width: "40% !important"}}>
 
         {colDataList}
       </ListGroup>
+      
+          <div className={(alertObj.alertType=="success") ? "ui message green" : "ui message red"} style={{display: (alertObj.alertShow) ? "inline-block" : "none"}}>{<p>{alertObj.alertText}</p>}</div>
+      
     </div>
   );
+
+  
 };
 
 

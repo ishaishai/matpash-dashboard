@@ -121,3 +121,7 @@
 .dropdown-toggle {
   width: 100% !important;
 }
+
+.dropdown-toggle::after {
+  float: left;
+}

@@ -42,12 +42,9 @@
   padding-top: 5px;
 }
 .saveLayoutBtn {
-  float: right;
-  margin-left: 5px;
-  margin-top: 5px;
+  float: left;
+  margin: 10px;
 }
-
-
 
 .dropDownContainer {
   display: flex;
@@ -67,14 +64,24 @@
   text-align: right;
 }
 
-
-.btnWrapper{
-   display: inline-block;
+.btnWrapper {
+  display: inline-block;
   width: 100%;
   margin-bottom: 10px;
 }
 
-.deleteDashboardBtn{
-  float:right
+.deleteDashboardBtn {
+  float: right;
 }
 
+.ui.message {
+  width: 40% !important;
+  position: absolute;
+  right: 3%;
+  margin-top: 2%;
+}
+.ui.message p {
+  text-align: right;
+  display: block;
+  right: 20px;
+}
