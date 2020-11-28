@@ -2,12 +2,21 @@ export default ({
   username,
   firstName,
   lastName,
+  id,
   password,
   organization,
   role,
   permissions,
 }) => {
   const errors = {};
+  if (!id) {
+    errors.id = 'שדה חובה';
+  } else if (id.length !== 9) {
+    errors.id = 'חייב להכיל 9 תווים';
+  } else if (!/^\d+$/.test(id)) {
+    errors.id = 'חייב להכיל ספרות בלבד';
+  }
+
   if (!username) {
     errors.username = 'שדה חובה';
   } else if (username.length < 5) {
