@@ -29,3 +29,8 @@ hr {
   margin-top: 0.7em;
   margin-right: 1.5em;
 }
+
+.defaultDashboardBtn {
+  float: right;
+  margin: 15px;
+}

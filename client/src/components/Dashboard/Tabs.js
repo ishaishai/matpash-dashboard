@@ -26,9 +26,11 @@ const DashboardTabs = props => {
   const fetchDashboardNames = async () => {
     const response = await axios.get('/api/dashboard/get-dashboard-names/tabs');
     let list = [...response.data.dashboardIdList];
+    let defaultDashId = response.data.defaultDashboard;
     if (list.length != 0) {
       setDashboardNames(list);
-      handleDashboardPick(list[0].index);
+      console.log(response.data.defaultDashboard);
+      handleDashboardPick(list.filter((dashboard) => dashboard.index==defaultDashId)[0]);
     } else {
       setDashboardNames([]);
       handleDashboardPick(null);
@@ -37,10 +39,6 @@ const DashboardTabs = props => {
   
   };
 
-
-  useEffect(()=> {
-    console.log(dashboardNames);
-  },[dashboardNames]);
 
   useEffect(() => {
     fetchDashboardNames();
@@ -57,23 +55,19 @@ const DashboardTabs = props => {
   );
   const responsiveGridRef = React.useRef('responsiveGrid');
 
-  const handleDashboardPick = async(dashId) => {
+  const handleDashboardPick = async(dashboard) => {
     console.log("handleDashboardPick");
     let grid;
     const graphPermissions = await getUserGraphPermissions();
     grid = (
-      <ResponsiveGrid userGraphOptions = {graphPermissions} permissions = {props.user.permissions}  onLayoutChange={setLayout} dashboardID={dashId} />
+      <ResponsiveGrid userGraphOptions = {graphPermissions} permissions = {props.user.permissions}  onLayoutChange={setLayout} dashboardID={dashboard.id} />
     );
+    console.log(dashboard);
+    setCurrentDashName(dashboard.name);
     setResponsiveGrid(grid);
-    setSelectedDashboard(dashId);
+    setSelectedDashboard(dashboard.index);
   };
 
-  useEffect(()=> {
-    if(dashboardNames!=null) {
-      setCurrentDashName(dashboardNames.filter((dashboard)=>(dashboard.index==selectedDashboard))[0].name)
-    }
-    
-  },[selectedDashboard]);
   useEffect(()=> {
     responsiveGridRef.current = responsiveGrid;
   },[ResponsiveGrid]);
@@ -91,6 +85,15 @@ const DashboardTabs = props => {
     }
   };
 
+  const saveDefaultDashboard = async () => {
+    try {
+      const result = await axios.post(`api/dashboard/set-default/`+selectedDashboard);
+      alert(`דשבורד "${currentDashName}" נבחר כברירת מחדל`);
+    }catch(error) {
+      alert("קרתה שגיאה");
+      console.log(error);
+    }
+  }
   
   const deleteDashboardHandler = async () => {
     let result = window.confirm('האם באמת למחוק את הדשבורד הזה? פעולה זו בלתי הפיכה');
@@ -139,7 +142,6 @@ const DashboardTabs = props => {
   }
 
 
-
   return (
     <div>
       <div className="btnWrapper">
@@ -151,7 +153,7 @@ const DashboardTabs = props => {
               return (
                 <Dropdown.Item
                   key={dashboard.index}
-                  onClick={() => handleDashboardPick(dashboard.index)}
+                  onClick={() => handleDashboardPick(dashboard)}
                 >
                   {dashboard.name}
                 </Dropdown.Item>
@@ -159,6 +161,11 @@ const DashboardTabs = props => {
             }) : ''}
           </DropdownButton>
         </div>
+        {isViewer ? (
+          <Button className="defaultDashboardBtn" onClick={saveDefaultDashboard}>
+            שמור כברירת מחדל
+          </Button>
+        ) : null}
         <div className ="dashboard-title">
           <hr/>
             {currentDashName}

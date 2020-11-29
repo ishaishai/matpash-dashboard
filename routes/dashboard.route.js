@@ -4,6 +4,7 @@ const router = express.Router();
 const requireToken = require('../middlewares/requireToken');
 
 router.get('/get-by-id/:id', requireToken, dashboardContoller.getDashboardById);
+router.post('/set-default/:id', requireToken, dashboardContoller.setDefaultDashboard);
 router.get(
   '/get-dashboard-names/:page',
   requireToken,
