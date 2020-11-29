@@ -369,9 +369,13 @@ exports.getDashboardNames = async (req, res) => {
         dashboardNamesKV.push(result.rows[0]);
       }
       console.log(dashboardNamesKV);
-    
+      const resultDefaultDash = await usersdbpool.query(
+        `select "defaultDash" from public."usersInfoTable" where "username"='${username}'`,
+      ); 
+      console.log(resultDefaultDash);
     res.status(200).json({
       dashboardIdList: dashboardNamesKV,
+      defaultDashboard: resultDefaultDash.rows[0].defaultDash,
     });
   } catch (err) {
     res.status(404).json({
@@ -661,3 +665,25 @@ exports.addNewGraphToDashboard = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.setDefaultDashboard = async (req, res) => {
+  const dashId = req.params.id;
+  const username = req.user.username;
+
+  try {
+    usersdbpool.query(`UPDATE public."usersInfoTable"
+    SET "defaultDash"='${dashId}'
+    WHERE "username"='${username}'`);
+
+    res.status(200).json({
+      msg: "OK",
+    });
+  }
+  catch(error) {
+    res.status(404).json({
+      error: err.message,
+    });
+    console.log(err);
+  }
+
+}

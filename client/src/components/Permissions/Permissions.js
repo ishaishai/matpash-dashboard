@@ -10,7 +10,7 @@ import 'bootstrap-v4-rtl';
 import './index.scss';
 import './style.css';
 
-import {BrowserRouter as Router,Switch,Route,Link} from "react-router-dom";
+import {BrowserRouter as Router,Switch,Route,Link,Redirect} from "react-router-dom";
 
 class Permissions extends React.Component {
   constructor(props){
@@ -28,10 +28,10 @@ class Permissions extends React.Component {
                 <Route path="/viewPerms">
                   <User_view_permission />
                 </Route>
-                
                 <Route path="/users">
                   <Users/>
                 </Route>
+                <Redirect to="/users"/>
                 <Route path="/perms">
                   <User_permission />
                 </Route>
