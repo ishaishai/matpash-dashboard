@@ -31,10 +31,10 @@ class Permissions extends React.Component {
                 <Route path="/users">
                   <Users/>
                 </Route>
-                <Redirect to="/users"/>
                 <Route path="/perms">
                   <User_permission />
                 </Route>
+                <Redirect to="/users"/>
               </Switch>
             </div>
             

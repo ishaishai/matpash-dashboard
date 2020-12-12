@@ -344,8 +344,12 @@ const CreateChart = props => {
   };
 
   const fetchPeriodColumn = async () => {
+    
+    let tableSelected = periodTableSelected.replace(/'/g, "''");
+    tableSelected = tableSelected.replace(/"/g, `""`);
+    
     let response = await axios.get(
-      '/api/tables/get-first-column/' + encodeURIComponent(periodTableSelected),
+      '/api/tables/get-first-column/' + encodeURIComponent(tableSelected),
     );
 
     const column = response.data.column;
@@ -379,8 +383,10 @@ const CreateChart = props => {
   };
 
   const fetchCrossColumn = async () => {
+    let tableSelected = crossTableSelected.replace(/'/g, "''");
+    tableSelected = tableSelected.replace(/"/g, `""`);
     const response = await axios.get(
-      '/api/tables/get-cols/' + encodeURIComponent(crossTableSelected),
+      '/api/tables/get-cols/' + encodeURIComponent(tableSelected),
     );
 
     const columns = response.data.colNamesList;
@@ -420,15 +426,11 @@ const CreateChart = props => {
   };
 
   const fetchToPeriodColumn = async () => {
-    // const response = await axios.get(
-    //   '/api/tables/get-period-end/' +
-    //     encodeURIComponent(periodTableSelected) +
-    //     '/' +
-    //     encodeURIComponent(startPeriodSelected),
-    // );
-
-    const response = await axios.get(
-      '/api/tables/get-first-column/' + encodeURIComponent(periodTableSelected),
+    let tableSelected = periodTableSelected.replace(/'/g, "''");
+    tableSelected = tableSelected.replace(/"/g, `""`);
+    
+    let response = await axios.get(
+      '/api/tables/get-first-column/' + encodeURIComponent(tableSelected),
     );
 
     const column = response.data.column;
@@ -560,19 +562,36 @@ const CreateChart = props => {
       console.log('creating graph...');
       let newDashboardResponse = null;
       console.log(graphToAdd.graph);
-      if (graphToAdd.dashboardID === 'דשבורד חדש') {
+      if (graphToAdd.dashboardID === 'דשבורד חדש') {  
+        let regexFixedDashName = newDashboardName.replace(/'/g, "''");
+        
+        console.log(regexFixedDashName,"fixxed");
         const newDashboardResponse = await axios.post(
           '/api/dashboard/add-new-dashboard/',
           {
-            dashboardName: newDashboardName
+            dashboardName: regexFixedDashName
           }
         );
         graphToAdd.dashboardID = newDashboardResponse.data.dashboardId;
       }
+      console.log(graphToAdd);
+
+      //duplicate " and ' for sql use in server
+      graphToAdd.graph.title = graphToAdd.graph.title.replace(/'/g, "''");
+      graphToAdd.graph.subtitle = graphToAdd.graph.subtitle.replace(/'/g, "''");
+      graphToAdd.graph.yAxisTitle = graphToAdd.graph.yAxisTitle.replace(/'/g, "''");
+      graphToAdd.graph.xAxisTitle = graphToAdd.graph.xAxisTitle.replace(/'/g, "''").replace(/"/g, `""`);
+      graphToAdd.graph.xAxisColumn = graphToAdd.graph.xAxisColumn.replace(/'/g, "''").replace(/"/g, `""`);
+      
+      for(let serie of graphToAdd.graph.series) { 
+        serie.serieName = serie.serieName.replace(/'/g, "''").replace(/"/g, `""`);
+      }
+
+
       const response = await axios.post(
         '/api/dashboard/add-new-graph-to-dashboard/',
         {
-          dashboardId: graphToAdd.dashboardID,
+          dashboardId: graphToAdd.dashboardID, 
           graph: graphToAdd.graph,
         },
       );

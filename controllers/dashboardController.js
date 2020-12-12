@@ -277,6 +277,8 @@ exports.getDashboardById = async (req, res) => {
 
           }
           lineSeriesToAdd.data = lineTempDataToAdd;
+          if(graph.flipXAxis)
+              lineSeriesToAdd.data = lineSeriesToAdd.data.reverse();
         }
 
         if (
@@ -523,7 +525,7 @@ exports.addNewDashboard = async (req, res) => {
       ON UPDATE CASCADE
       ON DELETE CASCADE
       )`);
-    
+
     result = dashboarddbpool.query(`INSERT INTO public."dashboardNames"(
       index, name)
       VALUES (${index}, '${dashboardName}');`)
@@ -577,6 +579,8 @@ exports.updateDashboardById = async (req, res) => {
 
 exports.addNewGraphToDashboard = async (req, res) => {
   let dashboardId = req.body.dashboardId;
+  let regex = new RegExp(/^\d+$/,);
+  let isIdNum = regex.test(dashboardId);
   const graph = req.body.graph;
   console.log(dashboardId,graph);
 
@@ -584,11 +588,14 @@ exports.addNewGraphToDashboard = async (req, res) => {
 
   try {
     //get all graphs in current dashboard '1,2,3'
-    let queryGetDashboardIndex = `select "index" from public."dashboardNames" where name = '${dashboardId}'`;
-    let resultIndex = await dashboarddbpool.query(queryGetDashboardIndex);
-    console.log(resultIndex,"resultIndex");
-    if(resultIndex.rows[0]) {
-      dashboardId = resultIndex.rows[0].index;
+    console.log(isIdNum);
+    if(!isIdNum) { 
+      let queryGetDashboardIndex = `select "index" from public."dashboardNames" where name = '${dashboardId}'`;
+      let resultIndex = await dashboarddbpool.query(queryGetDashboardIndex);
+      console.log(resultIndex.rows[0].index,"resultIndex");
+      if(resultIndex.rows[0]) {
+        dashboardId = resultIndex.rows[0].index;
+      }
     }
     const queryInsertGraph = `INSERT INTO public."graphsInfoTable"(
       "index", "position", "width", "height", "xPos", "yPos", "layoutIndex", "type", "title", "subtitle", "xAxisTitle", "yAxisTitle", "xAxisColumn", "yAxisColumn",

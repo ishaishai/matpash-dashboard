@@ -30,7 +30,11 @@ const DashboardTabs = props => {
     if (list.length != 0) {
       setDashboardNames(list);
       console.log(response.data.defaultDashboard);
-      handleDashboardPick(list.filter((dashboard) => dashboard.index==defaultDashId)[0]);
+      let defaultDash = list.filter((dashboard) => dashboard.index==defaultDashId)[0];
+      if(!defaultDash) { 
+        defaultDash = list[0];
+      }
+      handleDashboardPick(defaultDash);
     } else {
       setDashboardNames([]);
       handleDashboardPick(null);
@@ -58,14 +62,19 @@ const DashboardTabs = props => {
   const handleDashboardPick = async(dashboard) => {
     console.log("handleDashboardPick");
     let grid;
+    let index=null,name = null;
+    if(dashboard) { 
+      index =dashboard.index;
+      name = dashboard.name;
+    }
+
     const graphPermissions = await getUserGraphPermissions();
     grid = (
-      <ResponsiveGrid userGraphOptions = {graphPermissions} permissions = {props.user.permissions}  onLayoutChange={setLayout} dashboardID={dashboard.id} />
+      <ResponsiveGrid userGraphOptions = {graphPermissions} permissions = {props.user.permissions}  onLayoutChange={setLayout} dashboardID={index} />
     );
-    console.log(dashboard);
-    setCurrentDashName(dashboard.name);
+    setCurrentDashName(name);
     setResponsiveGrid(grid);
-    setSelectedDashboard(dashboard.index);
+    setSelectedDashboard(index);
   };
 
   useEffect(()=> {
@@ -161,11 +170,11 @@ const DashboardTabs = props => {
             }) : ''}
           </DropdownButton>
         </div>
-        {isViewer ? (
+        
           <Button className="defaultDashboardBtn" onClick={saveDefaultDashboard}>
             שמור כברירת מחדל
           </Button>
-        ) : null}
+        
         <div className ="dashboard-title">
           <hr/>
             {currentDashName}
