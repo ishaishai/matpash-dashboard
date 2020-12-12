@@ -8,9 +8,10 @@ async function parseExcelWorkBook(workBook) {
     for(tableName of sheetNames) {
         sheet = sheets[tableName];
         let colsInfo = await getColsInfo(sheet);
-        
-        tableName = tableName.replace(/['"]+/g, '');
-
+        //tableName = tableName.replace(/['"]+/g, '');
+        tableName = tableName.slice(0,26);
+	tableName = tableName.replace(/'/g, "''");
+	tableName = tableName.replace(/"/g, `""`);
         //if everything went well return OK
         await dbFuncs.dropCreateAndInsertDataTables(tableName,colsInfo,sheet); //drop and create both table and kv table
     }
