@@ -58,9 +58,7 @@ export const createUser = user => async dispatch => {
   }
 };
 
-export const fetchStatistics = () => async dispatch => {};
-
-export const uploadExcelFile = excelFile => async dispatch => {
+export const uploadExcelFile = (excelFile, history) => async dispatch => {
   dispatch({ type: CHECK_EXCEL_LOADING });
 
   try {
@@ -74,6 +72,10 @@ export const uploadExcelFile = excelFile => async dispatch => {
     dispatch({ type: CHECK_EXCEL_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: CHECK_EXCEL_ERROR, payload: error.response.data });
+    if (error.response.status === 500) {
+      window.alert('משהו השתבש');
+      history.push('/admin');
+    }
   }
 };
 

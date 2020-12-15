@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { uploadExcelFile, saveExcelFile, resetResults } from '../actions';
 import { validateFile } from '../utils';
 import Loader from './Loader';
 
-const Admin = ({ result, loading, resetResults, error, uploadExcelFile, saveExcelFile }) => {
+const Admin = ({ result, loading, resetResults, error, uploadExcelFile, saveExcelFile, history }) => {
   const [file, setFile] = useState(null);
   const [fileFormatError, setfileFormatError] = useState(false);
 
   const handlSubmit = e => {
     e.preventDefault();
     if (file && !fileFormatError) {
-      uploadExcelFile(file);
+      uploadExcelFile(file, history);
     }
   };
 
@@ -33,22 +34,18 @@ const Admin = ({ result, loading, resetResults, error, uploadExcelFile, saveExce
     saveExcelFile(file.name);
   }
 
-  const mapErrors = errors =>{
-    console.log('mapErrors')
+  const mapErrors = errors =>
     errors.map(err => <li style={{ margin: '10px' }}>{err}</li>);
-  }
 
   const success = result?.status === 'success';
   const failure = result?.status === 'failure';
-  console.log('success', success)
-  console.log('failure', failure)
 
   if (loading) {
     return <Loader message=".אנא המתן, פעולה זו עלולה להמשך מספר דקות" />;
   }
 
   return (
-    <div className="container" dir="rtl" style={{ marginTop: '30px' }}>
+    <div  dir="rtl" style={{ marginTop: '30px' }}>
       <h3 className="ui dividing header">בדיקת קובץ אקסל</h3>
       <form
         className={`ui form ${success ? 'success' : 'error'}`}
@@ -78,12 +75,12 @@ const Admin = ({ result, loading, resetResults, error, uploadExcelFile, saveExce
             <p>{'קובץ בפורמט לא תקין, אנא בחר קובץ אקסל'}</p>
           </div>
         )}
-        {error && (
+        {/* {error && (
           <div className="ui error message">
             <div className="header">קובץ אקסל לא תקין</div>
             <p>{error}</p>
           </div>
-        )}
+        )} */}
         <div className="inline field">
           <button
             className="ui primary button"
@@ -133,5 +130,5 @@ const mapStateToProps = ({ admin: { result, error, loading } }) => ({
 });
 
 export default connect(mapStateToProps, { uploadExcelFile, saveExcelFile, resetResults })(
-  Admin,
+  withRouter(Admin),
 );
