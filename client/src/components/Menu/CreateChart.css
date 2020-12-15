@@ -9,9 +9,10 @@
 
 .dropdown-menu.show {
   position: absolute !important;
-  display: block;
-  right: 0 !important;
-  height: 170px;
+  display: block !important;
+  
+  height: 170px !important;
+  width: max-content !important;
   overflow-y: scroll;
 }
 
