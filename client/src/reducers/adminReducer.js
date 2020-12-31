@@ -6,6 +6,9 @@ import {
   SAVE_EXCEL_LOADING,
   SAVE_EXCEL_SUCCESS,
   RESET_RESULTS,
+  FETCH_TABLE_NAMES_ERROR,
+  FETCH_TABLE_NAMES_LOADING,
+  FETCH_TABLE_NAMES_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
@@ -45,6 +48,21 @@ export default (state = initialState, action) => {
         result: payload,
       };
     case SAVE_EXCEL_ERROR:
+      return {
+        ...initialState,
+        error: payload,
+      };
+    case FETCH_TABLE_NAMES_LOADING:
+      return {
+        ...initialState,
+        loading: true,
+      };
+    case FETCH_TABLE_NAMES_SUCCESS:
+      return {
+        ...initialState,
+        result: payload,
+      };
+    case FETCH_TABLE_NAMES_ERROR:
       return {
         ...initialState,
         error: payload,

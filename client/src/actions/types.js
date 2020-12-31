@@ -20,3 +20,7 @@ export const RESET_RESULTS = 'reset_results';
 export const SAVE_EXCEL_LOADING = 'save_excel_loading'
 export const SAVE_EXCEL_SUCCESS = 'save_excel_success'
 export const SAVE_EXCEL_ERROR = 'save_excel_error';
+
+export const FETCH_TABLE_NAMES_LOADING = 'fetch_table_names_loading';
+export const FETCH_TABLE_NAMES_SUCCESS = 'fetch_table_names_success';
+export const FETCH_TABLE_NAMES_ERROR = 'fetch_table_names_error';

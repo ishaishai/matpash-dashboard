@@ -14,6 +14,9 @@ import {
   SAVE_EXCEL_SUCCESS,
   SAVE_EXCEL_ERROR,
   RESET_RESULTS,
+  FETCH_TABLE_NAMES_LOADING,
+  FETCH_TABLE_NAMES_ERROR,
+  FETCH_TABLE_NAMES_SUCCESS,
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -87,6 +90,17 @@ export const saveExcelFile = fileName => async dispatch => {
     dispatch({ type: SAVE_EXCEL_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: SAVE_EXCEL_ERROR, payload: error.response.data });
+  }
+};
+
+export const getTableNames = () => async dispatch => {
+  dispatch({ type: FETCH_TABLE_NAMES_LOADING });
+
+  try {
+    const response = await axios.get('/api/tables/get-names');
+    dispatch({ type: FETCH_TABLE_NAMES_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({ type: FETCH_TABLE_NAMES_ERROR, payload: error.response.data });
   }
 };
 

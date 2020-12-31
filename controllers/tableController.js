@@ -22,6 +22,12 @@ exports.getTablesName = async (req, res) => {
   // console.log(tbList);
 };
 
+exports.getTable = async (req, res) => {
+  const { tableName } = req.body
+  
+  maindbpool.query(`SELECT * FROM public."${tableName}"`)
+}
+
 exports.getColFromTable = async (req, res) => {
   let table_name = req.params.table_name;
   table_name = `${table_name} - KV`;
