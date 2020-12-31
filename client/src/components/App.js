@@ -15,6 +15,7 @@ import Login from './Login/Login';
 import Permissions from './Permissions/Permissions';
 import AdminScreen from './AdminScreen';
 import ProtectedRoute from './ProtectedRoute';
+import CreateGolden from './Menu/CreateGolden';
 
 const App = ({ fetchUser, auth }) => {
   useEffect(() => {
@@ -37,6 +38,12 @@ const App = ({ fetchUser, auth }) => {
             path="/create-chart"
             exact
             component={CreateChart}
+          />
+          <ProtectedRoute
+            isLoggedIn={auth.user}
+            path="/create-golden"
+            exact
+            component={CreateGolden}
           />
           <ProtectedRoute
             isLoggedIn={auth.user}

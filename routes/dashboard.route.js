@@ -10,6 +10,11 @@ router.get(
   requireToken,
   dashboardContoller.getDashboardNames,
 );
+router.get(
+  '/get-goldens',
+  requireToken,
+  dashboardContoller.getGoldens,
+);
 router.delete(
   '/delete-dashboard-by-id/:id',
   requireToken,
@@ -30,6 +35,13 @@ router.post(
   requireToken,
   dashboardContoller.addNewGraphToDashboard,
 );
+
+router.post(
+  '/add-new-golden',
+  requireToken,
+  dashboardContoller.addNewGolden,
+);
+
 router.post('/update', requireToken, dashboardContoller.updateDashboardById);
 
 module.exports = router;

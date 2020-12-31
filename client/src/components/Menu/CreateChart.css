@@ -58,6 +58,14 @@
   margin-top: 10%;
   height: 40px;
 }
+
+.add-monitor-btn {
+  margin-top: 3%;
+  height: 40px;
+}
+.add-monitor-col {
+  padding-right: 4% !important;
+}
 .form-label {
   line-height: 2rem;
 }
@@ -83,6 +91,11 @@
   float: left;
   margin-top: 0.7em;
   margin-right: 1.5em;
+}
+
+.inner-row {
+  direction: rtl;
+  text-align: right;
 }
 .col {
   text-align: center;

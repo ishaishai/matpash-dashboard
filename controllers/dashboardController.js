@@ -6,7 +6,7 @@ exports.getDashboardById = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id; //** here need to get user id from token.
   const username = req.user.username;
-  
+
   const dashboardToReturn = {
     id: id,
     graphList: [],
@@ -15,7 +15,7 @@ exports.getDashboardById = async (req, res) => {
   try {
     //that gives you list of numbers like '1,2,3', or empty if user or dashboard doesnt exist.
     const queryPullDashboard = `select dashboard${id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."username" = '${username}'`;
-   
+
     let result = await dashboarddbpool.query(queryPullDashboard); //complete query.
     console.log(result.rows[0][`dashboard${id}`]);
     if (
@@ -46,8 +46,6 @@ exports.getDashboardById = async (req, res) => {
 
     const graphList = result.rows;
 
-
-
     for (graph of graphList) {
       const graphToAdd = { index: graph.index };
       graphToAdd.options = {
@@ -65,18 +63,16 @@ exports.getDashboardById = async (req, res) => {
           text: graph.subtitle,
         },
         tooltip: {
-          style:{
+          style: {
             textAlign: 'right',
-            fontSize:'16px',
+            fontSize: '16px',
           },
           headerFormat:
-            graph.type == 'pie'
-              ? `<span dir="rtl">{point.key}`
-              : '',
+            graph.type == 'pie' ? `<span dir="rtl">{point.key}` : '',
           pointFormat:
             graph.type == 'pie'
-              ? '<div style="padding:0"><b>{point.y:.3f}%</b></div>' + 
-              '<div style="padding:0">ערך מספרי: <b>{point.actualValue}</b></div>'
+              ? '<div style="padding:0"><b>{point.y:.3f}%</b></div>' +
+                '<div style="padding:0">ערך מספרי: <b>{point.actualValue}</b></div>'
               : '<div dir="rtl" style="color:{series.color};padding:0";>{series.name}: </div>' +
                 '<div dir="rtl" style="padding:0"><b dir="ltr" style="display: inline-block;">{point.y:.3f} </b></div>',
 
@@ -103,7 +99,7 @@ exports.getDashboardById = async (req, res) => {
           verticalAlign: 'bottom',
           useHTML: true,
           title: {
-            text: null,//'<b> מקרא </b>',//'<div className = "highcharts-label highcharts-legend-title">:מקרא</div>'
+            text: null, //'<b> מקרא </b>',//'<div className = "highcharts-label highcharts-legend-title">:מקרא</div>'
           },
         },
         plotOptions: {
@@ -166,7 +162,7 @@ exports.getDashboardById = async (req, res) => {
         queryGetEnumeratedValues = `select rownum from (select "${xAxisColumnName}",row_number() over(order by 1) as "rownum"  from public."${xAxisTableName}") as tmp
                 where "${xAxisColumnName}" like '%${fromStr}%' or "${xAxisColumnName}" like '%${toStr}%'`;
       }
- 
+
       result = await maindbpool.query(queryGetEnumeratedValues);
 
       const fromNum = result.rows[0].rownum;
@@ -188,7 +184,9 @@ exports.getDashboardById = async (req, res) => {
       }
 
       //graphToAdd.xAxisCatagoryRange = tempxAxisCatagoryRange;
-      graphToAdd.options.xAxis.catagories = (graph.flipXAxis) ? tempxAxisCatagoryRange.reverse():tempxAxisCatagoryRange;
+      graphToAdd.options.xAxis.catagories = graph.flipXAxis
+        ? tempxAxisCatagoryRange.reverse()
+        : tempxAxisCatagoryRange;
       //console.log("---------- xAxisCatagoryRange: "+graphToAdd.xAxisCatagoryRange);
 
       //get all the series of dashboard and extract from it which series to the right graph by its index
@@ -250,7 +248,6 @@ exports.getDashboardById = async (req, res) => {
             graphToAdd.options.sum += Object.values(obj).map(Number)[0];
           }
 
-
           let colorArrayIndex = 0;
           for (obj of result.rows) {
             // console.log(
@@ -261,8 +258,8 @@ exports.getDashboardById = async (req, res) => {
               sliced: false,
               name: pieSeriesToAdd.name,
               y: 0,
-              actualValue: parseInt(Object.values(obj)[0]), 
-              color: pieColorsArray[colorArrayIndex++]
+              actualValue: parseInt(Object.values(obj)[0]),
+              color: pieColorsArray[colorArrayIndex++],
               //parseFloat(Object.values(obj)[0] / graphToAdd.options.sum) * 100, //change this
             });
           }
@@ -274,11 +271,10 @@ exports.getDashboardById = async (req, res) => {
                 ? parseInt(Object.values(obj)[0])
                 : parseFloat(Object.values(obj)[0]),
             );
-
           }
           lineSeriesToAdd.data = lineTempDataToAdd;
-          if(graph.flipXAxis)
-              lineSeriesToAdd.data = lineSeriesToAdd.data.reverse();
+          if (graph.flipXAxis)
+            lineSeriesToAdd.data = lineSeriesToAdd.data.reverse();
         }
 
         if (
@@ -301,7 +297,8 @@ exports.getDashboardById = async (req, res) => {
       ) {
         //calculate each part of series in them:
         for (let serie of pieTempDataToAdd) {
-          serie.y = parseFloat(serie.actualValue / graphToAdd.options.sum) * 100;
+          serie.y =
+            parseFloat(serie.actualValue / graphToAdd.options.sum) * 100;
         }
 
         pieSeriesToAdd.data = pieTempDataToAdd;
@@ -345,10 +342,8 @@ exports.getDashboardNames = async (req, res) => {
   const page = req.params.page;
   const dashboardNamesKV = [];
   const username = req.user.username;
-  
 
-  const userId = req.user.id; 
-
+  const userId = req.user.id;
 
   try {
     //this will get you a number. if there are 2 dashboards then 2. build strings like 'Dash 1' 'Dash 2'.
@@ -357,24 +352,27 @@ exports.getDashboardNames = async (req, res) => {
     ); //complete query.
     let nameList = Object.entries(result.rows[0])
       .filter(([key, value]) => {
-        if (key !== 'username' && value != null && page == 'tabs') { return true; }
-        else if (key !== 'username' && value != null && page == 'create') { return true; }
+        if (key !== 'username' && value != null && page == 'tabs') {
+          return true;
+        } else if (key !== 'username' && value != null && page == 'create') {
+          return true;
+        }
         //else if (key !== 'userId' && req.user.permissions == 'מנהל') { return true; }
         else return false;
       })
       .map(name => name[0].substring(9));
-      for(let name of nameList) {
-        const result = await dashboarddbpool.query(
-          `select * from public."dashboardNames" where "index"='${name}'`,
-        ); //complete query.
+    for (let name of nameList) {
+      const result = await dashboarddbpool.query(
+        `select * from public."dashboardNames" where "index"='${name}'`,
+      ); //complete query.
 
-        dashboardNamesKV.push(result.rows[0]);
-      }
-      console.log(dashboardNamesKV);
-      const resultDefaultDash = await usersdbpool.query(
-        `select "defaultDash" from public."usersInfoTable" where "username"='${username}'`,
-      ); 
-      console.log(resultDefaultDash);
+      dashboardNamesKV.push(result.rows[0]);
+    }
+    console.log(dashboardNamesKV);
+    const resultDefaultDash = await usersdbpool.query(
+      `select "defaultDash" from public."usersInfoTable" where "username"='${username}'`,
+    );
+    console.log(resultDefaultDash);
     res.status(200).json({
       dashboardIdList: dashboardNamesKV,
       defaultDashboard: resultDefaultDash.rows[0].defaultDash,
@@ -404,14 +402,18 @@ exports.deleteDashboardById = async (req, res) => {
     graphsExtracted = graphsExtracted.map(num => `'${num}'`).join(',');
     //use the string of the numbers from orevious -> '1,2,3' and delete them from graphsInfoTable
 
-    if(graphsExtracted!=`''`) {
+    if (graphsExtracted != `''`) {
       const queryDeleteGraphs = `DELETE FROM public."graphsInfoTable" WHERE "index" in (${graphsExtracted})`;
-      
+
       await dashboarddbpool.query(queryDeleteGraphs); //complete query.
     }
 
-    console.log(`ALTER TABLE public."dashboardPriviledgesTable" DROP COLUMN "dashboard${id}";`);
-    await dashboarddbpool.query(`ALTER TABLE public."dashboardPriviledgesTable" DROP COLUMN "dashboard${id}";`)
+    console.log(
+      `ALTER TABLE public."dashboardPriviledgesTable" DROP COLUMN "dashboard${id}";`,
+    );
+    await dashboarddbpool.query(
+      `ALTER TABLE public."dashboardPriviledgesTable" DROP COLUMN "dashboard${id}";`,
+    );
     // await dashboarddbpool.query(
     //   `update public."dashboardPriviledgesTable" set dashboard${id} = '';`,
     // ); //complete query.
@@ -421,9 +423,8 @@ exports.deleteDashboardById = async (req, res) => {
     await dashboarddbpool.query(queryDeleteDashSeriesTable); //complete query.
 
     const queryDeleteDashName = `DELETE FROM public."dashboardNames" where index=${id}`;
-    
 
-    await dashboarddbpool.query(queryDeleteDashName)
+    await dashboarddbpool.query(queryDeleteDashName);
     await storeOperation({
       type: 'dashboard_deletion',
       username: req.user.username,
@@ -488,7 +489,6 @@ exports.deleteGraphFromDashboard = async (req, res) => {
       username: req.user.username,
     });
 
-
     res.status(200).json({
       msg: 'graph removed from dashbard!',
     });
@@ -528,7 +528,7 @@ exports.addNewDashboard = async (req, res) => {
 
     result = dashboarddbpool.query(`INSERT INTO public."dashboardNames"(
       index, name)
-      VALUES (${index}, '${dashboardName}');`)
+      VALUES (${index}, '${dashboardName}');`);
 
     await storeOperation({
       type: 'dashboard_creation',
@@ -551,7 +551,6 @@ exports.updateDashboardById = async (req, res) => {
   const layoutObjectList = req.body.layout_grid;
   // //each object in layoutObjectList is {layoutObject}
   try {
-
     for (let layout of layoutObjectList) {
       ///iterate through the layoutObjectList and update each graph with the new layout
       result = await dashboarddbpool.query(`UPDATE public."graphsInfoTable"
@@ -564,7 +563,6 @@ exports.updateDashboardById = async (req, res) => {
       username: req.user.username,
     });
 
-
     res.status(200).json({
       msg: 'ok',
     });
@@ -576,24 +574,23 @@ exports.updateDashboardById = async (req, res) => {
   }
 };
 
-
 exports.addNewGraphToDashboard = async (req, res) => {
   let dashboardId = req.body.dashboardId;
-  let regex = new RegExp(/^\d+$/,);
+  let regex = new RegExp(/^\d+$/);
   let isIdNum = regex.test(dashboardId);
   const graph = req.body.graph;
-  console.log(dashboardId,graph);
+  console.log(dashboardId, graph);
 
   const username = req.user.username;
 
   try {
     //get all graphs in current dashboard '1,2,3'
     console.log(isIdNum);
-    if(!isIdNum) { 
+    if (!isIdNum) {
       let queryGetDashboardIndex = `select "index" from public."dashboardNames" where name = '${dashboardId}'`;
       let resultIndex = await dashboarddbpool.query(queryGetDashboardIndex);
-      console.log(resultIndex.rows[0].index,"resultIndex");
-      if(resultIndex.rows[0]) {
+      console.log(resultIndex.rows[0].index, 'resultIndex');
+      if (resultIndex.rows[0]) {
         dashboardId = resultIndex.rows[0].index;
       }
     }
@@ -611,7 +608,6 @@ exports.addNewGraphToDashboard = async (req, res) => {
     //next needed to update series for dashboard (for each graph so still in iteration)
     //pull graph series object and then use next statement
 
-
     for (let serie of graph.series) {
       const queryInsertGraphSeries = `INSERT INTO public."dashboard${dashboardId}Series"(index, "serieName", "serieRange", color) VALUES ((select max(index) from public."graphsInfoTable"), '${serie.serieName}', '', '${serie.color}');`;
       await dashboarddbpool.query(queryInsertGraphSeries);
@@ -628,7 +624,9 @@ exports.addNewGraphToDashboard = async (req, res) => {
       `select "username" from "public"."usersInfoTable" where "permissions"='מנהל';`,
     );
 
-    let usersNames = result.rows.map(usernameObj => `'${usernameObj.username}'`);
+    let usersNames = result.rows.map(
+      usernameObj => `'${usernameObj.username}'`,
+    );
 
     usersNames = usersNames.join(',');
 
@@ -661,7 +659,6 @@ exports.addNewGraphToDashboard = async (req, res) => {
       username: req.user.username,
     });
 
-
     res.status(200).json({
       msg: 'graph added!',
     });
@@ -683,14 +680,95 @@ exports.setDefaultDashboard = async (req, res) => {
     WHERE "username"='${username}'`);
 
     res.status(200).json({
-      msg: "OK",
+      msg: 'OK',
     });
-  }
-  catch(error) {
+  } catch (error) {
     res.status(404).json({
       error: err.message,
     });
     console.log(err);
   }
+};
 
-}
+exports.addNewGolden = async (req, res) => {
+  let goldenData = req.body.goldenData;
+  console.log(goldenData);
+  if (goldenData !== undefined) {
+    let resultIndex = await dashboarddbpool.query(
+      `SELECT COALESCE(MAX(index),0)+1 as "index" from public."goldenDataTable"`,
+    );
+    let layoutResult = await dashboarddbpool.query(`INSERT INTO public."goldenLayoutTable"(
+        index, title,valuetype, width, height, "xPos", "yPos")
+        VALUES (${resultIndex.rows[0].index},'${goldenData.title}','${
+      goldenData.valueType
+    }', ${goldenData.data.length + 1}, 1.75,0, 0);`);
+    for (let serie of goldenData.data) {
+      let result = await dashboarddbpool.query(`INSERT INTO public."goldenDataTable"(
+          index, "subTitle", seriename, period, cmpPeriod)
+          VALUES (${resultIndex.rows[0].index}, '${serie.subTitle}', '${serie.serieName}',
+                      '${serie.period}','${serie.cmpPeriod}')`);
+    }
+
+    res.status(200).json({
+      msg: 'OK',
+    });
+  } else {
+    res.state(400).json({
+      msg: 'FAIL',
+    });
+  }
+};
+
+exports.getGoldens = async (req, res) => {
+  let resultGoldens = await dashboarddbpool.query(
+    `select * from public."goldenDataTable"`,
+  );
+  let goldensDict = {};
+
+  for (let golden of resultGoldens.rows) {
+    if (goldensDict[golden.index] === undefined) {
+      goldensDict[golden.index] = { goldens: [], layout: undefined };
+    }
+
+    let selectedTable = golden.seriename.split('.')[0];
+    let selectedColumn = golden.seriename.split('.')[1];
+
+    let dataPeriodQuery = await maindbpool.query(`select "A1","${selectedColumn}" from public."${selectedTable}" 
+    where
+     "A1" = '${golden.period}'`);
+
+    let dataCmpPeriodQuery = await maindbpool.query(`select "A1","${selectedColumn}" from public."${selectedTable}" 
+    where
+     "A1" = '${golden.cmpperiod}'`);
+
+    goldensDict[golden.index].goldens.push({
+      subTitle: golden.subTitle,
+      periodValue: parseFloat(dataPeriodQuery.rows[0][selectedColumn]).toFixed(
+        2,
+      ),
+      periodCmpValue: parseFloat(
+        dataCmpPeriodQuery.rows[0][selectedColumn],
+      ).toFixed(2),
+    });
+    //goldensDict[golden.index].goldens.push(golden);
+  }
+
+  let resultLayouts = await dashboarddbpool.query(
+    `select * from public."goldenLayoutTable"`,
+  );
+
+  for (let layout of resultLayouts.rows) {
+    goldensDict[layout.index].layout = layout;
+  }
+
+  let goldensList = [];
+  for (let key in goldensDict) {
+    goldensList.push(goldensDict[key]);
+  }
+
+  console.log(goldensList);
+
+  res.status(200).json({
+    goldensList: goldensList,
+  });
+};
