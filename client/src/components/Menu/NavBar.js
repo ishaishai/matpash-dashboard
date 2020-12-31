@@ -16,6 +16,7 @@ const NavBar = (props, { logout }) => {
           <Nav.Link href="/users">משתמש חדש</Nav.Link>
           <Nav.Link href="/permissions">הרשאות</Nav.Link>
           <Nav.Link href="/statistics">סטטיסטיקה</Nav.Link>
+          <Nav.Link href="/create-golden">צור מוניטור</Nav.Link>
           <Nav.Link href="/create-chart">צור גרף</Nav.Link>
           <Nav.Link href="/">עבור לדשבורד</Nav.Link>
         </Nav>

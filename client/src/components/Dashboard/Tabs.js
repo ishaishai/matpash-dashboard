@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownButton, Button } from 'react-bootstrap';
-import ResponsiveGrid from './ResponsiveGrid';
+import HighChartsResponsiveGrid from './HighChartsResponsiveGrid';
 import axios from 'axios';
 import Highcharts from 'highcharts';
 import { connect } from 'react-redux';
 import './Tabs.css';
+import GoldenGrid from './GoldenGrid';
 
 require('highcharts/modules/exporting')(Highcharts);
 const defaultContextMenuButtons = Highcharts.getOptions().exporting.buttons
@@ -13,9 +14,18 @@ const defaultContextMenuButtons = Highcharts.getOptions().exporting.buttons
 const DashboardTabs = props => {
   const [selectedDashboard, setSelectedDashboard] = useState(null);
   const [layoutAfterChange, setLayoutAfterChange] = useState(null);
+  const [goldenLayout,setGoldenLayout] = useState(null);
   const [dashboardNames, setDashboardNames] = useState(null);
   const [currentDashName,setCurrentDashName] = useState('');
-
+  
+  const setGoldensLayout = event => { 
+    setGoldenLayout(event);
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 100);
+  };
+  const [goldenGrid,setGoldenGrid] = (useState(<GoldenGrid onLayoutChange={setGoldensLayout} />
+    ));
   const [isViewer, setIsViewer] = useState(() => {
     if (props.user.permissions === 'צופה') {
       return false;
@@ -48,16 +58,19 @@ const DashboardTabs = props => {
     fetchDashboardNames();
   }, []);
 
-  const setLayout = event => {
+  const setDashboardLayout = event => {
     setLayoutAfterChange(event);
+    console.log(event);
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
   };
-  const [responsiveGrid, setResponsiveGrid] = useState(
-    <ResponsiveGrid onLayoutChange={setLayout} dashboardID={null} />,
+
+
+  const [highchartsResponsive, setHighchartsResponsive] = useState(
+    <HighChartsResponsiveGrid onLayoutChange={setDashboardLayout} dashboardID={null} />,
   );
-  const responsiveGridRef = React.useRef('responsiveGrid');
+  const responsiveGridRef = React.useRef('highChartsResponsiveGrid');
 
   const handleDashboardPick = async(dashboard) => {
     console.log("handleDashboardPick");
@@ -70,16 +83,17 @@ const DashboardTabs = props => {
 
     const graphPermissions = await getUserGraphPermissions();
     grid = (
-      <ResponsiveGrid userGraphOptions = {graphPermissions} permissions = {props.user.permissions}  onLayoutChange={setLayout} dashboardID={index} />
+      <HighChartsResponsiveGrid userGraphOptions = {graphPermissions} permissions = {props.user.permissions}  onLayoutChange={setDashboardLayout} dashboardID={index} />
     );
     setCurrentDashName(name);
-    setResponsiveGrid(grid);
+    setHighchartsResponsive(grid);
     setSelectedDashboard(index);
   };
 
   useEffect(()=> {
-    responsiveGridRef.current = responsiveGrid;
-  },[ResponsiveGrid]);
+    responsiveGridRef.current = highchartsResponsive;
+    console.log(highchartsResponsive);
+  },[highchartsResponsive]);
 
   const saveLayout = async () => {
     console.log(layoutAfterChange);
@@ -197,8 +211,9 @@ const DashboardTabs = props => {
         ) : null}
       </div>
       
+      {goldenGrid}
       
-      {responsiveGrid}
+      {highchartsResponsive}
     </div>
   );
 };
