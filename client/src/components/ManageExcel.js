@@ -38,6 +38,10 @@ function ManageExcel({
     }
   };
 
+  const handleDeleteTable = () => { }
+  
+  const handleExportExcel = () => { };
+  
   return (
     <div className="container" dir="rtl">
       <DropdownButton
@@ -57,9 +61,26 @@ function ManageExcel({
         ))}
       </DropdownButton>
 
-      <button className="ui button primary" onClick={handleGetTable}>
-        {'תצוגה מקדימה'}
-      </button>
+      <div className="inline field" style={{ marginTop: '10px' }}>
+        <button className="ui button primary" onClick={handleGetTable}>
+          {'תצוגה מקדימה'}
+        </button>
+      </div>
+      <div className="inline field" style={{ marginTop: '10px' }}>
+        <label
+          className="ui icon button"
+          htmlFor="hidden-new-file"
+          style={{ marginRight: '0px' }}
+        >
+          ייצא לקובץ אקסל{'  '}
+          <i className="file excel icon"></i>
+        </label>
+      </div>
+      <div className="inline field" style={{ marginTop: '10px' }}>
+        <button className="ui button red" onClick={handleDeleteTable}>
+          {'מחק טבלה'}
+        </button>
+      </div>
       {showPreview && (
         <div className="row bg-light text-dark">
           {Object.keys(result.table[0]).map(col => (

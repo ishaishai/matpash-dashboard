@@ -49,6 +49,10 @@ exports.getTable = async (req, res) => {
   }
 };
 
+exports.deleteTable = async (req, res) => {
+  
+}
+
 exports.getColFromTable = async (req, res) => {
   let table_name = req.params.table_name;
   table_name = `${table_name} - KV`;
