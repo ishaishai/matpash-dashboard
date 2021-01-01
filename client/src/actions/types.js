@@ -28,3 +28,7 @@ export const FETCH_TABLE_NAMES_ERROR = 'fetch_table_names_error';
 export const FETCH_TABLE_LOADING = 'fetch_table_loading';
 export const FETCH_TABLE_SUCCESS = 'fetch_table_success';
 export const FETCH_TABLE_ERROR = 'fetch_table_error';
+
+export const DELETE_TABLE_LOADING = 'delete_table_loading';
+export const DELETE_TABLE_SUCCESS = 'delete_table_success';
+export const DELETE_TABLE_ERROR = 'delete_table_error';

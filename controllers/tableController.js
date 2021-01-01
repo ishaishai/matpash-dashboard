@@ -10,9 +10,7 @@ exports.getTablesName = async (req, res) => {
     )
     .then(result => {
       tbList = result.rows.map(t => t.table_name);
-      res.status(200).json(
-        tbList
-      );
+      res.status(200).json(tbList);
     })
     .catch(error => {
       return res.status(404).json({ error });
@@ -41,17 +39,28 @@ exports.getTable = async (req, res) => {
       resultTable.push(result);
     }
 
-    res.json({ table: resultTable });
+    return res.json({ table: resultTable });
   } catch (error) {
-    res.status(404).json({
+    return res.status(500).json({
       error: error.message,
     });
   }
 };
 
 exports.deleteTable = async (req, res) => {
-  
-}
+  const { table_name } = req.params;
+
+  try {
+    const result = maindbpool.query(
+      `DROP TABLE public."${table_name}", public."${table_name} - KV"`,
+    );
+    return res.json({ result });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
 
 exports.getColFromTable = async (req, res) => {
   let table_name = req.params.table_name;

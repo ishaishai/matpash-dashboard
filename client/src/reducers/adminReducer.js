@@ -12,6 +12,9 @@ import {
   FETCH_TABLE_ERROR,
   FETCH_TABLE_LOADING,
   FETCH_TABLE_SUCCESS,
+  DELETE_TABLE_ERROR,
+  DELETE_TABLE_LOADING,
+  DELETE_TABLE_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
@@ -82,8 +85,27 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         result: payload,
+        error: null,
       };
     case FETCH_TABLE_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+      };
+    case DELETE_TABLE_LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_TABLE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        result: payload,
+        error: null,
+      };
+    case DELETE_TABLE_ERROR:
       return {
         ...state,
         loading: false,

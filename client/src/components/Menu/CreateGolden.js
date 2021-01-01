@@ -52,7 +52,7 @@ const CreateGolden = props => {
 
   const fetchTableNames = async () => {
     const response = await axios.get('/api/tables/get-names/');
-    const names = response.data.tableList;
+    const names = response.data;
     setTableNames(names);
   };
 

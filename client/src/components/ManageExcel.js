@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getTableNames, getTable } from '../actions';
+import { getTableNames, getTable, deleteTable } from '../actions';
 import { DropdownButton, Dropdown } from 'react-bootstrap';
 import Loader from './Loader';
+
+const renderPreview = tableData => {
+  if (!tableData || tableData.length === 0) {
+    return null;
+  }
+  return (
+    <div className="row bg-light text-dark" style={{ marginTop: '20px' }}>
+      {Object.keys(tableData[0]).map(col => (
+        <div className="col border border-dark text-center">{col}</div>
+      ))}
+    </div>
+  );
+};
 
 function ManageExcel({
   getTableNames,
   getTable,
+  deleteTable,
   result,
   error,
   tableNames,
@@ -38,15 +52,20 @@ function ManageExcel({
     }
   };
 
-  const handleDeleteTable = () => { }
-  
-  const handleExportExcel = () => { };
-  
+  const handleDeleteTable = () => {
+    if (TableSelected !== 'בחר טבלה') {
+      deleteTable(TableSelected);
+    }
+    setTableSelected('בחר טבלה');
+  };
+
+  const handleExportExcel = () => {};
+
   return (
-    <div className="container" dir="rtl">
+    <div dir="rtl">
       <DropdownButton
-        className="dropdown-btn choose-dash-btn"
-        type=""
+        id="dropdown-size-small"
+        menuAlign="right"
         variant="outline-primary"
         title={TableSelected}
       >
@@ -65,38 +84,82 @@ function ManageExcel({
         <button className="ui button primary" onClick={handleGetTable}>
           {'תצוגה מקדימה'}
         </button>
-      </div>
-      <div className="inline field" style={{ marginTop: '10px' }}>
-        <label
-          className="ui icon button"
-          htmlFor="hidden-new-file"
-          style={{ marginRight: '0px' }}
-        >
-          ייצא לקובץ אקסל{'  '}
-          <i className="file excel icon"></i>
-        </label>
-      </div>
-      <div className="inline field" style={{ marginTop: '10px' }}>
-        <button className="ui button red" onClick={handleDeleteTable}>
-          {'מחק טבלה'}
-        </button>
-      </div>
-      {showPreview && (
-        <div className="row bg-light text-dark">
-          {Object.keys(result.table[0]).map(col => (
-            <div className="col border border-dark text-center">{col}</div>
-          ))}
-          {/* {result.table.map((row, i) => (
-            <div key={i} className="row">
-              {Object.keys(row).map(key => (
-                <div className="col border text-center">{row[key]}</div>
-              ))}
-            </div>
-          ))} */}
+        <div className="inline field" style={{ marginTop: '10px' }}>
+          <label
+            className="ui icon button"
+            htmlFor="hidden-new-file"
+            style={{ marginRight: '0px' }}
+          >
+            ייצא לקובץ אקסל{'  '}
+            <i className="file excel icon"></i>
+          </label>
         </div>
-      )}
+        <div className="inline field" style={{ marginTop: '10px' }}>
+          <div>
+            <button
+              type="button"
+              className="btn btn-secondary bg-danger"
+              data-toggle="modal"
+              data-target="#exampleModalCenter"
+            >
+              מחק טבלה
+            </button>
+            <div
+              className="modal fade"
+              id="exampleModalCenter"
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="exampleModalCenterTitle"
+              aria-hidden="true"
+            >
+              <div
+                className="modal-dialog modal-dialog-centered"
+                role="document"
+              >
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLongTitle">
+                      {' '}
+                      שמירת שינויים
+                    </h5>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    האם אתה בטוח שברצונך למחוק טבלה זו?
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary bg-danger"
+                      data-dismiss="modal"
+                    >
+                      ביטול
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-secondary bg-success"
+                      data-dismiss="modal"
+                      onClick={handleDeleteTable}
+                    >
+                      אישור
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {showPreview && renderPreview(result.table)}
     </div>
-  ); // console.log(kvTableResult.rows);
+  );
 }
 
 const mapStateToProps = ({
@@ -108,6 +171,6 @@ const mapStateToProps = ({
   tableNames,
 });
 
-export default connect(mapStateToProps, { getTableNames, getTable })(
+export default connect(mapStateToProps, { getTableNames, getTable, deleteTable })(
   ManageExcel,
 );

@@ -19,7 +19,10 @@ import {
   FETCH_TABLE_NAMES_SUCCESS,
   FETCH_TABLE_ERROR,
   FETCH_TABLE_LOADING,
-  FETCH_TABLE_SUCCESS
+  FETCH_TABLE_SUCCESS,
+  DELETE_TABLE_ERROR,
+  DELETE_TABLE_LOADING,
+  DELETE_TABLE_SUCCESS,
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -108,14 +111,27 @@ export const getTableNames = () => async dispatch => {
 };
 
 export const getTable = tableName => async dispatch => {
-  dispatch({ type: FETCH_TABLE_LOADING })
-  
+  dispatch({ type: FETCH_TABLE_LOADING });
+
   try {
     const response = await axios.get(`/api/tables/get-table/${tableName}`);
-    dispatch({ type: FETCH_TABLE_SUCCESS, payload: response.data })
+    dispatch({ type: FETCH_TABLE_SUCCESS, payload: response.data });
   } catch (error) {
-    dispatch({type: FETCH_TABLE_ERROR, payload: error.response.data})
+    dispatch({ type: FETCH_TABLE_ERROR, payload: error.response.data });
   }
-}
+};
+
+export const deleteTable = tableName => async dispatch => {
+  dispatch({ type: DELETE_TABLE_LOADING });
+
+  try {
+    const response = await axios.delete(
+      `/api/tables/delete-table/${tableName}`,
+    );
+    dispatch({ type: DELETE_TABLE_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({ type: DELETE_TABLE_ERROR, payload: error.response.data });
+  }
+};
 
 export const resetResults = () => ({ type: RESET_RESULTS });
