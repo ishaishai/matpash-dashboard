@@ -10,23 +10,44 @@ exports.getTablesName = async (req, res) => {
     )
     .then(result => {
       tbList = result.rows.map(t => t.table_name);
-      res.status(200).json({
-        tableList: tbList,
-      });
+      res.status(200).json(
+        tbList
+      );
     })
-    .catch(err => {
-      res.status(404).json({
-        error: err.message,
-      });
+    .catch(error => {
+      return res.status(404).json({ error });
     });
-  // console.log(tbList);
 };
 
 exports.getTable = async (req, res) => {
-  const { tableName } = req.body
-  
-  maindbpool.query(`SELECT * FROM public."${tableName}"`)
-}
+  const { table_name } = req.params;
+
+  try {
+    const tableResult = await maindbpool.query(
+      `SELECT * FROM public."${table_name}"`,
+    );
+    const kvTableResult = await maindbpool.query(
+      `SELECT * FROM public."${table_name} - KV"`,
+    );
+
+    const colNames = kvTableResult.rows[0];
+    const resultTable = [];
+
+    for (row of tableResult.rows) {
+      let result = Object.entries(colNames).reduce(
+        (c, [v, k]) => Object.assign(c, { [k]: row[v] || null }),
+        {},
+      );
+      resultTable.push(result);
+    }
+
+    res.json({ table: resultTable });
+  } catch (error) {
+    res.status(404).json({
+      error: error.message,
+    });
+  }
+};
 
 exports.getColFromTable = async (req, res) => {
   let table_name = req.params.table_name;
@@ -49,14 +70,13 @@ exports.getColFromTable = async (req, res) => {
 exports.getPeriodStart = async (req, res) => {
   console.log(req.params);
   const tableName = req.params.table_name;
-   //should get from token.
+  //should get from token.
   console.log('+' + tableName + '+');
   const firstColumnData = `select "A1" from public."${tableName}"`;
   console.log(firstColumnData);
   const firstColumnName = `select "A1" from public."${tableName} - KV"`;
 
   try {
-    
     let resData = await maindbpool.query(firstColumnData);
     let resName = await maindbpool.query(firstColumnName);
     res.status(200).json({
@@ -107,11 +127,10 @@ exports.getPeriodEnd = async (req, res) => {
   }
 };
 
-
 // if they want a dynamic example graph
 // exports.getCrossColData = async(req,res)=> {
 //   const tableName = req.params.table_name;
 //   const periodStart = req.params.start;
 //   const periodEnd = req.params.end;
-   
+
 // }

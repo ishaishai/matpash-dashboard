@@ -17,6 +17,9 @@ import {
   FETCH_TABLE_NAMES_LOADING,
   FETCH_TABLE_NAMES_ERROR,
   FETCH_TABLE_NAMES_SUCCESS,
+  FETCH_TABLE_ERROR,
+  FETCH_TABLE_LOADING,
+  FETCH_TABLE_SUCCESS
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -103,5 +106,16 @@ export const getTableNames = () => async dispatch => {
     dispatch({ type: FETCH_TABLE_NAMES_ERROR, payload: error.response.data });
   }
 };
+
+export const getTable = tableName => async dispatch => {
+  dispatch({ type: FETCH_TABLE_LOADING })
+  
+  try {
+    const response = await axios.get(`/api/tables/get-table/${tableName}`);
+    dispatch({ type: FETCH_TABLE_SUCCESS, payload: response.data })
+  } catch (error) {
+    dispatch({type: FETCH_TABLE_ERROR, payload: error.response.data})
+  }
+}
 
 export const resetResults = () => ({ type: RESET_RESULTS });

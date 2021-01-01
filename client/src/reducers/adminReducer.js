@@ -9,14 +9,19 @@ import {
   FETCH_TABLE_NAMES_ERROR,
   FETCH_TABLE_NAMES_LOADING,
   FETCH_TABLE_NAMES_SUCCESS,
+  FETCH_TABLE_ERROR,
+  FETCH_TABLE_LOADING,
+  FETCH_TABLE_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
   loading: false,
   error: null,
   result: 'null',
+  tableNames: []
 };
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
@@ -60,11 +65,28 @@ export default (state = initialState, action) => {
     case FETCH_TABLE_NAMES_SUCCESS:
       return {
         ...initialState,
-        result: payload,
+        tableNames: payload,
       };
     case FETCH_TABLE_NAMES_ERROR:
       return {
         ...initialState,
+        error: payload,
+      };
+    case FETCH_TABLE_LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
+    case FETCH_TABLE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        result: payload,
+      };
+    case FETCH_TABLE_ERROR:
+      return {
+        ...state,
+        loading: false,
         error: payload,
       };
     default:
