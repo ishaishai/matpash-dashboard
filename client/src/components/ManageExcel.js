@@ -49,6 +49,7 @@ function ManageExcel({
 
   const handleGetTable = () => {
     if (TableSelected !== 'בחר טבלה') {
+      getTable(TableSelected);
       setShowPreview(true);
     }
   };
