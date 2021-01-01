@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getTableNames, getTable, deleteTable } from '../actions';
 import { DropdownButton, Dropdown } from 'react-bootstrap';
+import * as Excel from 'exceljs/dist/exceljs';
+import { saveAs } from 'file-saver';
 import Loader from './Loader';
 
 const renderPreview = tableData => {
@@ -47,7 +49,6 @@ function ManageExcel({
 
   const handleGetTable = () => {
     if (TableSelected !== 'בחר טבלה') {
-      getTable(TableSelected);
       setShowPreview(true);
     }
   };
@@ -59,7 +60,27 @@ function ManageExcel({
     setTableSelected('בחר טבלה');
   };
 
-  const handleExportExcel = () => {};
+  const handleExportExcel = async () => {
+    const table = result.table;
+    if (!table || table.length === 0 || TableSelected === 'בחר טבלה') {
+      return;
+    }
+
+    const wb = new Excel.Workbook();
+    const ws = wb.addWorksheet(TableSelected);
+    // add column headers
+    ws.columns = Object.keys(table[0]).map(col => ({
+      header: col,
+      key: col,
+      width: 20,
+    }));
+    // Add row using key mapping to columns
+    ws.addRows(table);
+
+    const buf = await wb.xlsx.writeBuffer();
+
+    saveAs(new Blob([buf]), `${TableSelected}.xlsx`);
+  };
 
   return (
     <div dir="rtl">
@@ -85,14 +106,16 @@ function ManageExcel({
           {'תצוגה מקדימה'}
         </button>
         <div className="inline field" style={{ marginTop: '10px' }}>
-          <label
+          <button
             className="ui icon button"
+            disabled={!showPreview ? true : false}
             htmlFor="hidden-new-file"
+            onClick={handleExportExcel}
             style={{ marginRight: '0px' }}
           >
             ייצא לקובץ אקסל{'  '}
             <i className="file excel icon"></i>
-          </label>
+          </button>
         </div>
         <div className="inline field" style={{ marginTop: '10px' }}>
           <div>
@@ -171,6 +194,8 @@ const mapStateToProps = ({
   tableNames,
 });
 
-export default connect(mapStateToProps, { getTableNames, getTable, deleteTable })(
-  ManageExcel,
-);
+export default connect(mapStateToProps, {
+  getTableNames,
+  getTable,
+  deleteTable,
+})(ManageExcel);
