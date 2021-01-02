@@ -2,17 +2,16 @@ import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import Chart from './Charts';
 import Highcharts from 'highcharts';
-import {Header} from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import axios from 'axios';
-import "./ResponsiveGrid.css";
+import './ResponsiveGrid.css';
+import { numberWithCommas } from './NumWithCommas';
 
-
-const HighChartsResponsiveGrid = (props) => {
-  console.log(props);
+const HighChartsResponsiveGrid = props => {
   const ResponsiveGridLayout = WidthProvider(Responsive);
   const [highChartsOptions, setHighChartsOptions] = useState([]);
   const highChartsOptionsRef = React.useRef('highChartsOptions');
-  
+
   // let chartRef = []; // Create array of refs for each chart
   const chartRef = useMemo(
     () => highChartsOptions.map(_i => React.createRef()),
@@ -28,7 +27,6 @@ const HighChartsResponsiveGrid = (props) => {
           id,
       );
       const { data } = response.data;
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -38,8 +36,6 @@ const HighChartsResponsiveGrid = (props) => {
   const onResizeStop = useCallback(
     (event, index) => {
       const chartId = index.i.slice(-1);
-      // console.log(chartRef);
-      // chartRef[chartId].current.chart.reflow();
       setTimeout(() => {
         window.dispatchEvent(new Event('resize'));
       });
@@ -50,7 +46,6 @@ const HighChartsResponsiveGrid = (props) => {
   const getDashboard = async () => {
     setHighChartsOptions([]);
     if (props.dashboardID != null) {
-      console.log("dashboardID: ",props.dashboardID);
       const result = await axios.get(
         '/api/dashboard/get-by-id/' + props.dashboardID,
       );
@@ -59,26 +54,22 @@ const HighChartsResponsiveGrid = (props) => {
     return null;
   };
 
-  const flipGraph = async (event,index) => {
-    if(document.getElementById(index).style.transform==='')
-      document.getElementById(index).style.transform = "rotateY(-180deg)";
+  const flipGraph = async (event, index) => {
+    if (document.getElementById(index).style.transform === '')
+      document.getElementById(index).style.transform = 'rotateY(-180deg)';
     else {
-      document.getElementById(index).style.transform = "rotateY(180deg)";
-      document.getElementById(index).style.transform = "";
+      document.getElementById(index).style.transform = 'rotateY(180deg)';
+      document.getElementById(index).style.transform = '';
     }
-
-  }
+  };
 
   useEffect(() => {
     highChartsOptionsRef.current = highChartsOptions;
-
-  },[highChartsOptions]);
-
+  }, [highChartsOptions]);
 
   useEffect(() => {
     getDashboard();
   }, [props.dashboardID]);
-
 
   return (
     <div>
@@ -99,8 +90,8 @@ const HighChartsResponsiveGrid = (props) => {
             key={MappedChart.index}
             className="chartWrap"
           >
-            <div className="card-flip" id ={MappedChart.index}>
-                <div className="card front">
+            <div className="card-flip" id={MappedChart.index}>
+              <div className="card front">
                 <Chart
                   ref={chartRef[MappedChart.index]}
                   className="chart"
@@ -123,28 +114,68 @@ const HighChartsResponsiveGrid = (props) => {
                       text: MappedChart.options.subtitle.text,
                     },
                     tooltip: {
-                      ...MappedChart.options.tooltip,
-                    
-                    }, 
+                      style: {
+                        textAlign: 'right',
+                        fontSize: '16px',
+                      },
+                      formatter: function () {
+                        console.log(this);
+                        if (this.point || this.points) {
+                          let type = MappedChart.options.chart.type;
+                          console.log(type);
+                          if (type == 'pie') {
+                            console.log(this.point);
+                            return `<span dir="rtl">${this.point.name}
+                            <div style="padding:0"><b>${parseFloat(
+                              this.point.y,
+                            ).toFixed(2)}%</b></div>
+                            <div style="padding:0">ערך מספרי: ${numberWithCommas(
+                              parseFloat(this.point.actualValue),
+                            )}<b></b></div>
+                            </span>
+                            `;
+                          } else {
+                            return `<span>${this.x}
+                            <div style="padding:0"><b>${parseFloat(
+                              this.y,
+                            ).toFixed(2)}</b></div>
+                            </span>
+                            `;
+                          }
+                        }
+                      },
+                      shared: true,
+                      useHTML: true,
+                    },
                     plotOptions: {
                       column: {
                         pointPadding: 0.2,
                         borderWidth: 0,
                       },
-                      pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
+                      series: {
                         dataLabels: {
-                          distance:
-                            MappedChart.options.plotOptions.pie.dataLabels.distance,
-                          enabled:
-                            MappedChart.options.plotOptions.pie.dataLabels.enabled,
+                          enabled: false,
+
+                          pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                              distance:
+                                MappedChart.options.plotOptions.pie.dataLabels
+                                  .distance,
+                              enabled:
+                                MappedChart.options.plotOptions.pie.dataLabels
+                                  .enabled,
+                            },
+                            showInLegend: true,
+                            startAngle:
+                              MappedChart.options.plotOptions.pie.startAngle,
+                            endAngle:
+                              MappedChart.options.plotOptions.pie.endAngle,
+                            center: MappedChart.options.plotOptions.pie.center,
+                            size: MappedChart.options.plotOptions.pie.size,
+                          },
                         },
-                        showInLegend: true,
-                        startAngle: MappedChart.options.plotOptions.pie.startAngle,
-                        endAngle: MappedChart.options.plotOptions.pie.endAngle,
-                        center: MappedChart.options.plotOptions.pie.center,
-                        size: MappedChart.options.plotOptions.pie.size,
                       },
                     },
                     series: MappedChart.options.series.map(obj => ({
@@ -152,8 +183,10 @@ const HighChartsResponsiveGrid = (props) => {
                       data: obj.data,
                       color: obj.colr,
                     })),
-                    yAxis: MappedChart.options.yAxis,
-                      // min: 4500,
+                    yAxis: {
+                      ...MappedChart.options.yAxis,
+                    },
+                    // min: 4500,
                     xAxis: {
                       categories: MappedChart.options.xAxis.catagories,
                       labels: {
@@ -162,33 +195,42 @@ const HighChartsResponsiveGrid = (props) => {
                         },
                         type: MappedChart.options.xAxis.type,
                       },
-                    },     
-                    credits:  {
+                    },
+                    credits: {
                       enabled: false,
                     },
                     lang: {
                       printChart: "<p style='text-align:right'>הדפסת גרף</p>",
-                      downloadPNG:  "<p style='text-align:right'>PNG-הורדה כ</p>",
-                      downloadPDF: "<p style='text-align:right'>PDF-הורדה כ </p>",
-                      downloadJPEG: "<p style='text-align:right'>JPEG-הורד כ</p>",
-                      downloadSVG: "<p style='text-align:right'>SVG-הורדה כ </p>",
-                      viewFullscreen:  "<p style='text-align:right'>צפייה במסך מלא</p>"
+                      downloadPNG:
+                        "<p style='text-align:right'>PNG-הורדה כ</p>",
+                      downloadPDF:
+                        "<p style='text-align:right'>PDF-הורדה כ </p>",
+                      downloadJPEG:
+                        "<p style='text-align:right'>JPEG-הורד כ</p>",
+                      downloadSVG:
+                        "<p style='text-align:right'>SVG-הורדה כ </p>",
+                      viewFullscreen:
+                        "<p style='text-align:right'>צפייה במסך מלא</p>",
                     },
                     exporting: {
                       buttons: {
                         contextButton: {
-                          menuItems: [ (props.permissions!='צופה') ? 
+                          menuItems: [
+                            props.permissions != 'צופה'
+                              ? {
+                                  text:
+                                    "<p style='text-align:right'>מחיקת גרף </p>",
+                                  onclick: () => {
+                                    deleteChart(MappedChart.index);
+                                  },
+                                }
+                              : null,
                             {
-                              text: "<p style='text-align:right'>מחיקת גרף </p>",
-                              onclick: () => {
-                                deleteChart(MappedChart.index);
-                              } 
-                            } : null,
-                            {
-                              text: "<p style='text-align:right'>הצג מידע נוסף </p>",
-                              onclick: (event) => {
-                                flipGraph(event,MappedChart.index);
-                              }
+                              text:
+                                "<p style='text-align:right'>הצג מידע נוסף </p>",
+                              onclick: event => {
+                                flipGraph(event, MappedChart.index);
+                              },
                             },
                             ...Object.values(props.userGraphOptions),
                           ],
@@ -197,20 +239,23 @@ const HighChartsResponsiveGrid = (props) => {
                     },
                   }}
                 />
-                </div>
-                <div className="card back">
+              </div>
+              <div className="card back">
                 <Header as="h3">
                   <p>{MappedChart.options.title.text}</p>
                 </Header>
-                  <p>
-                    luram,luramluramluraramluraramluraramluramluram,luramluramluramluram,luramluram
-                  </p>
+                <p>
+                  luram,luramluramluraramluraramluraramluramluram,luramluramluramluram,luramluram
+                </p>
 
-                  <button className="ui left green labeled icon button btn-goback" onClick={(event) => flipGraph(event,MappedChart.index)}>
-                    חזור
-                    <i className="left arrow icon"></i>
-                  </button>
-                </div>
+                <button
+                  className="ui left green labeled icon button btn-goback"
+                  onClick={event => flipGraph(event, MappedChart.index)}
+                >
+                  חזור
+                  <i className="left arrow icon"></i>
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -218,6 +263,6 @@ const HighChartsResponsiveGrid = (props) => {
       {/* <Route path="/CreateChart" exact render={() => <CreateChart />} /> */}
     </div>
   );
-}
+};
 
 export default HighChartsResponsiveGrid;

@@ -62,24 +62,7 @@ exports.getDashboardById = async (req, res) => {
         subtitle: {
           text: graph.subtitle,
         },
-        tooltip: {
-          style: {
-            textAlign: 'right',
-            fontSize: '16px',
-          },
-          headerFormat:
-            graph.type == 'pie' ? `<span dir="rtl">{point.key}` : '',
-          pointFormat:
-            graph.type == 'pie'
-              ? '<div style="padding:0"><b>{point.y:.3f}%</b></div>' +
-                '<div style="padding:0">ערך מספרי: <b>{point.actualValue}</b></div>'
-              : '<div dir="rtl" style="color:{series.color};padding:0";>{series.name}: </div>' +
-                '<div dir="rtl" style="padding:0"><b dir="ltr" style="display: inline-block;">{point.y:.3f} </b></div>',
 
-          footerFormat: '</span>',
-          shared: true,
-          useHTML: true,
-        },
         xAxis: {
           title: {
             text: graph.xAxisTitle,
@@ -733,24 +716,26 @@ exports.getGoldens = async (req, res) => {
     let selectedTable = golden.seriename.split('.')[0];
     let selectedColumn = golden.seriename.split('.')[1];
 
-    let dataPeriodQuery = await maindbpool.query(`select "A1","${selectedColumn}" from public."${selectedTable}" 
+    const dataPeriodQuery = await maindbpool.query(`select "A1","${selectedColumn}" from public."${selectedTable}" 
     where
      "A1" = '${golden.period}'`);
 
-    let dataCmpPeriodQuery = await maindbpool.query(`select "A1","${selectedColumn}" from public."${selectedTable}" 
+    const dataCmpPeriodQuery = await maindbpool.query(`select "A1","${selectedColumn}" from public."${selectedTable}" 
     where
      "A1" = '${golden.cmpperiod}'`);
 
     goldensDict[golden.index].goldens.push({
       subTitle: golden.subTitle,
-      periodValue: parseFloat(dataPeriodQuery.rows[0][selectedColumn]).toFixed(
-        2,
-      ),
-      periodCmpValue: parseFloat(
-        dataCmpPeriodQuery.rows[0][selectedColumn],
-      ).toFixed(2),
+      periodValue: parseFloat(dataPeriodQuery.rows[0][selectedColumn]),
+      periodCmpValue: parseFloat(dataCmpPeriodQuery.rows[0][selectedColumn]),
     });
-    //goldensDict[golden.index].goldens.push(golden);
+    console.log(goldensDict[golden.index].goldens);
+  }
+
+  for (let gold in goldensDict) {
+    for (let golden of goldensDict[gold].goldens) {
+      console.log(golden);
+    }
   }
 
   let resultLayouts = await dashboarddbpool.query(
