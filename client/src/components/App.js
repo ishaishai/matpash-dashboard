@@ -60,13 +60,11 @@ const App = ({ fetchUser, auth }) => {
           <ProtectedRoute
             isLoggedIn={auth.user}
             path="/permissions"
-            exact
             component={Permissions}
           />
           <ProtectedRoute
             isLoggedIn={auth.user}
             path="/admin"
-            exact
             component={AdminScreen}
           />
           <Route path="/login" component={Login} />

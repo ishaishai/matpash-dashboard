@@ -35,7 +35,7 @@ function AdminScreen() {
               <Tab>
                 <Link
                   className="navbar bg-primary text-white border border-bottom-0 rounded-top "
-                  to="/excel-upload"
+                  to="/admin/excel-upload"
                 >
                   העלאת קבצי אקסל
                 </Link>
@@ -43,7 +43,7 @@ function AdminScreen() {
               <Tab>
                 <Link
                   className="navbar bg-primary text-white border border-bottom-0 rounded-top "
-                  to="/excel-manage"
+                  to="/admin/excel-manage"
                 >
                   ניהול קבצי אקסל
                 </Link>
@@ -53,13 +53,9 @@ function AdminScreen() {
         </nav>
         <div className="container-fluid">
           <Switch>
-            <Route path="/excel-upload">
-              <Admin />
-            </Route>
-            <Route path="/excel-manage">
-              <ManageExcel />
-            </Route>
-            <Redirect to="/excel-upload"/>
+            <Route exact path="/admin/excel-upload" component={Admin} />
+            <Route exact path="/admin/excel-manage" component={ManageExcel} />
+            <Redirect to="/admin/excel-upload" />
           </Switch>
         </div>
       </div>

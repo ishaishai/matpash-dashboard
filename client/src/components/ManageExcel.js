@@ -35,9 +35,6 @@ function ManageExcel({
     getTableNames();
   }, [getTableNames]);
 
-  // const success = result?.status === 'success';
-  // const failure = result?.status === 'failure';
-
   if (loading) {
     return <Loader message=".אנא המתן, פעולה זו עלולה להמשך מספר דקות" />;
   }
@@ -122,6 +119,7 @@ function ManageExcel({
           <div>
             <button
               type="button"
+              disabled={TableSelected === 'בחר טבלה' ? true : false}
               className="btn btn-secondary bg-danger"
               data-toggle="modal"
               data-target="#exampleModalCenter"
