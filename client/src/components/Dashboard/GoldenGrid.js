@@ -3,6 +3,7 @@ import { Responsive, WidthProvider } from 'react-grid-layout';
 import axios from 'axios';
 import './ResponsiveGrid.css';
 import { Header, Segment, Statistic, Divider, Icon } from 'semantic-ui-react';
+import { numberWithCommas } from './NumWithCommas';
 
 const GoldenGrid = props => {
   const [goldens, setGoldens] = useState([]);
@@ -30,15 +31,43 @@ const GoldenGrid = props => {
   const getGoldens = async () => {
     const response = await axios.get('/api/dashboard/get-goldens/');
     if (response.data.goldensList !== undefined) {
-      setGoldens(response.data.goldensList);
       console.log(response.data.goldensList);
+      setGoldens(response.data.goldensList);
     }
   };
-  const numberWithCommas = num => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  const calcSummarized = entireGolden => {
+    let tmp = entireGolden.goldens;
+    var result = [
+      tmp.reduce((acc, n) => {
+        for (var prop in n) {
+          if (acc.hasOwnProperty(prop)) acc[prop] += n[prop];
+          else acc[prop] = n[prop];
+        }
+        return acc;
+      }, {}),
+    ];
+    return numberWithCommas(parseFloat(result[0].periodValue).toFixed(2));
+  };
+
+  const calcSummarizedChange = entireGolden => {
+    let tmp = entireGolden.goldens;
+    var result = [
+      tmp.reduce((acc, n) => {
+        for (var prop in n) {
+          if (acc.hasOwnProperty(prop)) acc[prop] += n[prop];
+          else acc[prop] = n[prop];
+        }
+        return acc;
+      }, {}),
+    ];
+    entireGolden.sum = result[0].periodValue - result[0].periodCmpValue;
+    console.log(entireGolden);
+    return calcGoldenData(result[0]);
   };
 
   const calcGoldenData = MappedGolden => {
+    console.log(MappedGolden);
     return MappedGolden.periodValue - MappedGolden.periodCmpValue < 0
       ? numberWithCommas(
           -1 *
@@ -52,6 +81,7 @@ const GoldenGrid = props => {
           ).toFixed(2),
         );
   };
+
   useEffect(() => {
     getGoldens();
   }, []);
@@ -84,10 +114,23 @@ const GoldenGrid = props => {
                 <Divider inverted />
                 <Statistic.Group inverted>
                   <Statistic className="monitor-base" size="mini">
-                    <Statistic.Label>סה"כ שינוי</Statistic.Label>
-                    <Statistic.Value>22</Statistic.Value>
+                    <Statistic.Label>סה"כ לתקופה</Statistic.Label>
+                    <Statistic.Value>
+                      {calcSummarized(MappedMonitor)}
+                    </Statistic.Value>
                     <Statistic.Label>
-                      (12 <Icon name="arrow up green" />)
+                      ({calcSummarizedChange(MappedMonitor)}
+                      {console.log(MappedMonitor.sum)}
+                      <Icon
+                        name={
+                          MappedMonitor.sum > 0
+                            ? 'arrow up green'
+                            : MappedMonitor.sum < 0
+                            ? 'arrow down red'
+                            : 'hand point left outline blue'
+                        }
+                      />
+                      ) שינוי ביחס לתקופה קודמת
                     </Statistic.Label>
                   </Statistic>
                 </Statistic.Group>
@@ -97,7 +140,7 @@ const GoldenGrid = props => {
                     <Statistic className="monitor-base" size="mini">
                       <Statistic.Label>{MappedGolden.subTitle}</Statistic.Label>
                       <Statistic.Label>
-                        {MappedGolden.periodValue}
+                        {parseFloat(MappedGolden.periodValue).toFixed(2)}
                       </Statistic.Label>
                       <Statistic.Label>
                         ({calcGoldenData(MappedGolden)}
