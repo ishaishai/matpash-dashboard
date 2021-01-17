@@ -1,6 +1,8 @@
 const db = require('../config/dbConfig');
 const { dashboarddbpool, maindbpool, usersdbpool } = db;
 const storeOperation = require('../services/storeOperation');
+const { graphChooser } = require('../services/graphService/graph');
+const { graph } = require('../services/graphService/graph');
 
 exports.getDashboardById = async (req, res) => {
   const { id } = req.params;
@@ -17,7 +19,6 @@ exports.getDashboardById = async (req, res) => {
     const queryPullDashboard = `select dashboard${id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."username" = '${username}'`;
 
     let result = await dashboarddbpool.query(queryPullDashboard); //complete query.
-    console.log(result.rows[0][`dashboard${id}`]);
     if (
       result.rows[0][`dashboard${id}`] === null ||
       result.rows[0] === undefined
@@ -46,269 +47,13 @@ exports.getDashboardById = async (req, res) => {
 
     const graphList = result.rows;
 
-    for (graph of graphList) {
-      const graphToAdd = { index: graph.index };
-      graphToAdd.options = {
-        chart: {
-          zoomType: null,
-          plotBackgroundColor: null,
-          plotBorderWidth: null,
-          plotShadow: false,
-          type: graph.type,
-        },
-        title: {
-          text: graph.title,
-        },
-        subtitle: {
-          text: graph.subtitle,
-        },
-
-        xAxis: {
-          title: {
-            text: graph.xAxisTitle,
-          },
-          type: null,
-          catagories: [],
-          crosshair: true,
-        },
-        yAxis: {
-          title: {
-            text: graph.yAxisTitle,
-          },
-        },
-        legend: {
-          layout: 'horizontal',
-          align: 'center',
-          verticalAlign: 'bottom',
-          useHTML: true,
-          title: {
-            text: null, //'<b> מקרא </b>',//'<div className = "highcharts-label highcharts-legend-title">:מקרא</div>'
-          },
-        },
-        plotOptions: {
-          pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-              distance: 0,
-              enabled: false,
-            },
-            startAngle: 0,
-            endAngle: 0,
-            center: ['50%', '50%'],
-            showInLegend: true,
-            size: '110%',
-          },
-        },
-        responsive: {
-          rules: [
-            {
-              chartOptions: {
-                legend: {
-                  layout: 'horizontal',
-                  align: 'center',
-                  verticalAlign: 'bottom',
-                },
-              },
-            },
-          ],
-        },
-        layout: {
-          xPos: graph.xPos,
-          yPos: graph.yPos,
-          height: graph.height,
-          width: graph.width,
-        },
-        series: [],
-        sum: 0,
-      };
-
-      let [table, col] = graph.xAxisColumn.split('.');
-
-      result = await maindbpool.query(
-        `select "${col}" from public."${table} - KV"`,
-      );
-
-      xAxisColumn = result.rows[0][col];
-      const xAxisColumnName = graph.xAxisColumn.split('.')[1];
-      const xAxisTableName = graph.xAxisColumn.split('.')[0];
-      const fromStr = graph.xAxisCatagoryRange.split('$')[0];
-      const toStr = graph.xAxisCatagoryRange.split('$')[1];
-
-      //extract enumerated value of rows for the wanted range
-
-      let queryGetEnumeratedValues;
-      if (!toStr) {
-        queryGetEnumeratedValues = `select "rownum" from (select "${xAxisColumnName}",row_number() over(order by 1) as "rownum"  from public."${xAxisTableName}") as tmp
-                where "${xAxisColumnName}" like '%${fromStr}%';`;
-      } else {
-        queryGetEnumeratedValues = `select rownum from (select "${xAxisColumnName}",row_number() over(order by 1) as "rownum"  from public."${xAxisTableName}") as tmp
-                where "${xAxisColumnName}" like '%${fromStr}%' or "${xAxisColumnName}" like '%${toStr}%'`;
+    for (let graph of graphList) {
+      if (graph.type !== undefined) {
+        const graphToAdd = await graphChooser(graph, id);
+        dashboardToReturn.graphList.push(graphToAdd);
       }
-
-      result = await maindbpool.query(queryGetEnumeratedValues);
-
-      const fromNum = result.rows[0].rownum;
-      const toNum = !result.rows[1] ? undefined : result.rows[1].rownum;
-      //from previous statement we get two values for the enumerated range lets say 2 and 8. now we want all real values between them.
-      let queryGetXAxisCatagory;
-      if (!toNum) {
-        queryGetXAxisCatagory = `select "${xAxisColumnName}" from (select "${xAxisColumnName}",row_number() over(order by 1) as "rownum"  from public."${xAxisTableName}") as tmp where
-                rownum >=${fromNum}`;
-      } else {
-        queryGetXAxisCatagory = `select "${xAxisColumnName}" from (select "${xAxisColumnName}",row_number() over(order by 1) as "rownum"  from public."${xAxisTableName}") as tmp where
-                rownum >=${fromNum} and rownum<=${toNum}`;
-      }
-      result = await maindbpool.query(queryGetXAxisCatagory);
-
-      let tempxAxisCatagoryRange = [];
-      for (obj of result.rows) {
-        tempxAxisCatagoryRange.push(Object.values(obj)[0]);
-      }
-
-      //graphToAdd.xAxisCatagoryRange = tempxAxisCatagoryRange;
-      graphToAdd.options.xAxis.catagories = graph.flipXAxis
-        ? tempxAxisCatagoryRange.reverse()
-        : tempxAxisCatagoryRange;
-      //console.log("---------- xAxisCatagoryRange: "+graphToAdd.xAxisCatagoryRange);
-
-      //get all the series of dashboard and extract from it which series to the right graph by its index
-      const queryDashSeries = `select * from public."dashboard${id}Series" where "dashboard${id}Series"."index" = ${graph.index}`;
-      result = await dashboarddbpool.query(queryDashSeries);
-      let seriesList = result.rows;
-
-      let pieTempDataToAdd = [];
-
-      let pieSeriesToAdd = {
-        name: null,
-        colr: null,
-        data: [],
-      };
-
-      for (series of seriesList) {
-        let lineSeriesToAdd = {
-          name: null,
-          colr: null,
-          data: [],
-        };
-        let lineTempDataToAdd = [];
-        let pieColorsArray = [];
-
-        const tableName = series.serieName.split('.')[0];
-        const columnName = series.serieName.split('.')[1];
-        let columnNameResult = await maindbpool.query(
-          `select "${columnName}" from public."${tableName} - KV"`,
-        );
-
-        if (
-          graphToAdd.options.chart.type == 'pie' ||
-          graphToAdd.options.chart.type == 'halfpie'
-        ) {
-          pieSeriesToAdd.name = Object.values(columnNameResult.rows[0])[0];
-          //pieSeriesToAdd.colr = series.color;
-          pieColorsArray.push(series.color);
-        } else {
-          lineSeriesToAdd.name = Object.values(columnNameResult.rows[0])[0];
-          lineSeriesToAdd.colr = series.color;
-        }
-
-        //for each serie needed to pull its data so serieName needed to be split by dot and then be used like
-        //maybe not use range for series because all data in range of xAxis is enough
-        let querySerie;
-        if (!toNum) {
-          querySerie = `select "${columnName}" from (select "${columnName}",row_number() over(order by 1) as "rownum"  from public."${tableName}") as tmp where
-                    rownum =${fromNum}`;
-        } else {
-          querySerie = `select "${columnName}" from (select "${columnName}",row_number() over(order by 1) as "rownum"  from public."${tableName}") as tmp where
-                    rownum >=${fromNum} and rownum<=${toNum}`;
-        }
-        result = await maindbpool.query(querySerie);
-        if (
-          graphToAdd.options.chart.type == 'pie' ||
-          graphToAdd.options.chart.type == 'halfpie'
-        ) {
-          for (obj of result.rows) {
-            graphToAdd.options.sum += Object.values(obj).map(Number)[0];
-          }
-
-          let colorArrayIndex = 0;
-          for (obj of result.rows) {
-            // console.log(
-            //   parseFloat(Object.values(obj)[0] / graphToAdd.options.sum),
-            // );
-            pieTempDataToAdd.push({
-              selected: false,
-              sliced: false,
-              name: pieSeriesToAdd.name,
-              y: 0,
-              actualValue: parseInt(Object.values(obj)[0]),
-              color: pieColorsArray[colorArrayIndex++],
-              //parseFloat(Object.values(obj)[0] / graphToAdd.options.sum) * 100, //change this
-            });
-          }
-        } //if (graphToAdd.type == 'line')
-        else {
-          for (obj of result.rows) {
-            lineTempDataToAdd.push(
-              Object.values(obj)[0] % 1 === 0
-                ? parseInt(Object.values(obj)[0])
-                : parseFloat(Object.values(obj)[0]),
-            );
-          }
-          lineSeriesToAdd.data = lineTempDataToAdd;
-          if (graph.flipXAxis)
-            lineSeriesToAdd.data = lineSeriesToAdd.data.reverse();
-        }
-
-        if (
-          graphToAdd.options.chart.type != 'pie' &&
-          graphToAdd.options.chart.type != 'halfpie'
-        ) {
-          graphToAdd.options.series.push(lineSeriesToAdd);
-        }
-      }
-
-      // if (
-      //   graphToAdd.options.chart.type != 'pie' &&
-      //   graphToAdd.options.chart.type != 'halfpie'
-      // ) {
-      //   graphToAdd.options.sum = 1;
-      // }
-      if (
-        graphToAdd.options.chart.type == 'pie' ||
-        graphToAdd.options.chart.type == 'halfpie'
-      ) {
-        //calculate each part of series in them:
-        for (let serie of pieTempDataToAdd) {
-          serie.y =
-            parseFloat(serie.actualValue / graphToAdd.options.sum) * 100;
-        }
-
-        pieSeriesToAdd.data = pieTempDataToAdd;
-        graphToAdd.options.series.push(pieSeriesToAdd);
-        //graphToAdd.options.plotOptions.pie.dataLabels.enabled = true;
-        if (graphToAdd.options.chart.type == 'halfpie') {
-          graphToAdd.options.chart.type = 'pie';
-          graphToAdd.options.plotOptions.pie.dataLabels.distance = -50;
-          graphToAdd.options.plotOptions.pie.style = {
-            fontWeight: 'bold',
-            color: 'white',
-          };
-          graphToAdd.options.plotOptions.pie.startAngle = -90;
-          graphToAdd.options.plotOptions.pie.endAngle = 90;
-          graphToAdd.options.plotOptions.pie.center = ['50%', '75%'];
-          graphToAdd.options.plotOptions.pie.size = '110%';
-          graphToAdd.options.series.innerSize = '50%';
-        }
-      }
-      // if (graphToAdd.options.chart.type == 'pie') {
-      //   for (let serie of graphToAdd.options.series) {
-      //     console.log(serie);
-      //   }
-      // }
-      dashboardToReturn.graphList.push(graphToAdd);
     }
-
+    //console.log(dashboardToReturn);
     res.status(200).json({
       msg: 'ok',
       dashboard: dashboardToReturn,
@@ -351,11 +96,9 @@ exports.getDashboardNames = async (req, res) => {
 
       dashboardNamesKV.push(result.rows[0]);
     }
-    console.log(dashboardNamesKV);
     const resultDefaultDash = await usersdbpool.query(
       `select "defaultDash" from public."usersInfoTable" where "username"='${username}'`,
     );
-    console.log(resultDefaultDash);
     res.status(200).json({
       dashboardIdList: dashboardNamesKV,
       defaultDashboard: resultDefaultDash.rows[0].defaultDash,
@@ -375,7 +118,7 @@ exports.deleteDashboardById = async (req, res) => {
   try {
     //that gives you list of numbers like '1,2,3', or empty if user or dashboard doesnt exist.
     const queryPullDashboard = `select dashboard${id} from public."dashboardPriviledgesTable" where "dashboardPriviledgesTable"."username" = '${username}'`;
-    console.log(id);
+
     let result = await dashboarddbpool.query(queryPullDashboard); //complete query.
     if (result.rows.length === 0)
       throw new Error('user has no permisson to dashboard');
@@ -562,17 +305,14 @@ exports.addNewGraphToDashboard = async (req, res) => {
   let regex = new RegExp(/^\d+$/);
   let isIdNum = regex.test(dashboardId);
   const graph = req.body.graph;
-  console.log(dashboardId, graph);
 
   const username = req.user.username;
 
   try {
     //get all graphs in current dashboard '1,2,3'
-    console.log(isIdNum);
     if (!isIdNum) {
       let queryGetDashboardIndex = `select "index" from public."dashboardNames" where name = '${dashboardId}'`;
       let resultIndex = await dashboarddbpool.query(queryGetDashboardIndex);
-      console.log(resultIndex.rows[0].index, 'resultIndex');
       if (resultIndex.rows[0]) {
         dashboardId = resultIndex.rows[0].index;
       }

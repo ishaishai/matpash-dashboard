@@ -193,3 +193,21 @@ div.dropdown button span {
 }
 
 /**/
+.buttonOption {
+  height: 35px !important;
+  margin: 5px !important;
+}
+
+.text-center {
+  font-family: 'Varela Round', sans-serif !important;
+  vertical-align:baseline;
+  
+}
+
+.navbar {
+  font-family: 'Varela Round', sans-serif !important;
+}
+
+.innerUserDetailBox {
+  margin-top:5%;
+}

@@ -82,10 +82,10 @@ const HighChartsResponsiveGrid = props => {
         {highChartsOptions.map(MappedChart => (
           <div
             data-grid={{
-              x: MappedChart.options.layout.xPos,
-              y: MappedChart.options.layout.yPos,
-              w: MappedChart.options.layout.width,
-              h: MappedChart.options.layout.height,
+              x: MappedChart.layout.xPos,
+              y: MappedChart.layout.yPos,
+              w: MappedChart.layout.width,
+              h: MappedChart.layout.height,
             }}
             key={MappedChart.index}
             className="chartWrap"
@@ -97,105 +97,9 @@ const HighChartsResponsiveGrid = props => {
                   className="chart"
                   id={'chart-' + MappedChart.index}
                   options={{
-                    // ...MappedChart,
+                    ...MappedChart.options,
+                    series: MappedChart.options.series,
                     id: MappedChart.index,
-                    chart: {
-                      type: MappedChart.options.chart.type,
-                      zoomType: MappedChart.options.chart.zoomType,
-                    },
-                    legend: {
-                      ...MappedChart.options.legend,
-                      rtl: true,
-                    },
-                    title: {
-                      text: MappedChart.options.title.text,
-                    },
-                    subtitle: {
-                      text: MappedChart.options.subtitle.text,
-                    },
-                    tooltip: {
-                      style: {
-                        textAlign: 'right',
-                        fontSize: '16px',
-                      },
-                      formatter: function () {
-                        console.log(this);
-                        if (this.point || this.points) {
-                          let type = MappedChart.options.chart.type;
-                          console.log(type);
-                          if (type == 'pie') {
-                            console.log(this.point);
-                            return `<span dir="rtl">${this.point.name}
-                            <div style="padding:0"><b>${parseFloat(
-                              this.point.y,
-                            ).toFixed(2)}%</b></div>
-                            <div style="padding:0">ערך מספרי: ${numberWithCommas(
-                              parseFloat(this.point.actualValue),
-                            )}<b></b></div>
-                            </span>
-                            `;
-                          } else {
-                            return `<span>${this.x}
-                            <div style="padding:0"><b>${parseFloat(
-                              this.y,
-                            ).toFixed(2)}</b></div>
-                            </span>
-                            `;
-                          }
-                        }
-                      },
-                      shared: true,
-                      useHTML: true,
-                    },
-                    plotOptions: {
-                      column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0,
-                      },
-                      series: {
-                        dataLabels: {
-                          enabled: false,
-
-                          pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                              distance:
-                                MappedChart.options.plotOptions.pie.dataLabels
-                                  .distance,
-                              enabled:
-                                MappedChart.options.plotOptions.pie.dataLabels
-                                  .enabled,
-                            },
-                            showInLegend: true,
-                            startAngle:
-                              MappedChart.options.plotOptions.pie.startAngle,
-                            endAngle:
-                              MappedChart.options.plotOptions.pie.endAngle,
-                            center: MappedChart.options.plotOptions.pie.center,
-                            size: MappedChart.options.plotOptions.pie.size,
-                          },
-                        },
-                      },
-                    },
-                    series: MappedChart.options.series.map(obj => ({
-                      name: obj.name,
-                      data: obj.data,
-                      color: obj.colr,
-                    })),
-                    yAxis: {
-                      ...MappedChart.options.yAxis,
-                    },
-                    // min: 4500,
-                    xAxis: {
-                      categories: MappedChart.options.xAxis.catagories,
-                      labels: {
-                        style: {
-                          color: 'black',
-                        },
-                        type: MappedChart.options.xAxis.type,
-                      },
-                    },
                     credits: {
                       enabled: false,
                     },
@@ -211,6 +115,68 @@ const HighChartsResponsiveGrid = props => {
                         "<p style='text-align:right'>SVG-הורדה כ </p>",
                       viewFullscreen:
                         "<p style='text-align:right'>צפייה במסך מלא</p>",
+                    },
+                    tooltip: {
+                      style: {
+                        textAlign: 'right',
+                        fontSize: '16px',
+                      },
+                      formatter:
+                        MappedChart.options.chart.type == 'pie'
+                          ? function () {
+                              if (this.point || this.points) {
+                                console.log(this.point);
+                                return `<span dir="rtl">${this.point.name}
+                                  <div style="padding:0"><b>${parseFloat(
+                                    this.point.y,
+                                  ).toFixed(2)}%</b></div>
+                                  <div style="padding:0">ערך מספרי: ${numberWithCommas(
+                                    parseFloat(this.point.actualValue),
+                                  )}</div>
+                                  </span>
+                                  `;
+                              }
+                            }
+                          : // : null,
+                            function () {
+                              let x = this.x;
+                              const tmpChart = this.points[0].series.chart;
+                              console.log(tmpChart);
+                              let valuesTooltip = tmpChart.series
+                                .map(MappedSerie => {
+                                  for (let point of MappedSerie.points) {
+                                    if (point.category == this.x) {
+                                      return `<div dir="rtl">
+                                      <b>${point.series.name}: </b>
+                                          <div dir="ltr">${numberWithCommas(
+                                            parseFloat(point.y).toFixed(2),
+                                          )}</div>
+                                          </div>`;
+                                    }
+                                  }
+                                })
+                                .join('');
+                              console.log(valuesTooltip);
+                              return `
+                                <span dir="rtl">
+                                  <b>${this.x}</b>
+                                  <div style="padding:0"></div>
+                                  ${valuesTooltip}
+                                </span>`;
+                            },
+
+                      //   for (let point of this.points) {
+                      //     return `<span><b>${this.x}</b>
+                      // <div style="padding:0"><b>${parseFloat(
+                      //   this.y,
+                      // ).toFixed(2)} ${
+                      //       this.points[0].series.name
+                      //     }</b></div>
+                      // </span>
+                      // `;
+                      //   }
+                      shared: true,
+                      useHTML: true,
                     },
                     exporting: {
                       buttons: {

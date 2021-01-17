@@ -37,8 +37,9 @@ const CreateGolden = props => {
     alertText: '',
     alertShow: false,
   });
+  const [actionSelected, setActionSelected] = useState('ממוצע');
   const [valueSelected, setValueSelected] = useState('נתון כמספר');
-
+  const actionOptions = [`סכום`, `ממוצע`];
   const valueOptions = [
     `נתון כמספר`,
     `מש"ח - ₪`,
@@ -215,6 +216,10 @@ const CreateGolden = props => {
     setValueSelected(event.target.innerHTML);
   };
 
+  const handleActionSelected = event => {
+    setActionSelected(event.target.innerHTML);
+  };
+
   const handleTitle = event => {
     setTitle(event.target.value);
   };
@@ -239,6 +244,7 @@ const CreateGolden = props => {
           title: title,
           data: crossColumnsData,
           valueType: valueSelected,
+          actionType: actionSelected,
         },
       });
       alert('המוניטור נוצר');
@@ -318,6 +324,27 @@ const CreateGolden = props => {
                             className="dropDownItem"
                           >
                             {option}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
+                    </Col>
+                    <Col md="auto">
+                      <Form.Label className="FormLabel">
+                        :בחר פעולה (סכום, ממוצע)
+                      </Form.Label>
+                      <DropdownButton
+                        className="dropdown-btn"
+                        type=""
+                        variant="outline-primary"
+                        title={actionSelected === '' ? 'בחר' : actionSelected}
+                      >
+                        {actionOptions.map((action, i) => (
+                          <Dropdown.Item
+                            key={i}
+                            onClick={handleActionSelected}
+                            className="dropDownItem"
+                          >
+                            {action}
                           </Dropdown.Item>
                         ))}
                       </DropdownButton>

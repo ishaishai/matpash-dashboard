@@ -25,7 +25,9 @@
 .xBtn:hover {
   font-weight: bold;
 }
-
+body {
+  font-family: 'Varela Round', sans-serif !important;
+}
 .Tab {
   width: auto;
 }

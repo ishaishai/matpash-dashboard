@@ -1,6 +1,26 @@
+const { usersdbpool } = require('../config/dbConfig');
 const { usersQuery, DashboardDBpool } = require('../db');
 
 class UserService {
+  async deleteUser(username) {
+    try {
+      const resultDashPriviledges = await DashboardDBpool.query(
+        `delete from public."dashboardPriviledgesTable" where "username"='${username}'`,
+      );
+      const resultUserPriviledges = await usersdbpool.query(
+        `delete from public."usersPriviledgesTable" where "username"='${username}'`,
+      );
+      const resultUseEvents = await usersdbpool.query(
+        `delete from public."eventsTable" where "username"='${username}'`,
+      );
+      const resultUserInfo = await usersdbpool.query(
+        `delete from public."usersInfoTable" where "username"='${username}'`,
+      );
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
   async findByUsername(username) {
     const {
       rows,
@@ -54,9 +74,21 @@ class UserService {
       VALUES ('${username}', false, false, false);`);
 
     //insert into dashboard priviledges also
-    await DashboardDBpool.query(`INSERT INTO public."dashboardPriviledgesTable"(
-      "username")
-      VALUES ('${username}'); `);
+
+    const result = await DashboardDBpool.query(
+      `select * from public."dashboardPriviledgesTable" where "username"='super'`,
+    );
+
+    let dashboardPriviledgesString = ``;
+    for (let obj in result.rows[0]) {
+      if (obj !== 'username') {
+        dashboardPriviledgesString += `'${result.rows[0][obj]}',`;
+      }
+    }
+    dashboardPriviledgesString = dashboardPriviledgesString.slice(0, -1);
+    console.log(dashboardPriviledgesString);
+    await DashboardDBpool.query(`INSERT INTO public."dashboardPriviledgesTable"
+      VALUES ('${username}',${dashboardPriviledgesString}); `);
   }
 
   async getPermissions() {

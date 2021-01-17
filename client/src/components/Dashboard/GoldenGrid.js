@@ -31,7 +31,6 @@ const GoldenGrid = props => {
   const getGoldens = async () => {
     const response = await axios.get('/api/dashboard/get-goldens/');
     if (response.data.goldensList !== undefined) {
-      console.log(response.data.goldensList);
       setGoldens(response.data.goldensList);
     }
   };
@@ -62,7 +61,7 @@ const GoldenGrid = props => {
       }, {}),
     ];
     entireGolden.sum = result[0].periodValue - result[0].periodCmpValue;
-    console.log(entireGolden);
+
     return calcGoldenData(result[0]);
   };
 
@@ -111,7 +110,6 @@ const GoldenGrid = props => {
                 <Header as="h3" className="monitor-title">
                   <p className="golden">{MappedMonitor.layout.title}</p>
                 </Header>
-                <Divider inverted />
                 <Statistic.Group inverted>
                   <Statistic className="monitor-base" size="mini">
                     <Statistic.Label>סה"כ לתקופה</Statistic.Label>
@@ -119,8 +117,8 @@ const GoldenGrid = props => {
                       {calcSummarized(MappedMonitor)}
                     </Statistic.Value>
                     <Statistic.Label>
-                      ({calcSummarizedChange(MappedMonitor)}
-                      {console.log(MappedMonitor.sum)}
+                      שינוי ביחס לתקופה קודמת
+                      <br />({calcSummarizedChange(MappedMonitor)}
                       <Icon
                         name={
                           MappedMonitor.sum > 0
@@ -130,7 +128,7 @@ const GoldenGrid = props => {
                             : 'hand point left outline blue'
                         }
                       />
-                      ) שינוי ביחס לתקופה קודמת
+                      )
                     </Statistic.Label>
                   </Statistic>
                 </Statistic.Group>

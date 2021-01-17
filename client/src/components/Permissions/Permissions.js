@@ -68,8 +68,6 @@ class NavTabs extends React.Component {
   }
 
   render() {
-    console.log(this.state.selectedIndex);
-    console.log('BAB');
     return (
       <Tabs
         selectedIndex={this.state.selectedIndex}
