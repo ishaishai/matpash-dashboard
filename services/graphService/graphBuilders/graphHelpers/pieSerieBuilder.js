@@ -27,8 +27,6 @@ exports.pieSerieBuilder = async (graph, dashId) => {
   result = await maindbpool.query(queryGetEnumeratedValues);
 
   const fromNum = result.rows[0].rownum;
-  const toNum = !result.rows[1] ? undefined : result.rows[1].rownum;
-
   const queryDashSeries = `select * from public."dashboard${dashId}Series" where "dashboard${dashId}Series"."index" = ${graph.index}`;
   result = await dashboarddbpool.query(queryDashSeries);
   let seriesList = result.rows;
@@ -39,9 +37,11 @@ exports.pieSerieBuilder = async (graph, dashId) => {
     name: null,
     color: null,
     data: [],
+    innerSize: '40%',
   };
 
   for (series of seriesList) {
+    console.log(series, 'seriesinpiebuilder');
     let pieColorsArray = [];
 
     const tableName = series.serieName.split('.')[0];
@@ -57,13 +57,10 @@ exports.pieSerieBuilder = async (graph, dashId) => {
     //for each serie needed to pull its data so serieName needed to be split by dot and then be used like
     //maybe not use range for series because all data in range of xAxis is enough
     let querySerie;
-    if (!toNum) {
-      querySerie = `select "${columnName}" from (select "${columnName}",row_number() over(order by 1) as "rownum"  from public."${tableName}") as tmp where
+    querySerie = `select "${columnName}" from (select "${columnName}",row_number() over(order by 1) as "rownum"  from public."${tableName}") as tmp where
                     rownum =${fromNum}`;
-    } else {
-      querySerie = `select "${columnName}" from (select "${columnName}",row_number() over(order by 1) as "rownum"  from public."${tableName}") as tmp where
-                    rownum >=${fromNum} and rownum<=${toNum}`;
-    }
+
+    console.log(querySerie);
     result = await maindbpool.query(querySerie);
 
     for (obj of result.rows) {
@@ -72,9 +69,7 @@ exports.pieSerieBuilder = async (graph, dashId) => {
 
     let colorArrayIndex = 0;
     for (obj of result.rows) {
-      // console.log(
-      //   parseFloat(Object.values(obj)[0] / graphToAdd.options.sum),
-      // );
+      console.log(obj);
       pieTempDataToAdd.push({
         selected: false,
         sliced: false,

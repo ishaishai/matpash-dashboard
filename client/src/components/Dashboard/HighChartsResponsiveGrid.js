@@ -1,7 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import Chart from './Charts';
-import Highcharts from 'highcharts';
 import { Header } from 'semantic-ui-react';
 import axios from 'axios';
 import './ResponsiveGrid.css';
@@ -90,6 +89,7 @@ const HighChartsResponsiveGrid = props => {
             key={MappedChart.index}
             className="chartWrap"
           >
+            {console.log(MappedChart)}
             <div className="card-flip" id={MappedChart.index}>
               <div className="card front">
                 <Chart
@@ -99,6 +99,14 @@ const HighChartsResponsiveGrid = props => {
                   options={{
                     ...MappedChart.options,
                     series: MappedChart.options.series,
+                    plotOptions: {
+                      ...MappedChart.options.plotOptions,
+                      series: {
+                        animation: {
+                          duration: 5000,
+                        },
+                      },
+                    },
                     id: MappedChart.index,
                     credits: {
                       enabled: false,

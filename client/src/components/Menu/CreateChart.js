@@ -19,6 +19,12 @@ import {
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { Checkbox } from '@material-ui/core';
+import { halfPieExample } from './ExampleCharts/halfPieExample';
+import { pieExample } from './ExampleCharts/pieExample';
+import { lineExample } from './ExampleCharts/lineExample';
+import { columnExample } from './ExampleCharts/columnExample';
+import { barExample } from './ExampleCharts/barExample';
+import { areaExample } from './ExampleCharts/areaExample';
 
 const hexToRgb = hex => {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -42,15 +48,8 @@ const ColorsAreClose = (color1, color2, threshold = 70) => {
 
 const CreateChart = props => {
   let Type;
-  const [navKey, setNavKey] = useState('5');
-  const [graphTypeArray, setGraphTypeArray] = useState([
-    'pie',
-    'bar',
-    'line',
-    'area',
-    'column',
-  ]);
-
+  const [navKey, setNavKey] = useState('6');
+  const [toggleHalfPie, setToggleHalfPie] = useState(false);
   const [alertObj, setAlertObj] = useState({
     alertType: null,
     alertText: '',
@@ -83,111 +82,15 @@ const CreateChart = props => {
   const graphSeriesRef = React.useRef(graphSeries);
   const colDataListRef = React.useRef(colDataList);
   const [color, setColor] = useState('#000000');
-
-  const [options, setOptions] = useState({
-    id: 1,
-    chart: {
-      events: {
-        load: function () {
-          let btn = document.getElementsByClassName('btn');
-          let chart = this;
-          for (let btntmp of btn) {
-            if (
-              btntmp.id === 'area' ||
-              btntmp.id === 'pie' ||
-              btntmp.id === 'bar' ||
-              btntmp.id === 'line' ||
-              btntmp.id === 'column'
-            ) {
-              btntmp.addEventListener('click', () => {
-                Type = btntmp.id;
-                //setType(Type);
-                //
-
-                for (let i = 0; i < chart.series.length; i++) {
-                  chart.series[i].update({ type: Type });
-                }
-              });
-              chart.redraw();
-            }
-          }
-
-          //  for (let j = 0; j < btn.length; j++) {
-          //    btn[j].addEventListener('click', () => {
-          //      Type = btn[j].id;
-          //      //setType(Type);
-          //     //
-          //     for(let i=0;i<chart.series.length;i++) {
-          //       chart.series[i].update({ type: Type});
-          //     }
-          //    });
-          //  }
-        },
-      },
-      type: type,
-    },
-    title: {
-      text: title,
-    },
-    subtitle: {
-      text: subTitle,
-    },
-    plotOptions: {
-      series: {
-        animation: {
-          duration: 3000,
-        },
-      },
-    },
-
-    series: [
-      {
-        name: '1',
-        data:
-          type !== 'pie'
-            ? [5, 3, 4, 7, 2]
-            : [
-                {
-                  name: '1',
-                  seleced: false,
-                  sliced: false,
-                  y: '25%',
-                },
-                {
-                  name: '2',
-                  seleced: false,
-                  sliced: false,
-                  y: '35%',
-                },
-                {
-                  name: '3',
-                  seleced: false,
-                  sliced: false,
-                  y: '40%',
-                },
-              ],
-      },
-    ],
-    legend: {
-      position: 'right',
-    },
-    xAxis: {
-      categories: null,
-      labels: {
-        style: {
-          color: 'black',
-        },
-      },
-    },
-    yAxis: {
-      title: {
-        text: null,
-      },
-    },
-    credits: {
-      enabled: false,
-    },
-  });
+  const [options, setOptions] = useState(lineExample());
+  const [chart, setChart] = useState(
+    <Chart
+      className="chart"
+      id={'chart-0'}
+      options={options}
+      Highcharts={Highcharts}
+    />,
+  );
 
   let graphToAdd = {
     dashboardID: dropdownSelection,
@@ -207,8 +110,6 @@ const CreateChart = props => {
     },
   };
 
-  const [chart, setChart] = useState(options);
-
   useEffect(() => {
     fetchTableNames();
     fetchDashboardNames();
@@ -217,16 +118,6 @@ const CreateChart = props => {
   const ListItem = ({ value, click }) => {
     return <option onClick={click}>{value}</option>;
   };
-
-  const List = ({ items, click }) => (
-    <Form.Group className="column">
-      <Form.Control as="select" multiple>
-        {items.map((item, i) => (
-          <ListItem key={i} value={item} click={click} />
-        ))}
-      </Form.Control>
-    </Form.Group>
-  );
 
   let colData;
   const [selected, setSelection] = useState(colData);
@@ -244,8 +135,13 @@ const CreateChart = props => {
       ...prev,
       title: { text: title },
       subtitle: { text: subTitle },
+      yAxis: {
+        title: {
+          text: yAxisTitle,
+        },
+      },
     }));
-  }, [title, subTitle]);
+  }, [title, subTitle, yAxisTitle]);
 
   const handleSubTitle = event => {
     setSubTitle(event.target.value);
@@ -279,17 +175,13 @@ const CreateChart = props => {
         catagoriesRange = periodColumnFromRange.slice(i, j + 1);
       }
     }
-    setOptions(options => {
-      options.xAxis.categories = catagoriesRange;
-      return {
-        ...options,
-      };
-    });
+    // setOptions(options => {
+    //   options.xAxis.categories = catagoriesRange;
+    //   return {
+    //     ...options,
+    //   };
+    // });
   }, [endPeriodSelected]);
-
-  useEffect(() => {
-    console.log(options.xAxis);
-  }, [options.xAxis.catagories]);
 
   const handleCrossColumnSelection = event => {
     const selectedColumn = event.target.innerHTML;
@@ -521,15 +413,7 @@ const CreateChart = props => {
   const [Shown, setShown] = useState(true);
 
   useEffect(() => {
-    //options.chart.type cannot be set directly using type for some reason, so made this to set it:
-    setOptions(options => {
-      options.chart.type = type;
-      return {
-        ...options,
-      };
-    });
-
-    if (type == 'pie') {
+    if (type == 'pie' || type == 'halfpie') {
       setPiePeriodLabel(':בחר את התקופה הרצויה');
       setEndPeriodSelected('');
       setShown(false);
@@ -538,9 +422,45 @@ const CreateChart = props => {
       setShown(true);
     }
   }, [type]);
+
   const periodDropDownHandler = event => {
     setType(event.target.id);
+    setOptions(
+      event.target.id === 'pie'
+        ? pieExample()
+        : event.target.id === 'halfpie'
+        ? halfPieExample()
+        : event.target.id === 'line'
+        ? lineExample()
+        : event.target.id === 'column'
+        ? columnExample()
+        : event.target.id === 'bar'
+        ? barExample()
+        : event.target.id === 'area'
+        ? areaExample()
+        : null,
+    );
+    setChart(null);
   };
+
+  useEffect(() => {
+    console.log(options);
+    setChart(
+      <Chart
+        className="chart"
+        id={'chart-0'}
+        options={options}
+        Highcharts={Highcharts}
+      />,
+    );
+  }, [options]);
+
+  useEffect(() => {
+    if (toggleHalfPie == true) {
+      setType('pie');
+      console.log(toggleHalfPie);
+    }
+  }, [toggleHalfPie]);
 
   const handleYAxisTitle = event => {
     setYAxisTitle(event.target.value);
@@ -553,7 +473,11 @@ const CreateChart = props => {
       alertTimeout(true, 'יש לבחור טבלה עבור תקופה', 'fail');
     } else if (startPeriodSelected.length === 0) {
       alertTimeout(true, 'יש לבחור את תחילת התקופה הרצויה', 'fail');
-    } else if (type != 'pie' && endPeriodSelected.length === 0) {
+    } else if (
+      type != 'pie' &&
+      type != 'halfpie' &&
+      endPeriodSelected.length === 0
+    ) {
       alertTimeout(true, ' יש לבחור את סוף התקופה', 'fail');
     } else if (graphSeries.length === 0) {
       alertTimeout(true, 'יש להוסיף עמודות מידע', 'fail');
@@ -652,8 +576,16 @@ const CreateChart = props => {
               </Nav.Link>
               <Nav.Link
                 className="nav-link btn"
-                id="pie"
+                id="halfpie"
                 eventKey="2"
+                onClick={periodDropDownHandler}
+              >
+                חצי עוגה
+              </Nav.Link>
+              <Nav.Link
+                className="nav-link btn"
+                id="pie"
+                eventKey="3"
                 onClick={periodDropDownHandler}
               >
                 עוגה
@@ -661,7 +593,7 @@ const CreateChart = props => {
               <Nav.Link
                 className="nav-link btn"
                 id="area"
-                eventKey="3"
+                eventKey="4"
                 onClick={periodDropDownHandler}
               >
                 שטח
@@ -669,7 +601,7 @@ const CreateChart = props => {
               <Nav.Link
                 className="nav-link btn"
                 id="column"
-                eventKey="4"
+                eventKey="5"
                 onClick={periodDropDownHandler}
               >
                 עמודות - אנכי
@@ -677,7 +609,7 @@ const CreateChart = props => {
               <Nav.Link
                 className="nav-link btn"
                 id="line"
-                eventKey="5"
+                eventKey="6"
                 onClick={periodDropDownHandler}
               >
                 לינארי
@@ -690,12 +622,14 @@ const CreateChart = props => {
       <Container fluid="true">
         <Row sm>
           <Col className="chart-demo-col">
-            <Chart
+            <div id="exampleContainer">{chart}</div>
+            {/* {chart} */}
+            {/* <Chart
               className="chart"
               id={'chart-0'}
               options={options}
               Highcharts={Highcharts}
-            />
+            /> */}
           </Col>
           <Col>
             <Container className="main-container">
