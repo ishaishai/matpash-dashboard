@@ -173,12 +173,14 @@ const GraphChart = props => {
         ) : (
           <p className="textDescription">{MappedChart.info}</p>
         )}
-        <button
-          className="ui left blue labeled icon button btn-edit"
-          onClick={event => editGraphInfo(event, MappedChart.index)}
-        >
-          {infoEditToggle ? 'שמור' : 'ערוך'}
-        </button>
+        {props.permissions != 'צופה' ? (
+          <button
+            className="ui left blue labeled icon button btn-edit"
+            onClick={event => editGraphInfo(event, MappedChart.index)}
+          >
+            {infoEditToggle ? 'שמור' : 'ערוך'}
+          </button>
+        ) : null}
         <button
           className="ui left green labeled icon button btn-goback"
           onClick={event => flipGraph(event, MappedChart.index)}

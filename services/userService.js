@@ -75,6 +75,7 @@ class UserService {
 
     //insert into dashboard priviledges also
 
+    // if(permissions == 'מנהל') { -- need to fix because for user which isnt מנהל gets all dashboards
     const result = await DashboardDBpool.query(
       `select * from public."dashboardPriviledgesTable" where "username"='super'`,
     );
@@ -87,6 +88,7 @@ class UserService {
     }
     dashboardPriviledgesString = dashboardPriviledgesString.slice(0, -1);
     console.log(dashboardPriviledgesString);
+
     await DashboardDBpool.query(`INSERT INTO public."dashboardPriviledgesTable"
       VALUES ('${username}',${dashboardPriviledgesString}); `);
   }
