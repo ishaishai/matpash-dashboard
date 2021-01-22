@@ -54,6 +54,20 @@ g text {
   width: 30%;
   position: fixed !important;
   bottom: 25px;
+  font-family: 'Varela Round', sans-serif !important;
+}
+
+.btn-edit {
+  width:30%;
+  position: fixed !important;
+  bottom: 5%;
+  left: 40%;
+  font-family: 'Varela Round', sans-serif !important;
+}
+
+.textDescription {
+  text-align: right;
+  direction: rtl;
 }
 
 /* .card-flip {

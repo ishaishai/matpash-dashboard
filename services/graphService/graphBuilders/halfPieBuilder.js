@@ -4,7 +4,7 @@ const { pieSerieBuilder } = require('./graphHelpers/pieSerieBuilder');
 
 exports.halfPieBuilder = async (graph, dashId) => {
   const data = await pieSerieBuilder(graph, dashId);
-  console.log(data, 'data');
+  graphToAdd.info = graph.info;
   const graphToAdd = { index: graph.index };
   graphToAdd.layout = {
     xPos: graph.xPos,

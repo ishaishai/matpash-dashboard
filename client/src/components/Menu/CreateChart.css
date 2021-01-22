@@ -125,6 +125,10 @@
   text-align: right !important;
 }
 
+.textDescription {
+  resize: none;
+}
+
 .list-group {
   margin-top: 2%;
   width: 50%;

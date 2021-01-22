@@ -2,8 +2,8 @@ const { pieSerieBuilder } = require('./graphHelpers/pieSerieBuilder');
 
 exports.pieBuilder = async (graph, dashId) => {
   const data = await pieSerieBuilder(graph, dashId);
-  console.log(data, 'data');
   const graphToAdd = { index: graph.index };
+  graphToAdd.info = graph.info;
   graphToAdd.layout = {
     xPos: graph.xPos,
     yPos: graph.yPos,

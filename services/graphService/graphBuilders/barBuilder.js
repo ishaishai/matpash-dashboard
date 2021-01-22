@@ -4,6 +4,7 @@ const { xAxisTitlePull } = require('./graphHelpers/xAxisTitlePuller');
 
 exports.barBuilder = async (graph, dashId) => {
   const graphToAdd = { index: graph.index };
+  graphToAdd.info = graph.info;
   graphToAdd.layout = {
     xPos: graph.xPos,
     yPos: graph.yPos,

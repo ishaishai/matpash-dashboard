@@ -3,7 +3,7 @@ const { catagoryBuilder } = require('./graphHelpers/catagoryBuilder');
 const { xAxisTitlePull } = require('./graphHelpers/xAxisTitlePuller');
 exports.lineBuilder = async (graph, dashId) => {
   const graphToAdd = { index: graph.index };
-
+  graphToAdd.info = graph.info;
   graphToAdd.layout = {
     xPos: graph.xPos,
     yPos: graph.yPos,

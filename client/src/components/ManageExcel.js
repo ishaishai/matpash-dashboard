@@ -33,6 +33,7 @@ function ManageExcel({
 
   useEffect(() => {
     getTableNames();
+    tableNames.sort((a, b) => (a.label > b.label ? 1 : -1));
   }, [getTableNames]);
 
   if (loading) {

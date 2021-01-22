@@ -57,6 +57,7 @@ const CreateChart = props => {
   });
   const [flipXAxis, setFlipXAxis] = useState(false);
   const [yAxisTitle, setYAxisTitle] = useState('');
+  const [infoText, setInfoText] = useState('');
   const [showDashboardNameLabel, setShowDashboardNameLabel] = useState(false);
   const [newDashboardName, setNewDashboardName] = useState('דשבורד');
   const [colDataList, setColDataList] = useState([]);
@@ -107,6 +108,7 @@ const CreateChart = props => {
           ? `${endPeriodSelected}$${startPeriodSelected}`
           : `${startPeriodSelected}`,
       series: graphSeries,
+      info: infoText,
     },
   };
 
@@ -466,6 +468,10 @@ const CreateChart = props => {
     setYAxisTitle(event.target.value);
   };
 
+  const handleInfoBox = event => {
+    setInfoText(event.target.value);
+  };
+
   const handleGraphInfo = async event => {
     if (dropdownSelection === 'בחירת דשבורד') {
       alertTimeout(true, 'יש לבחור דשבורד אליו יתווסף הגרף', 'fail');
@@ -500,6 +506,7 @@ const CreateChart = props => {
       console.log(graphToAdd);
 
       //duplicate " and ' for sql use in server
+      graphToAdd.graph.info = graphToAdd.graph.info.replace(/'/g, "''");
       graphToAdd.graph.title = graphToAdd.graph.title.replace(/'/g, "''");
       graphToAdd.graph.subtitle = graphToAdd.graph.subtitle.replace(/'/g, "''");
       graphToAdd.graph.yAxisTitle = graphToAdd.graph.yAxisTitle.replace(
@@ -818,14 +825,31 @@ const CreateChart = props => {
                   </Button>
                 </Col>
               </Row>
-              <Row className="form-row" style={{ height: '108px' }}>
-                <Col className="form-col">
-                  <Form.Label className="FormLabel">:כותרת ציר אנכי</Form.Label>
+              <Row className="form-row" style={{ paddingLeft: '10%' }}>
+                {Shown ? (
+                  <Col className="form-col" style={{ paddingBottom: '5%' }}>
+                    <Form.Label className="FormLabel">
+                      :כותרת ציר אנכי
+                    </Form.Label>
+                    <Form.Control
+                      size="lg"
+                      placeholder="כותרת"
+                      onBlur={handleYAxisTitle}
+                      className="ytitle-input"
+                    />
+                  </Col>
+                ) : null}
+                <Col xs={6} className="form-col">
+                  <Form.Label className="FormLabel">
+                    :טקסט לתיאור הגרף (אופציונלי)
+                  </Form.Label>
                   <Form.Control
-                    size="lg"
-                    placeholder="כותרת"
-                    onBlur={handleYAxisTitle}
-                    className="ytitle-input"
+                    className="textDescription"
+                    as="textarea"
+                    rows={4}
+                    cols={20}
+                    style={{ width: '100%' }}
+                    onBlur={handleInfoBox}
                   />
                 </Col>
               </Row>

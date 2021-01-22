@@ -4,17 +4,17 @@ const router = express.Router();
 const requireToken = require('../middlewares/requireToken');
 
 router.get('/get-by-id/:id', requireToken, dashboardContoller.getDashboardById);
-router.post('/set-default/:id', requireToken, dashboardContoller.setDefaultDashboard);
+router.post(
+  '/set-default/:id',
+  requireToken,
+  dashboardContoller.setDefaultDashboard,
+);
 router.get(
   '/get-dashboard-names/:page',
   requireToken,
   dashboardContoller.getDashboardNames,
 );
-router.get(
-  '/get-goldens',
-  requireToken,
-  dashboardContoller.getGoldens,
-);
+router.get('/get-goldens', requireToken, dashboardContoller.getGoldens);
 router.delete(
   '/delete-dashboard-by-id/:id',
   requireToken,
@@ -36,12 +36,8 @@ router.post(
   dashboardContoller.addNewGraphToDashboard,
 );
 
-router.post(
-  '/add-new-golden',
-  requireToken,
-  dashboardContoller.addNewGolden,
-);
+router.post('/add-new-golden', requireToken, dashboardContoller.addNewGolden);
 
 router.post('/update', requireToken, dashboardContoller.updateDashboardById);
-
+router.post('/update-graph-info', dashboardContoller.updateGraphInfo);
 module.exports = router;

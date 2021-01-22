@@ -319,11 +319,11 @@ exports.addNewGraphToDashboard = async (req, res) => {
     }
     const queryInsertGraph = `INSERT INTO public."graphsInfoTable"(
       "index", "position", "width", "height", "xPos", "yPos", "layoutIndex", "type", "title", "subtitle", "xAxisTitle", "yAxisTitle", "xAxisColumn", "yAxisColumn",
-      "xAxisCatagoryRange", "yAxisCatagoryRange", "legend","flipXAxis")
+      "xAxisCatagoryRange", "yAxisCatagoryRange", "legend","flipXAxis","info")
       VALUES ((SELECT COALESCE(MAX(index),0)+1 from public."graphsInfoTable"), '0', 3, 
             3, 0,0, 1, '${graph.type}','${graph.title}',
             '${graph.subtitle}', '${graph.xAxisTitle}', '${graph.yAxisTitle}', '${graph.xAxisColumn}', 
-            '', '${graph.xAxisCatagoryRange}', '', true,${graph.flip});
+            '', '${graph.xAxisCatagoryRange}', '', true,${graph.flip},'${graph.info}');
         `;
 
     await dashboarddbpool.query(queryInsertGraph);
@@ -438,6 +438,26 @@ exports.addNewGolden = async (req, res) => {
   } else {
     res.state(400).json({
       msg: 'FAIL',
+    });
+  }
+};
+
+exports.updateGraphInfo = async (req, res) => {
+  const { graph } = req.body;
+  try {
+    let resultUpdate = await dashboarddbpool.query(
+      `UPDATE public."graphsInfoTable"
+    SET info='${graph.info}'
+    WHERE index='${graph.index}'`,
+    );
+
+    if (resultUpdate)
+      res.status(200).json({
+        msg: 'ok',
+      });
+  } catch (e) {
+    res.status(500).json({
+      msg: 'failed',
     });
   }
 };
