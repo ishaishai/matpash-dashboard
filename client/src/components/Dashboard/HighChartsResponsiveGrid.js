@@ -21,12 +21,20 @@ const HighChartsResponsiveGrid = props => {
 
   const deleteChart = async id => {
     try {
-      const response = await axios.delete(
-        '/api/dashboard/remove-graph-from-dashboard/' +
-          props.dashboardID +
-          '/' +
-          id,
+      let result = window.confirm(
+        'האם באמת למחוק את הגרף הזה? פעולה זו בלתי הפיכה',
       );
+      let response;
+      if (result) {
+        response = await axios.delete(
+          '/api/dashboard/remove-graph-from-dashboard/' +
+            props.dashboardID +
+            '/' +
+            id,
+        );
+        alert('הגרף נמחק!');
+      }
+
       const { data } = response.data;
     } catch (error) {
       console.log(error);
