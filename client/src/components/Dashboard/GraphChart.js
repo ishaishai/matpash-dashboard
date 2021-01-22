@@ -15,12 +15,21 @@ const GraphChart = props => {
     if (!infoEditToggle) {
       setInfoEditToggle(true);
     } else {
-      MappedChart.info = document.getElementById('textDescription').value;
+      MappedChart.info = document
+        .getElementById('textDescription')
+        .value.replace(/'/g, "''")
+        .replace((/"/g, `""`));
       try {
         const response = await axios.post('/api/dashboard/update-graph-info', {
           graph: MappedChart,
         });
         if (response.data.msg == 'ok') alert('גרף עודכן!');
+        MappedChart.info = MappedChart.info
+          .replace(/""/g, `"`)
+          .replace(/''/g, "'");
+        // MappedChart.info = MappedChart.info
+        //   .replace(/'/g, "''")
+        //   .replace((/"/g, `""`));
       } catch (error) {
         console.log(error);
       }

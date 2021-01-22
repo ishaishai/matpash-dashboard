@@ -506,7 +506,9 @@ const CreateChart = props => {
       console.log(graphToAdd);
 
       //duplicate " and ' for sql use in server
-      graphToAdd.graph.info = graphToAdd.graph.info.replace(/'/g, "''");
+      graphToAdd.graph.info = graphToAdd.graph.info
+        .replace(/'/g, "''")
+        .replace(/"/g, `""`);
       graphToAdd.graph.title = graphToAdd.graph.title.replace(/'/g, "''");
       graphToAdd.graph.subtitle = graphToAdd.graph.subtitle.replace(/'/g, "''");
       graphToAdd.graph.yAxisTitle = graphToAdd.graph.yAxisTitle.replace(
