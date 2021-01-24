@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import SearchBox from './search';
-import { Button } from 'react-bootstrap';
 import './style.css';
+import User from './User';
 
 class Users extends Component {
   constructor(props) {
@@ -25,6 +25,7 @@ class Users extends Component {
     };
     this.handlePageClick = this.handlePageClick.bind(this);
     this.setSearchStrCallBack = this.setSearchStrCallBack.bind(this);
+    this.searchData = this.searchData.bind(this);
   }
   setSearchStrCallBack(value) {
     console.log('setSearchStrCallBack: ', value);
@@ -40,27 +41,29 @@ class Users extends Component {
     );
   }
 
-  searchData() {
+  async searchData() {
     const url =
       '/api/users/search/' +
       this.state.currentPage +
       '?str=' +
       this.state.searchStr;
-    axios.get(url).then(res => {
-      console.log('searchData from server:', res);
-      this.setState(
-        {
-          perPage: res.data.perPage,
-          pageCount: res.data.pageCount,
-          totalCount: res.data.totalCount,
-          data: res.data.users,
-        },
-        () => {
-          // this.props.usersInfoCallback(this.state.sourceData);
-          // console.log("pagecount: ",this.state.pageCount)
-        },
-      );
+    const res = await axios.get(url);
+    console.log(res);
+    this.setState({
+      perPage: res.data.perPage,
+      pageCount: res.data.pageCount,
+      totalCount: res.data.totalCount,
+      data: res.data.users,
     });
+    // axios.get(url).then(res => {
+    //   console.log('searchData from server:', res);
+    //   this.setState({
+    //     perPage: res.data.perPage,
+    //     pageCount: res.data.pageCount,
+    //     totalCount: res.data.totalCount,
+    //     data: res.data.users,
+    //   });
+    // });
   }
 
   handlePageClick(e) {
@@ -73,21 +76,6 @@ class Users extends Component {
         this.searchData();
       },
     );
-  }
-
-  async deleteUser(e, username) {
-    username = username.replace(/'/g, "''");
-    username = username.replace(/"/g, `""`);
-    let result = window.confirm('האם למחוק משתמש זה? פעולה זו בלתי הפיכה');
-    if (result) {
-      const response = await axios.delete('/api/users/delete-user/' + username);
-      alert('!המשתמש נמחק');
-      this.searchData();
-    }
-  }
-  async editUser(id) {}
-  componentDidMount() {
-    this.searchData();
   }
 
   render() {
@@ -112,45 +100,11 @@ class Users extends Component {
           {/* <div className="col border border-dark text-center">#</div> */}
         </div>
         {/* {this.state.postData} */}
-        {page.map((pd, i) => (
-          <div id={pd.username} key={pd.username} className="row ">
-            <div className="col border text-center">
-              <Button
-                className="ui red button buttonOption"
-                onClick={e => this.deleteUser(e, pd['username'])}
-              >
-                מחק
-              </Button>
-              <Button
-                className="ui button buttonOption"
-                onClick={() => this.editUser(pd.id)}
-              >
-                ערוך
-              </Button>
-            </div>
-            <div className="col border text-center">
-              <div className="innerUserDetailBox">{pd['permissions']}</div>
-            </div>
-            <div className="col border text-center">
-              <div className="innerUserDetailBox">{pd['organization']}</div>
-            </div>
-            <div className="col border text-center">
-              <div className="innerUserDetailBox">{pd['role']}</div>
-            </div>
-            <div className="col border text-center">
-              <div className="innerUserDetailBox">{pd['lastName']}</div>
-            </div>
-            <div className="col border text-center">
-              <div className="innerUserDetailBox">{pd['firstName']}</div>
-            </div>
-            <div className="col border text-center">
-              <div className="innerUserDetailBox">{pd['username']}</div>
-            </div>
-            {/* <div className="col border text-center">
-              {this.state.perPage - (this.state.perPage - i)}
-            </div> */}
-          </div>
-        ))}
+        {page
+          ? page.map((pd, i) => (
+              <User searchData={this.searchData} userData={pd} />
+            ))
+          : null}
         <ReactPaginate
           forcePage={this.state.currentPage - 1}
           initialPage={0}

@@ -21,6 +21,10 @@
   color: white;
 }
 
+.color-picker-col {
+ display:inline-table; 
+}
+
 .form-row {
   align-items: center;
   display: flex;
@@ -33,7 +37,12 @@
   border: 1px solid lightblue;
   border-radius: 2%;
 }
+.xAxisFlip {
+  z-index: 0 !important;
+}
 
+.choose-color-btn {
+}
 .dash-title-input {
   margin-bottom: 2px;
   direction: rtl;
@@ -100,12 +109,26 @@
 .col {
   text-align: center;
 }
+
+.colPick {
+  border-style: none !important;
+  height: 5rem !important;
+  width: 7rem !important;
+  display: inline-table;
+}
+
+.submit-color {
+  width: 100%;
+  font-family: 'Varela Round', sans-serif !important;
+  font-size: large;
+}
+
 .choose-dash-btn {
   margin-right: 20px;
 }
 
 .add-column-btn {
-  width: 70%;
+  width: max-content;
 }
 
 .color-picker {
@@ -159,4 +182,47 @@
 
 .dropdown-toggle::after {
   float: left;
+}
+
+
+
+/* MODAL for popup color picker */
+.modalPopUp {
+  z-index: 1 !important;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.25);
+  display: block !important;
+}
+
+.modal_content {
+  background-color: white;
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  width: 40%;
+  padding: 20px;
+  border-radius: 5px;
+  border: 2px solid black;
+}
+
+.modal_content h3 {
+  width: fit-content;
+  margin: auto;
+  font-family: 'Varela Round', sans-serif !important;
+}
+
+.close {
+  color: Black;
+  float: right;
+}
+
+.close:hover {
+  color: cyan;
+  cursor: pointer;
+}
+
+
+.custom-file {
+  z-index: 0 !important;
 }

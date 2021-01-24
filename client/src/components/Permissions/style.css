@@ -211,3 +211,8 @@ div.dropdown button span {
 .innerUserDetailBox {
   margin-top:5%;
 }
+
+.textEditUser {
+  text-align: center;
+  direction: rtl;
+}

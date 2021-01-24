@@ -13,6 +13,11 @@ exports.getUsers = async (req, res) => {
   }
 };
 
+exports.updateUser = async (req, res) => {
+  console.log(req.body);
+  res.status(200).json({ msg: 'ok' });
+};
+
 exports.deleteUser = async (req, res) => {
   const result = await userService.deleteUser(req.params.username);
   if (result) {

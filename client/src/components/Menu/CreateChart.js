@@ -25,6 +25,7 @@ import { lineExample } from './ExampleCharts/lineExample';
 import { columnExample } from './ExampleCharts/columnExample';
 import { barExample } from './ExampleCharts/barExample';
 import { areaExample } from './ExampleCharts/areaExample';
+import ColorPicker from './ColorPicker';
 
 const hexToRgb = hex => {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -82,7 +83,8 @@ const CreateChart = props => {
   const [graphSeries, setGraphSeries] = useState([]);
   const graphSeriesRef = React.useRef(graphSeries);
   const colDataListRef = React.useRef(colDataList);
-  const [color, setColor] = useState('#000000');
+  const [toggleColorPicker, setToggleColorPicker] = useState(false);
+  const [color, setColor] = useState(null);
   const [options, setOptions] = useState(lineExample());
   const [chart, setChart] = useState(
     <Chart
@@ -190,9 +192,14 @@ const CreateChart = props => {
     setCrossColumnSelected(selectedColumn);
   };
 
-  const handleColorChange = event => {
-    setColor(event.target.value);
+  const handleColorChange = selectedColor => {
+    console.log(selectedColor);
+    setColor(selectedColor);
   };
+
+  useEffect(() => {
+    console.log(color);
+  }, [color]);
 
   const fetchTableNames = async () => {
     const response = await axios.get('/api/tables/get-names/');
@@ -352,10 +359,16 @@ const CreateChart = props => {
   }, [colDataList]);
 
   const handleCrossData = () => {
+    if (!color) {
+      alertTimeout(true, 'בחר צבע עבור העמודה', 'fail');
+      return;
+    }
     if (crossTableSelected === '') {
       alertTimeout(true, 'בחר טבלה להצלבה', 'fail');
+      return;
     } else if (crossColumnSelected === '') {
       alertTimeout(true, 'בחר עמודה כסדרת מידע להצלבה', 'fail');
+      return;
     } else {
       let item = (
         <ListGroup.Item key={colDataList.length + 1}>
@@ -540,6 +553,18 @@ const CreateChart = props => {
     }
   };
 
+  const toggleColorPopUp = () => {
+    if (toggleColorPicker) {
+      setToggleColorPicker(false);
+    } else {
+      setToggleColorPicker(true);
+    }
+  };
+
+  useEffect(() => {
+    console.log(toggleColorPicker);
+  }, [toggleColorPicker]);
+
   const alertTimeout = (show, text, type) => {
     setAlertObj({
       alertShow: show,
@@ -663,7 +688,7 @@ const CreateChart = props => {
                 </DropdownButton>
                 <Form className="upload-picture">
                   <Form.File
-                    id="custom-file-translate-scss"
+                    //  id="custom-file-translate-scss"
                     label="העלאת תמונה"
                     lang="en"
                     custom
@@ -811,19 +836,29 @@ const CreateChart = props => {
                   </DropdownButton>
                 </Col>
                 <Col className="color-picker-col">
-                  <Form.Label className="FormLabel">:צבע</Form.Label>
-                  <input
+                  {/* <Form.Label className="FormLabel">:צבע</Form.Label> */}
+                  {/* <input
                     type="color"
                     className="color-picker"
                     onBlur={handleColorChange}
-                  />
+                  /> */}
+                  <Button
+                    variant="primary"
+                    type=""
+                    className="choose-color-btn"
+                    onClick={toggleColorPopUp}
+                  >
+                    בחר צבע
+                  </Button>
+                </Col>
+                <Col>
                   <Button
                     variant="primary"
                     type=""
                     className="add-column-btn"
                     onClick={handleCrossData}
                   >
-                    הוסף עמודות מידע
+                    הוסף עמודת מידע
                   </Button>
                 </Col>
               </Row>
@@ -893,6 +928,12 @@ const CreateChart = props => {
 
       <ListGroup style={{ width: '40% !important' }}>{colDataList}</ListGroup>
 
+      {toggleColorPicker ? (
+        <ColorPicker
+          toggle={toggleColorPopUp}
+          handleColorPick={handleColorChange}
+        />
+      ) : null}
       <div
         className={
           alertObj.alertType == 'success'
