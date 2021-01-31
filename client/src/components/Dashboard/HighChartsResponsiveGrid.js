@@ -71,6 +71,28 @@ const HighChartsResponsiveGrid = props => {
     getDashboard();
   }, [props.dashboardID]);
 
+  let mappedCharts = highChartsOptions.map(MappedChart => (
+    <div
+      data-grid={{
+        x: MappedChart.layout.xPos,
+        y: MappedChart.layout.yPos,
+        w: MappedChart.layout.width,
+        h: MappedChart.layout.height,
+      }}
+      key={MappedChart.index}
+      id={MappedChart.index}
+      className="chartWrap"
+    >
+      <GraphChart
+        MappedChart={MappedChart}
+        chartRef={chartRef}
+        deleteChart={deleteChart}
+        userGraphOptions={props.userGraphOptions}
+        permissions={props.permissions}
+      />
+    </div>
+  ));
+  props.pullhighCharts(mappedCharts);
   return (
     <div>
       <ResponsiveGridLayout
@@ -79,7 +101,8 @@ const HighChartsResponsiveGrid = props => {
         //compactType="false" - for free use (need to find the right attribute)
         onLayoutChange={props.onLayoutChange}
       >
-        {highChartsOptions.map(MappedChart => (
+        {mappedCharts}
+        {/* {highChartsOptions.map(MappedChart => (
           <div
             data-grid={{
               x: MappedChart.layout.xPos,
@@ -99,7 +122,7 @@ const HighChartsResponsiveGrid = props => {
             />
             {console.log(MappedChart)}
           </div>
-        ))}
+        ))} */}
       </ResponsiveGridLayout>
       {/* <Route path="/CreateChart" exact render={() => <CreateChart />} /> */}
     </div>

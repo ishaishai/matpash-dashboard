@@ -10,7 +10,9 @@
 .chartWrap > div {
   height: 100%;
 }
-
+.MonitorWrap > div {
+  height: 100%;
+}
 .layout {
   background-color: rgb(237, 241, 247);
 }

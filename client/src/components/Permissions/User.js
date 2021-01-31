@@ -62,9 +62,9 @@ const User = props => {
         >
           מחק
         </Button>
-        <Button className="ui button buttonOption" onClick={() => editUser()}>
+        {/* <Button className="ui button buttonOption" onClick={() => editUser()}>
           ערוך
-        </Button>
+        </Button> */}
       </div>
       <div className="col border text-center">
         <div className="innerUserDetailBox">{userData['permissions']}</div>

@@ -104,7 +104,7 @@ const GoldenGrid = props => {
                 h: MappedMonitor.layout.height,
               }}
               key={MappedMonitor.layout.index}
-              className="chartWrap"
+              className="MonitorWrap"
             >
               <Segment inverted>
                 <Header as="h3" className="monitor-title">

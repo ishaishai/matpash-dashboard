@@ -7,12 +7,14 @@ import Highcharts from 'highcharts';
 import { connect } from 'react-redux';
 import './Tabs.css';
 import GoldenGrid from './GoldenGrid';
+import { buildSanitizeFunction } from 'express-validator';
 
 require('highcharts/modules/exporting')(Highcharts);
 const defaultContextMenuButtons = Highcharts.getOptions().exporting.buttons
   .contextButton.menuItems;
 
 const DashboardTabs = props => {
+  let prevLayout = [];
   const [selectedDashboard, setSelectedDashboard] = useState(null);
   const [layoutAfterChange, setLayoutAfterChange] = useState(null);
   const [goldenLayout, setGoldenLayout] = useState(null);
@@ -60,16 +62,54 @@ const DashboardTabs = props => {
   }, []);
 
   const setDashboardLayout = event => {
+    let currentLayout = event;
+
+    if (prevLayout.length === currentLayout.length) {
+      for (let i = 0; i < prevLayout.length; i++) {
+        if (
+          prevLayout[i].i === currentLayout[i].i &&
+          (prevLayout[i].w !== currentLayout[i].w ||
+            prevLayout[i].h !== currentLayout[i].h)
+        ) {
+          let chartWrapper = Array.prototype.slice
+            .call(document.getElementsByClassName('chartWrap'))
+            .filter(chart => chart.id == prevLayout[i].i);
+
+          let height = chartWrapper[0].style.height;
+          let width = chartWrapper[0].style.width;
+
+          let cardFront = document.getElementById(prevLayout[i].i).childNodes[0]
+            .childNodes[0];
+          let cardBack = document.getElementById(prevLayout[i].i).childNodes[0]
+            .childNodes[1];
+
+          cardFront.style.height = height;
+          cardFront.style.width = width;
+          cardBack.style.height = height;
+          cardBack.style.width = width;
+
+          //set highchart element because too much nested divs
+          cardFront.childNodes[0].childNodes[0].style.height = height;
+          cardFront.childNodes[0].childNodes[0].style.width = width;
+        }
+      }
+    } else {
+      prevLayout = currentLayout;
+    }
+
     setLayoutAfterChange(event);
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
   };
-
+  const pullhighCharts = mappedCharts => {
+    console.log(mappedCharts);
+  };
   const [highchartsResponsive, setHighchartsResponsive] = useState(
     <HighChartsResponsiveGrid
       onLayoutChange={setDashboardLayout}
       dashboardID={null}
+      pullhighCharts={pullhighCharts}
     />,
   );
   const responsiveGridRef = React.useRef('highChartsResponsiveGrid');
@@ -90,6 +130,7 @@ const DashboardTabs = props => {
         permissions={props.user.permissions}
         onLayoutChange={setDashboardLayout}
         dashboardID={index}
+        pullhighCharts={pullhighCharts}
       />
     );
     setCurrentDashName(name);

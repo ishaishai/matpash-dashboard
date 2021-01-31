@@ -38,11 +38,11 @@ const GraphChart = props => {
   };
 
   const flipGraph = async (event, index) => {
-    if (document.getElementById(index).style.transform === '')
-      document.getElementById(index).style.transform = 'rotateY(-180deg)';
+    let card = document.getElementById(index).childNodes[0];
+    if (card.style.transform === '') card.style.transform = 'rotateY(-180deg)';
     else {
-      document.getElementById(index).style.transform = 'rotateY(180deg)';
-      document.getElementById(index).style.transform = '';
+      card.style.transform = 'rotateY(180deg)';
+      card.style.transform = '';
     }
   };
 

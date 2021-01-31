@@ -28,39 +28,42 @@ g text {
   }
 
   .card-flip div {
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
+    backface-visibility: hidden !important;
+    transform-style: preserve-3d !important;
 }
 .card-flip {
-  display: grid; grid-template: 1fr / 1fr;
-  grid-template-areas: "frontAndBack";
-  transform-style: preserve-3d;
-  transition: all 0.7s ease;
+  display: grid !important; grid-template: 1fr / 1fr !important;
+  grid-template-areas: "frontAndBack" !important;
+  transform-style: preserve-3d !important;
+  transition: all 0.7s ease !important;
 }
 
 .front {
-    grid-area: frontAndBack;
+    grid-area: frontAndBack !important;
+    transform-style: preserve-3d !important;
+    display: grid !important; grid-template: 1fr / 1fr !important;
+    /* transition: all 0.7s ease !important;  */
 }
 
-.back {
-    text-align: right;
+.back {  
+    text-align: right !important;
     padding: 5%;
-    grid-area: frontAndBack;
-    transform: rotateY(180deg);
-    height: 100%;
+    grid-area: frontAndBack !important;
+    transform: rotateY(180deg) !important;
+    height: 100% !important;
 }
 
 .btn-goback {
   width: 30%;
   position: fixed !important;
-  bottom: 25px;
+  bottom: 10%;
   font-family: 'Varela Round', sans-serif !important;
 }
 
 .btn-edit {
   width:30%;
   position: fixed !important;
-  bottom: 5%;
+  bottom: 10%;
   left: 40%;
   font-family: 'Varela Round', sans-serif !important;
 }
@@ -83,8 +86,7 @@ g text {
 }
 
 .label{
-  
-font-family: 'Varela Round', sans-serif !important;
+  font-family: 'Varela Round', sans-serif !important;
 }
 .value {
 font-family: 'Varela Round', sans-serif !important;
