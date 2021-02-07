@@ -92,3 +92,7 @@ g text {
 font-family: 'Varela Round', sans-serif !important;
   
 }
+.goldensWrapper {
+  margin:auto;
+  height:inherit;
+}

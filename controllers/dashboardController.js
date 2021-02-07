@@ -3,6 +3,7 @@ const { dashboarddbpool, maindbpool, usersdbpool } = db;
 const storeOperation = require('../services/storeOperation');
 const { graphChooser } = require('../services/graphService/graph');
 const { graph } = require('../services/graphService/graph');
+const { hebDate } = require('../func/hebDate');
 
 exports.getDashboardById = async (req, res) => {
   const { id } = req.params;
@@ -53,6 +54,7 @@ exports.getDashboardById = async (req, res) => {
         dashboardToReturn.graphList.push(graphToAdd);
       }
     }
+
     //console.log(dashboardToReturn);
     res.status(200).json({
       msg: 'ok',
@@ -253,8 +255,8 @@ exports.addNewDashboard = async (req, res) => {
       )`);
 
     result = dashboarddbpool.query(`INSERT INTO public."dashboardNames"(
-      index, name)
-      VALUES (${index}, '${dashboardName}');`);
+      index, name,lastUpdate)
+      VALUES (${index}, '${dashboardName}','${hebDate()}');`);
 
     await storeOperation({
       type: 'dashboard_creation',
@@ -275,6 +277,7 @@ exports.addNewDashboard = async (req, res) => {
 
 exports.updateDashboardById = async (req, res) => {
   const layoutObjectList = req.body.layout_grid;
+  const dashboardID = req.body.dashboardID;
   // //each object in layoutObjectList is {layoutObject}
   try {
     for (let layout of layoutObjectList) {
@@ -283,6 +286,10 @@ exports.updateDashboardById = async (req, res) => {
           SET width=${layout.w}, height=${layout.h}, "xPos"=${layout.x}, "yPos"=${layout.y} 
           WHERE "graphsInfoTable"."index" = ${layout.i};`); //complete query.
     }
+    console.log(hebDate());
+    dashboarddbpool.query(`UPDATE public."dashboardNames"
+    SET lastupdate='${hebDate()}'
+    WHERE index='${dashboardID}'`);
 
     await storeOperation({
       type: 'dashboard_update',
@@ -377,6 +384,9 @@ exports.addNewGraphToDashboard = async (req, res) => {
     //use the graph string and update each user that has access to that dashboard
     dashboarddbpool.query(queryInsertGraphToDashboard);
 
+    dashboarddbpool.query(`UPDATE public."dashboardNames"
+    SET lastupdate='${hebDate()}'
+    WHERE index='${dashboardId}'`);
     await storeOperation({
       type: 'graph_creation',
       username: req.user.username,
@@ -450,6 +460,11 @@ exports.updateGraphInfo = async (req, res) => {
     SET info='${graph.info}'
     WHERE index='${graph.index}'`,
     );
+
+    //get dashboardId in the request and then
+    // dashboarddbpool.query(`UPDATE public."dashboardNames"
+    // SET lastupdate='${hebDate()}'
+    // WHERE index='${dashboardId}'`);
 
     if (resultUpdate)
       res.status(200).json({

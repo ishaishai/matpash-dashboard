@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Dropdown, DropdownButton, Button } from 'react-bootstrap';
+import {
+  Button,
+  Form,
+  Navbar,
+  Nav,
+  Dropdown,
+  DropdownButton,
+  Col,
+  Container,
+  Row,
+  ListGroup,
+  ListGroupItem,
+} from 'react-bootstrap';
 import HighChartsResponsiveGrid from './HighChartsResponsiveGrid';
 import { Divider } from 'semantic-ui-react';
 import axios from 'axios';
@@ -15,11 +27,10 @@ const defaultContextMenuButtons = Highcharts.getOptions().exporting.buttons
 
 const DashboardTabs = props => {
   let prevLayout = [];
-  const [selectedDashboard, setSelectedDashboard] = useState(null);
   const [layoutAfterChange, setLayoutAfterChange] = useState(null);
   const [goldenLayout, setGoldenLayout] = useState(null);
   const [dashboardNames, setDashboardNames] = useState(null);
-  const [currentDashName, setCurrentDashName] = useState('');
+  const [currentDash, setCurrentDash] = useState({});
 
   const setGoldensLayout = event => {
     setGoldenLayout(event);
@@ -40,6 +51,7 @@ const DashboardTabs = props => {
   const fetchDashboardNames = async () => {
     const response = await axios.get('/api/dashboard/get-dashboard-names/tabs');
     let list = [...response.data.dashboardIdList];
+    console.log(list);
     let defaultDashId = response.data.defaultDashboard;
     if (list.length != 0) {
       setDashboardNames(list);
@@ -133,9 +145,9 @@ const DashboardTabs = props => {
         pullhighCharts={pullhighCharts}
       />
     );
-    setCurrentDashName(name);
+    console.log(dashboard);
+    setCurrentDash(dashboard);
     setHighchartsResponsive(grid);
-    setSelectedDashboard(index);
   };
 
   useEffect(() => {
@@ -143,9 +155,11 @@ const DashboardTabs = props => {
   }, [highchartsResponsive]);
 
   const saveLayout = async () => {
+    console.log(currentDash);
     try {
       const response = await axios.post('/api/dashboard/update', {
         layout_grid: layoutAfterChange,
+        dashboardID: currentDash.index,
       });
       if (response.data.msg == 'ok') alert('!התבנית נשמרה');
     } catch (error) {
@@ -156,9 +170,9 @@ const DashboardTabs = props => {
   const saveDefaultDashboard = async () => {
     try {
       const result = await axios.post(
-        `api/dashboard/set-default/` + selectedDashboard,
+        `api/dashboard/set-default/` + currentDash.index,
       );
-      alert(`דשבורד "${currentDashName}" נבחר כברירת מחדל`);
+      alert(`דשבורד "${currentDash.name}" נבחר כברירת מחדל`);
     } catch (error) {
       alert('קרתה שגיאה');
       console.log(error);
@@ -172,7 +186,7 @@ const DashboardTabs = props => {
 
     if (result) {
       const result = await axios.delete(
-        '/api/dashboard/delete-dashboard-by-id/' + selectedDashboard,
+        '/api/dashboard/delete-dashboard-by-id/' + currentDash.index,
       );
       alert('!הדשבורד נמחק');
     }
@@ -214,55 +228,82 @@ const DashboardTabs = props => {
   return (
     <div>
       <div className="btnWrapper">
-        <div className="dashboardDropDown">
-          <DropdownButton
-            id="dropdown"
-            title="דשבורדים"
-            className="dropdown-btn choose-dash-btn"
-            type=""
-            variant="outline-primary"
-          >
-            {dashboardNames != null
-              ? dashboardNames.map(dashboard => {
-                  return (
-                    <Dropdown.Item
-                      key={dashboard.index}
-                      onClick={() => handleDashboardPick(dashboard)}
+        <Container fluid="true">
+          <Row sm className="justify-content-md-center">
+            <Col className="colButton">
+              <Row sm>
+                <Col className="colButton">
+                  <div className="dashboardDropDown">
+                    <DropdownButton
+                      id="dropdown"
+                      title="דשבורדים"
+                      className="dropdown-btn choose-dash-btn"
+                      type=""
+                      variant="outline-primary"
                     >
-                      {dashboard.name}
-                    </Dropdown.Item>
-                  );
-                })
-              : ''}
-          </DropdownButton>
-        </div>
+                      {dashboardNames != null
+                        ? dashboardNames.map(dashboard => {
+                            return (
+                              <Dropdown.Item
+                                key={dashboard.index}
+                                onClick={() => handleDashboardPick(dashboard)}
+                              >
+                                {dashboard.name}
+                              </Dropdown.Item>
+                            );
+                          })
+                        : ''}
+                    </DropdownButton>
+                  </div>
+                </Col>
+              </Row>
+              <Row className="lastUpdate-row">
+                <Col>
+                  <p className="lastUpdate">
+                    עדכון אחרון: {currentDash.lastupdate}
+                  </p>
+                </Col>
+              </Row>
+            </Col>
 
-        <Button className="defaultDashboardBtn" onClick={saveDefaultDashboard}>
-          שמור כברירת מחדל
-        </Button>
+            <Col className="colButton">
+              <Button
+                className="defaultDashboardBtn"
+                onClick={saveDefaultDashboard}
+              >
+                שמור כברירת מחדל
+              </Button>
+            </Col>
 
-        <div className="dashboard-title">
-          <hr />
-          {currentDashName}
+            <Col xs={5}>
+              <div className="dashboard-title">
+                <hr />
+                {currentDash.name}
 
-          <hr />
-        </div>
-        {isViewer ? (
-          <Button className="saveLayoutBtn" onClick={saveLayout}>
-            שמור תבנית
-          </Button>
-        ) : null}
-        {isViewer ? (
-          <Button
-            className="saveLayoutBtn"
-            variant="outline-danger"
-            onClick={deleteDashboardHandler}
-          >
-            מחיקת דשבורד
-          </Button>
-        ) : null}
+                <hr />
+              </div>
+            </Col>
+            <Col className="colButton">
+              {isViewer ? (
+                <Button className="saveLayoutBtn" onClick={saveLayout}>
+                  שמור תבנית
+                </Button>
+              ) : null}
+            </Col>
+            <Col className="colButton">
+              {isViewer ? (
+                <Button
+                  className="saveLayoutBtn"
+                  variant="outline-danger"
+                  onClick={deleteDashboardHandler}
+                >
+                  מחיקת דשבורד
+                </Button>
+              ) : null}
+            </Col>
+          </Row>
+        </Container>
       </div>
-
       {goldenGrid}
       <Divider />
       {highchartsResponsive}

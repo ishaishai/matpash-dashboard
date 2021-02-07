@@ -27,9 +27,20 @@
 .xBtn:hover {
   font-weight: bold;
 }
+
+
 body {
   font-family: 'Varela Round', sans-serif !important;
 }
+
+@media screen and (max-width: 768px) {
+  body {
+    width: 50%;
+    min-width: 5px;
+  }
+}
+
+
 .Tab {
   width: auto;
 }
@@ -40,15 +51,6 @@ body {
   font-size: 20px;
 }
 
-.dashboardDropDown {
-  float: right;
-  padding-left: 5px;
-  padding-top: 5px;
-}
-.saveLayoutBtn {
-  float: left;
-  margin: 10px;
-}
 
 .dropDownContainer {
   display: flex;

@@ -1,12 +1,31 @@
 .dashboard-title {
-  width: 70%;
+  width: 100%;
   text-align: center;
   font-size: 2.5em;
   display: inline-block !important;
-  padding-left: 10%;
   font-family: 'Varela Round', sans-serif !important;
 }
+.saveLayoutBtn {
+  float: left;
+  margin: 0;
+}
 
+.colLastUpdate {
+  flex-grow: 3;
+}
+
+.dashboardDropDown {
+  right: 5rem;
+}
+.lastUpdate-row {
+  position:absolute;
+  width: max-content;
+}
+.lastUpdate {
+  position:relative;
+  top: 1rem;
+  text-decoration: underline;
+}
 hr {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -15,15 +34,18 @@ hr {
 }
 
 .btnWrapper {
+  margin-top: 2rem;
+  direction: rtl;
   display: inline-block !important;
-  height: 110px;
+  height: auto;
   width: 100% !important;
 }
 
-.dropdown-btn {
+.dropdown-btn { 
+  margin:0;
   direction: rtl;
   float: none;
-  margin: 10px;
+  min-width: 1%;
 }
 .btn-outline-primary::after {
   float: left;
@@ -31,7 +53,9 @@ hr {
   margin-right: 1.5em;
 }
 
-.defaultDashboardBtn {
-  float: right;
-  margin: 15px;
+.col-auto {
+  margin:auto;
+  width:max-content;
+  margin: auto 0;
+  padding: 0;
 }

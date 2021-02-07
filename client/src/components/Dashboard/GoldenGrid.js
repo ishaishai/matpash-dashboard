@@ -86,7 +86,7 @@ const GoldenGrid = props => {
   }, []);
 
   return (
-    <div>
+    <div className="goldensWrapper">
       <ResponsiveGridLayout
         onResizeStop={onResizeStop}
         className="layout"
@@ -142,7 +142,6 @@ const GoldenGrid = props => {
                       </Statistic.Label>
                       <Statistic.Label>
                         ({calcGoldenData(MappedGolden)}
-                        )
                         <Icon
                           style={{ marginLeft: '2px' }}
                           name={
@@ -157,6 +156,7 @@ const GoldenGrid = props => {
                               : 'hand point left outline blue'
                           }
                         />
+                        )
                       </Statistic.Label>
                     </Statistic>
                   ))}
