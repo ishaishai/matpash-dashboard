@@ -157,7 +157,7 @@ const DashboardTabs = props => {
   }, [highchartsResponsive]);
 
   const saveLayout = async () => {
-    console.log(currentDash);
+    console.log(goldenLayout);
     try {
       const response = await axios.post('/api/dashboard/update', {
         layout_grid: {

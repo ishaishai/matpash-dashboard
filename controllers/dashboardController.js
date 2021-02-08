@@ -439,10 +439,10 @@ exports.addNewGolden = async (req, res) => {
       `SELECT COALESCE(MAX(index),0)+1 as "index" from public."goldenDataTable"`,
     );
     let layoutResult = await dashboarddbpool.query(`INSERT INTO public."goldenLayoutTable"(
-        index, title,valuetype, width, height, "xPos", "yPos")
+        index, title,valuetype, width, height, "xPos", "yPos","actionType")
         VALUES (${resultIndex.rows[0].index},'${goldenData.title}','${
       goldenData.valueType
-    }', ${goldenData.data.length + 1}, 1.75,0, 0);`);
+    }', ${goldenData.data.length + 1}, 1.75,0, 0,"${goldenData.actionType});`);
     for (let serie of goldenData.data) {
       let result = await dashboarddbpool.query(`INSERT INTO public."goldenDataTable"(
           index, "subTitle", seriename, period, cmpPeriod)

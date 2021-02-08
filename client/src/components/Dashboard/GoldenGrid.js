@@ -60,7 +60,7 @@ const GoldenGrid = props => {
         return acc;
       }, {}),
     ];
-    return numberWithCommas(parseFloat(result[0].periodValue).toFixed(2));
+    return parseFloat(result[0].periodValue).toFixed(2);
   };
 
   const calcSummarizedChange = entireGolden => {
@@ -82,21 +82,21 @@ const GoldenGrid = props => {
   const calcGoldenData = MappedGolden => {
     console.log(MappedGolden);
     return MappedGolden.periodValue - MappedGolden.periodCmpValue < 0
-      ? numberWithCommas(
-          -1 *
-            parseFloat(
-              MappedGolden.periodValue - MappedGolden.periodCmpValue,
-            ).toFixed(2),
-        )
-      : numberWithCommas(
+      ? -1 *
           parseFloat(
             MappedGolden.periodValue - MappedGolden.periodCmpValue,
-          ).toFixed(2),
-        );
+          ).toFixed(2)
+      : parseFloat(
+          MappedGolden.periodValue - MappedGolden.periodCmpValue,
+        ).toFixed(2);
   };
 
   const calcAverageSum = MappedMonitor => {
-    return calcSummarized(MappedMonitor) / MappedMonitor.goldens.length;
+    console.log(calcSummarized(MappedMonitor));
+    return numberWithCommas(
+      calcSummarized(MappedMonitor) /
+        (MappedMonitor.goldens.length != 0 ? MappedMonitor.goldens.length : 1),
+    );
   };
 
   useEffect(() => {
@@ -173,7 +173,7 @@ const GoldenGrid = props => {
                       {printValueByType(
                         MappedMonitor.layout.valuetype,
                         MappedMonitor.layout.actionType == 'סכום'
-                          ? calcSummarized(MappedMonitor)
+                          ? numberWithCommas(calcSummarized(MappedMonitor))
                           : calcAverageSum(MappedMonitor),
                       )}
                     </Statistic.Value>
@@ -182,7 +182,7 @@ const GoldenGrid = props => {
                       <br />(
                       {printValueByType(
                         MappedMonitor.layout.valuetype,
-                        calcSummarizedChange(MappedMonitor),
+                        numberWithCommas(calcSummarizedChange(MappedMonitor)),
                       )}
                       <Icon
                         name={
