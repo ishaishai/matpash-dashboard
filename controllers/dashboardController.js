@@ -442,7 +442,7 @@ exports.addNewGolden = async (req, res) => {
         index, title,valuetype, width, height, "xPos", "yPos","actionType")
         VALUES (${resultIndex.rows[0].index},'${goldenData.title}','${
       goldenData.valueType
-    }', ${goldenData.data.length + 1}, 1.75,0, 0,"${goldenData.actionType});`);
+    }', ${goldenData.data.length + 1}, 1.75,0, 0,'${goldenData.actionType}');`);
     for (let serie of goldenData.data) {
       let result = await dashboarddbpool.query(`INSERT INTO public."goldenDataTable"(
           index, "subTitle", seriename, period, cmpPeriod)
