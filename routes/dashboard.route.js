@@ -25,6 +25,13 @@ router.delete(
   requireToken,
   dashboardContoller.deleteGraphFromDashboard,
 );
+
+router.delete(
+  '/remove-golden/:index',
+  requireToken,
+  dashboardContoller.deleteGolden,
+);
+
 router.post(
   '/add-new-dashboard',
   requireToken,

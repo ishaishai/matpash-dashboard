@@ -4,17 +4,26 @@ import axios from 'axios';
 import './ResponsiveGrid.css';
 import { Header, Segment, Statistic, Divider, Icon } from 'semantic-ui-react';
 import { numberWithCommas } from './NumWithCommas';
+import { Button } from 'react-bootstrap';
 
 const GoldenGrid = props => {
   const [goldens, setGoldens] = useState([]);
   const [goldensResponse, setGoldenResponse] = useState(false);
   const goldensRef = React.useRef('goldens');
-
+  const [isViewer, setIsViewer] = useState(() => {
+    if (props.user.permissions === 'צופה') {
+      return false;
+    } else {
+      return true;
+    }
+  });
   const ResponsiveGridLayout = WidthProvider(Responsive);
 
-  const deleteGolden = async id => {
+  const deleteGolden = async index => {
     try {
-      const response = await axios.delete('/api/dashboard/remove-golden/' + id);
+      const response = await axios.delete(
+        '/api/dashboard/remove-golden/' + index,
+      );
       const { data } = response.data;
     } catch (error) {
       console.log(error);
@@ -29,11 +38,16 @@ const GoldenGrid = props => {
   }, []);
 
   const getGoldens = async () => {
+    setGoldens([]);
     const response = await axios.get('/api/dashboard/get-goldens/');
     if (response.data.goldensList !== undefined) {
       setGoldens(response.data.goldensList);
     }
   };
+
+  useEffect(() => {
+    console.log(goldens);
+  }, [goldens]);
 
   const calcSummarized = entireGolden => {
     let tmp = entireGolden.goldens;
@@ -81,16 +95,46 @@ const GoldenGrid = props => {
         );
   };
 
+  const calcAverageSum = MappedMonitor => {
+    return calcSummarized(MappedMonitor) / MappedMonitor.goldens.length;
+  };
+
   useEffect(() => {
     getGoldens();
   }, []);
+
+  const printValueByType = (valuetype, value) => {
+    console.log(valuetype);
+    let strValue = '';
+    switch (valuetype) {
+      case 'אחוזים - %':
+        strValue = `${value}%`;
+        break;
+      case 'מש"ח - ₪':
+        strValue = `${value}₪ מש"ח`;
+        break;
+      case 'מיש"ח - ₪':
+        strValue = `${value}₪ מיש"ח`;
+        break;
+      case 'מ"ד - $':
+        strValue = `${value}$ מ"ד`;
+        break;
+      case 'מל"ד - $':
+        strValue = `${value}$ מל"ד`;
+        break;
+      default:
+        strValue = `${value}`;
+    }
+    console.log(strValue);
+    return strValue;
+  };
 
   return (
     <div className="goldensWrapper">
       <ResponsiveGridLayout
         onResizeStop={onResizeStop}
         className="layout"
-        compactType="horizontal" // - for free use (need to find the right attribute)
+        //  compactType="horizontal" // - for free use (need to find the right attribute)
         onLayoutChange={props.onLayoutChange}
       >
         {
@@ -100,25 +144,46 @@ const GoldenGrid = props => {
               data-grid={{
                 x: MappedMonitor.layout.xPos,
                 y: MappedMonitor.layout.yPos,
-                w: MappedMonitor.goldens.length * 1.5,
+                w: MappedMonitor.layout.width,
                 h: MappedMonitor.layout.height,
               }}
               key={MappedMonitor.layout.index}
               className="MonitorWrap"
             >
               <Segment inverted>
+                {isViewer ? (
+                  <Button
+                    className="red ui button monitor"
+                    onClick={() => deleteGolden(MappedMonitor.layout.index)}
+                  >
+                    מחק
+                  </Button>
+                ) : null}
                 <Header as="h3" className="monitor-title">
                   <p className="golden">{MappedMonitor.layout.title}</p>
                 </Header>
                 <Statistic.Group inverted>
                   <Statistic className="monitor-base" size="mini">
-                    <Statistic.Label>סה"כ לתקופה</Statistic.Label>
+                    <Statistic.Label>
+                      {MappedMonitor.layout.actionType == 'סכום'
+                        ? `סה"כ לתקופה`
+                        : `ממוצע לתקופה`}
+                    </Statistic.Label>
                     <Statistic.Value>
-                      {calcSummarized(MappedMonitor)}
+                      {printValueByType(
+                        MappedMonitor.layout.valuetype,
+                        MappedMonitor.layout.actionType == 'סכום'
+                          ? calcSummarized(MappedMonitor)
+                          : calcAverageSum(MappedMonitor),
+                      )}
                     </Statistic.Value>
                     <Statistic.Label>
                       שינוי ביחס לתקופה קודמת
-                      <br />({calcSummarizedChange(MappedMonitor)}
+                      <br />(
+                      {printValueByType(
+                        MappedMonitor.layout.valuetype,
+                        calcSummarizedChange(MappedMonitor),
+                      )}
                       <Icon
                         name={
                           MappedMonitor.sum > 0
@@ -133,15 +198,24 @@ const GoldenGrid = props => {
                   </Statistic>
                 </Statistic.Group>
                 <Divider className="monitor-divider" inverted />
-                <Statistic.Group inverted>
+                <Statistic.Group inverted className="subStatistics">
                   {MappedMonitor.goldens.map(MappedGolden => (
                     <Statistic className="monitor-base" size="mini">
                       <Statistic.Label>{MappedGolden.subTitle}</Statistic.Label>
                       <Statistic.Label>
-                        {parseFloat(MappedGolden.periodValue).toFixed(2)}
+                        {printValueByType(
+                          MappedMonitor.layout.valuetype,
+                          numberWithCommas(
+                            parseFloat(MappedGolden.periodValue).toFixed(2),
+                          ),
+                        )}
                       </Statistic.Label>
                       <Statistic.Label>
-                        ({calcGoldenData(MappedGolden)}
+                        (
+                        {printValueByType(
+                          MappedMonitor.layout.valuetype,
+                          numberWithCommas(calcGoldenData(MappedGolden)),
+                        )}
                         <Icon
                           style={{ marginLeft: '2px' }}
                           name={

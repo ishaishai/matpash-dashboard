@@ -82,10 +82,12 @@ g text {
 }
 
 .monitor-divider {
-  margin: 20px !important;
+  /* margin: 20px !important; */
+  margin: 1.5vw !important;
 }
 
 .label{
+  font-size: 0.8vw !important;
   font-family: 'Varela Round', sans-serif !important;
 }
 .value {
@@ -95,4 +97,22 @@ font-family: 'Varela Round', sans-serif !important;
 .goldensWrapper {
   margin:auto;
   height:inherit;
+}
+
+.ui.statistics.subStatistics {
+  margin-top: 1.5vw;
+}
+
+
+.red.ui.button {
+  box-shadow: 0 0 5px gray;
+
+}
+.red.ui.button.monitor{
+  position: absolute;
+  right:1vw;
+}
+
+.monitor-title {
+  margin: 0 !important;
 }

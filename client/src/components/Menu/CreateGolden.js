@@ -199,6 +199,7 @@ const CreateGolden = props => {
       setColDataList(colDataList => [...colDataList, item]);
       setCrossColumnsData(crossColumnsData => [...crossColumnsData, column]);
       setCrossColumnSelected('');
+      setCmpPeriodSelected('');
       setPeriodSelected('');
       setCrossTableSelected('');
       setCrossColumns([]);

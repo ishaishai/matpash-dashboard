@@ -276,17 +276,21 @@ exports.addNewDashboard = async (req, res) => {
 };
 
 exports.updateDashboardById = async (req, res) => {
-  const layoutObjectList = req.body.layout_grid;
-  const dashboardID = req.body.dashboardID;
+  const { graphsLayout, goldensLayout, dashboardID } = req.body.layout_grid;
+
   // //each object in layoutObjectList is {layoutObject}
   try {
-    for (let layout of layoutObjectList) {
+    for (let layout of graphsLayout) {
       ///iterate through the layoutObjectList and update each graph with the new layout
       result = await dashboarddbpool.query(`UPDATE public."graphsInfoTable"
           SET width=${layout.w}, height=${layout.h}, "xPos"=${layout.x}, "yPos"=${layout.y} 
           WHERE "graphsInfoTable"."index" = ${layout.i};`); //complete query.
     }
-    console.log(hebDate());
+    for (let layout of goldensLayout) {
+      result = await dashboarddbpool.query(`UPDATE public."goldenLayoutTable"
+      SET width=${layout.w}, height=${layout.h}, "xPos"=${layout.x}, "yPos"=${layout.y} 
+      WHERE "goldenLayoutTable"."index" = ${layout.i};`); //complete query.
+    }
     dashboarddbpool.query(`UPDATE public."dashboardNames"
     SET lastupdate='${hebDate()}'
     WHERE index='${dashboardID}'`);
@@ -483,6 +487,16 @@ exports.getGoldens = async (req, res) => {
   );
   let goldensDict = {};
 
+  let resultLayouts = await dashboarddbpool.query(
+    `select * from public."goldenLayoutTable"`,
+  );
+  for (let layout of resultLayouts.rows) {
+    goldensDict[layout.index] = {
+      layout: layout,
+      goldens: [],
+    };
+  }
+  //use golden index to get valueType from goldenDict[index].layout.valueType and calculate respectively
   for (let golden of resultGoldens.rows) {
     if (goldensDict[golden.index] === undefined) {
       goldensDict[golden.index] = { goldens: [], layout: undefined };
@@ -499,12 +513,21 @@ exports.getGoldens = async (req, res) => {
     where
      "A1" = '${golden.cmpperiod}'`);
 
+    let periodValue = 0;
+    let periodCmpValue = 0;
+    if (goldensDict[golden.index].layout.valuetype === 'אחוזים - %') {
+      periodValue = parseFloat(dataPeriodQuery.rows[0][selectedColumn]) * 100;
+      periodCmpValue =
+        parseFloat(dataCmpPeriodQuery.rows[0][selectedColumn]) * 100;
+    } else {
+      periodValue = parseFloat(dataPeriodQuery.rows[0][selectedColumn]);
+      periodCmpValue = parseFloat(dataCmpPeriodQuery.rows[0][selectedColumn]);
+    }
     goldensDict[golden.index].goldens.push({
       subTitle: golden.subTitle,
-      periodValue: parseFloat(dataPeriodQuery.rows[0][selectedColumn]),
-      periodCmpValue: parseFloat(dataCmpPeriodQuery.rows[0][selectedColumn]),
+      periodValue: periodValue,
+      periodCmpValue: periodCmpValue,
     });
-    console.log(goldensDict[golden.index].goldens);
   }
 
   for (let gold in goldensDict) {
@@ -513,22 +536,32 @@ exports.getGoldens = async (req, res) => {
     }
   }
 
-  let resultLayouts = await dashboarddbpool.query(
-    `select * from public."goldenLayoutTable"`,
-  );
-
-  for (let layout of resultLayouts.rows) {
-    goldensDict[layout.index].layout = layout;
-  }
-
   let goldensList = [];
   for (let key in goldensDict) {
     goldensList.push(goldensDict[key]);
   }
 
-  console.log(goldensList);
-
   res.status(200).json({
     goldensList: goldensList,
   });
+};
+
+exports.deleteGolden = async (req, res) => {
+  let index = req.params.index;
+  try {
+    await dashboarddbpool.query(
+      `delete from public."goldenDataTable" where index = ${index}`,
+    );
+    await dashboarddbpool.query(
+      `delete from public."goldenLayoutTable" where index = ${index}`,
+    );
+    res.status(200).json({
+      msg: 'OK',
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      msg: 'Internal Error',
+    });
+  }
 };

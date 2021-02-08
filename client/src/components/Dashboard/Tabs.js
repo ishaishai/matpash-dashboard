@@ -33,13 +33,15 @@ const DashboardTabs = props => {
   const [currentDash, setCurrentDash] = useState({});
 
   const setGoldensLayout = event => {
+    console.log(event);
+
     setGoldenLayout(event);
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
   };
   const [goldenGrid, setGoldenGrid] = useState(
-    <GoldenGrid onLayoutChange={setGoldensLayout} />,
+    <GoldenGrid user={props.user} onLayoutChange={setGoldensLayout} />,
   );
   const [isViewer, setIsViewer] = useState(() => {
     if (props.user.permissions === 'צופה') {
@@ -158,8 +160,11 @@ const DashboardTabs = props => {
     console.log(currentDash);
     try {
       const response = await axios.post('/api/dashboard/update', {
-        layout_grid: layoutAfterChange,
-        dashboardID: currentDash.index,
+        layout_grid: {
+          goldensLayout: goldenLayout,
+          graphsLayout: layoutAfterChange,
+          dashboardID: currentDash.index,
+        },
       });
       if (response.data.msg == 'ok') alert('!התבנית נשמרה');
     } catch (error) {
