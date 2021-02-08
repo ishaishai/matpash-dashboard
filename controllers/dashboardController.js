@@ -280,16 +280,20 @@ exports.updateDashboardById = async (req, res) => {
 
   // //each object in layoutObjectList is {layoutObject}
   try {
-    for (let layout of graphsLayout) {
-      ///iterate through the layoutObjectList and update each graph with the new layout
-      result = await dashboarddbpool.query(`UPDATE public."graphsInfoTable"
+    if (graphsLayout) {
+      for (let layout of graphsLayout) {
+        ///iterate through the layoutObjectList and update each graph with the new layout
+        result = await dashboarddbpool.query(`UPDATE public."graphsInfoTable"
           SET width=${layout.w}, height=${layout.h}, "xPos"=${layout.x}, "yPos"=${layout.y} 
           WHERE "graphsInfoTable"."index" = ${layout.i};`); //complete query.
+      }
     }
-    for (let layout of goldensLayout) {
-      result = await dashboarddbpool.query(`UPDATE public."goldenLayoutTable"
+    if (goldensLayout) {
+      for (let layout of goldensLayout) {
+        result = await dashboarddbpool.query(`UPDATE public."goldenLayoutTable"
       SET width=${layout.w}, height=${layout.h}, "xPos"=${layout.x}, "yPos"=${layout.y} 
       WHERE "goldenLayoutTable"."index" = ${layout.i};`); //complete query.
+      }
     }
     dashboarddbpool.query(`UPDATE public."dashboardNames"
     SET lastupdate='${hebDate()}'
