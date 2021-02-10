@@ -38,10 +38,6 @@ body {
   width:100%;
 }
 
-@media screen and (max-width: 768px) {
-  body {
-  }
-}
 
 
 .Tab {
@@ -79,9 +75,6 @@ body {
   margin-bottom: 10px;
 }
 
-.deleteDashboardBtn {
-  float: right;
-}
 
 .ui.message {
   width: 40% !important;

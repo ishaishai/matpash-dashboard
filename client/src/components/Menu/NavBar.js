@@ -8,7 +8,7 @@ const NavBar = (props, { logout }) => {
   const [adminNav] = useState(() => {
     if (props.permissions === 'מנהל') {
       return (
-        <Nav className="ml-auto justify-content-lg-end mainNavBar">
+        <Nav className="ml-auto justify-content-lg-end mainNavbar">
           <Nav.Link href="/">עבור לדשבורד</Nav.Link>
           <Nav.Link href="/create-chart">צור גרף</Nav.Link>
           <Nav.Link href="/create-golden">צור מוניטור</Nav.Link>

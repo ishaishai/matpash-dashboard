@@ -16,7 +16,7 @@
   overflow-y: scroll;
 }
 
-.mainNavBar {
+.mainNavbar {
   direction: rtl;
 }
 .navbar-brand.mainBrand {
@@ -25,7 +25,7 @@
 
 
 @media screen and (max-width: 991px) {
-  .mainNavBar {
+  .mainNavbar {
     text-align: right;
   }
 }
@@ -54,8 +54,6 @@
   z-index: 0 !important;
 }
 
-.choose-color-btn {
-}
 .dash-title-input {
   margin-bottom: 2px;
   direction: rtl;

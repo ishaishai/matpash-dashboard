@@ -58,10 +58,6 @@
 } */
 
 
-.nav-link{
-  display: none;
-  pointer-events: none;
-}
 .navbar-brand {
   display: block !important;
   color:black !important;
