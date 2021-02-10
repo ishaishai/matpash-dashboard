@@ -1,44 +1,114 @@
 .dashboard-title {
-  width: 100%;
-  text-align: center;
+  display: flex;
+  justify-content: center;
   font-size: 2.5em;
-  display: inline-block !important;
   font-family: 'Varela Round', sans-serif !important;
 }
 .saveLayoutBtn {
-  float: left;
-  margin: 0;
+  left: 15rem;
+}
+
+.menuBtn {
+  position:absolute;
+}
+
+.defaultDashboardBtn
+{
+  right: 15rem;
+}
+
+.deleteDashboardBtn {
+  left: 5rem;
 }
 
 .colLastUpdate {
   flex-grow: 3;
 }
 
-.dashboardDropDown {
-  right: 5rem;
+.navbar-nav {
+  height: 3rem;
 }
+
+@media screen and (max-width: 991px) {
+  .dashNav {
+    flex-flow: row nowrap;
+    display:flex;
+    justify-content: center !important;
+    transition: 5s all ease-in-out;
+  }
+  .navbar-nav { 
+    display:inline !important;
+  }
+  .menuBtn  {
+    position: static;
+    width: 100%;
+    height: 2.5rem;
+    margin-top: 0.1rem;
+  }
+
+  .menuBtn > * {
+    width: 100%;
+  }
+  
+}
+
+
+/* .navbar-nav .menuBtn:hover {
+  color:
+} */
+
+
+.nav-link{
+  display: none;
+  pointer-events: none;
+}
+.navbar-brand {
+  display: block !important;
+  color:black !important;
+  margin: 0 !important;
+
+}
+
+.navbar-toggler:active:focus {
+  outline:none;
+  
+}
+
+
+
 .lastUpdate-row {
   position:absolute;
   width: max-content;
 }
 .lastUpdate {
-  position:relative;
-  top: 1rem;
-  text-decoration: underline;
+  text-align: right;
+direction: rtl;
 }
 hr {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  width: auto;
+  display:flex;
+  justify-content: center;
   border: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.dashNav {
+  background-color:rgba(241, 242, 246,1.0);
+  box-shadow: 3px 3px 3px gray;
+  background-image: none !important;
+}
+
+
 .btnWrapper {
-  margin-top: 2rem;
   direction: rtl;
-  display: inline-block !important;
-  height: auto;
+  display: flex !important;
+  justify-content: center;
+  height: 2vw;
   width: 100% !important;
+  align-content: center;
+}
+.dashboardDropDown {
+  right: 5rem;
 }
 
 .dropdown-btn { 

@@ -16,6 +16,19 @@
   overflow-y: scroll;
 }
 
+.mainNavBar {
+  direction: rtl;
+}
+.navbar-brand.mainBrand {
+  color:white !important;
+}
+
+
+@media screen and (max-width: 991px) {
+  .mainNavBar {
+    text-align: right;
+  }
+}
 .navBar-Color {
   background-color: #219ebc;
   color: white;

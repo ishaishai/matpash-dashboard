@@ -12,11 +12,14 @@
 }
 .MonitorWrap > div {
   height: 100%;
+  min-width: max-content;
 }
 .layout {
   background-color: rgb(237, 241, 247);
 }
-
+#root {
+  width: inherit;
+}
 .xBtn {
   color: blue;
   margin-left: 7px;
@@ -31,12 +34,12 @@
 
 body {
   font-family: 'Varela Round', sans-serif !important;
+  display:flex;
+  width:100%;
 }
 
 @media screen and (max-width: 768px) {
   body {
-    width: 50%;
-    min-width: 5px;
   }
 }
 

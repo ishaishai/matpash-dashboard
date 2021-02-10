@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import HighChartsResponsiveGrid from './HighChartsResponsiveGrid';
+import { Divider } from 'semantic-ui-react';
+import axios from 'axios';
+import Highcharts from 'highcharts';
+import { connect } from 'react-redux';
+import './Tabs.css';
+import GoldenGrid from './GoldenGrid';
 import {
   Button,
   Form,
@@ -12,14 +19,6 @@ import {
   ListGroup,
   ListGroupItem,
 } from 'react-bootstrap';
-import HighChartsResponsiveGrid from './HighChartsResponsiveGrid';
-import { Divider } from 'semantic-ui-react';
-import axios from 'axios';
-import Highcharts from 'highcharts';
-import { connect } from 'react-redux';
-import './Tabs.css';
-import GoldenGrid from './GoldenGrid';
-import { buildSanitizeFunction } from 'express-validator';
 
 require('highcharts/modules/exporting')(Highcharts);
 const defaultContextMenuButtons = Highcharts.getOptions().exporting.buttons
@@ -40,7 +39,7 @@ const DashboardTabs = props => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
   };
-  const [goldenGrid, setGoldenGrid] = useState(
+  const [goldenGrid] = useState(
     <GoldenGrid user={props.user} onLayoutChange={setGoldensLayout} />,
   );
   const [isViewer, setIsViewer] = useState(() => {
@@ -130,11 +129,9 @@ const DashboardTabs = props => {
 
   const handleDashboardPick = async dashboard => {
     let grid;
-    let index = null,
-      name = null;
+    let index = null;
     if (dashboard) {
       index = dashboard.index;
-      name = dashboard.name;
     }
 
     const graphPermissions = await getUserGraphPermissions();
@@ -174,9 +171,6 @@ const DashboardTabs = props => {
 
   const saveDefaultDashboard = async () => {
     try {
-      const result = await axios.post(
-        `api/dashboard/set-default/` + currentDash.index,
-      );
       alert(`דשבורד "${currentDash.name}" נבחר כברירת מחדל`);
     } catch (error) {
       alert('קרתה שגיאה');
@@ -190,9 +184,6 @@ const DashboardTabs = props => {
     );
 
     if (result) {
-      const result = await axios.delete(
-        '/api/dashboard/delete-dashboard-by-id/' + currentDash.index,
-      );
       alert('!הדשבורד נמחק');
     }
 
@@ -232,83 +223,70 @@ const DashboardTabs = props => {
 
   return (
     <div>
-      <div className="btnWrapper">
-        <Container fluid="true">
-          <Row sm className="justify-content-md-center">
-            <Col className="colButton">
-              <Row sm>
-                <Col className="colButton">
-                  <div className="dashboardDropDown">
-                    <DropdownButton
-                      id="dropdown"
-                      title="דשבורדים"
-                      className="dropdown-btn choose-dash-btn"
-                      type=""
-                      variant="outline-primary"
-                    >
-                      {dashboardNames != null
-                        ? dashboardNames.map(dashboard => {
-                            return (
-                              <Dropdown.Item
-                                key={dashboard.index}
-                                onClick={() => handleDashboardPick(dashboard)}
-                              >
-                                {dashboard.name}
-                              </Dropdown.Item>
-                            );
-                          })
-                        : ''}
-                    </DropdownButton>
-                  </div>
-                </Col>
-              </Row>
-              <Row className="lastUpdate-row">
-                <Col>
-                  <p className="lastUpdate">
-                    עדכון אחרון: {currentDash.lastupdate}
-                  </p>
-                </Col>
-              </Row>
-            </Col>
-
-            <Col className="colButton">
-              <Button
-                className="defaultDashboardBtn"
-                onClick={saveDefaultDashboard}
+      <Navbar
+        expand="lg"
+        variant={'dark'}
+        className="justify-content-md-end dashNav"
+      >
+        <Navbar.Toggle aria-controls="basic-navbar-nav">
+          <Navbar.Brand>תפריט</Navbar.Brand>
+        </Navbar.Toggle>
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav>
+            <div className="dashboardDropDown menuBtn">
+              <DropdownButton
+                id="dropdown"
+                title="דשבורדים"
+                className="dropdown-btn choose-dash-btn"
+                type=""
+                variant="outline-primary"
               >
+                {dashboardNames != null
+                  ? dashboardNames.map(dashboard => {
+                      return (
+                        <Dropdown.Item
+                          key={dashboard.index}
+                          onClick={() => handleDashboardPick(dashboard)}
+                        >
+                          {dashboard.name}
+                        </Dropdown.Item>
+                      );
+                    })
+                  : ''}
+              </DropdownButton>
+            </div>
+            <div className="menuBtn defaultDashboardBtn">
+              <Button className="" onClick={saveDefaultDashboard}>
                 שמור כברירת מחדל
               </Button>
-            </Col>
-
-            <Col xs={5}>
-              <div className="dashboard-title">
-                <hr />
-                {currentDash.name}
-
-                <hr />
-              </div>
-            </Col>
-            <Col className="colButton">
+            </div>
+            <div className="menuBtn saveLayoutBtn">
               {isViewer ? (
-                <Button className="saveLayoutBtn" onClick={saveLayout}>
+                <Button className="" onClick={saveLayout}>
                   שמור תבנית
                 </Button>
               ) : null}
-            </Col>
-            <Col className="colButton">
+            </div>
+            <div className="deleteDashboardBtn menuBtn">
               {isViewer ? (
                 <Button
-                  className="saveLayoutBtn"
+                  className=""
                   variant="outline-danger"
                   onClick={deleteDashboardHandler}
                 >
                   מחיקת דשבורד
                 </Button>
               ) : null}
-            </Col>
-          </Row>
-        </Container>
-      </div>
+            </div>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+      <hr />
+      <div className="dashboard-title">{currentDash.name}</div>
+      <hr />
+
+      <p className="lastUpdate">עדכון אחרון: {currentDash.lastupdate}</p>
+
       {goldenGrid}
       <Divider />
       {highchartsResponsive}
