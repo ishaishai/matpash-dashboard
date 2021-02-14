@@ -32,8 +32,6 @@ const DashboardTabs = props => {
   const [currentDash, setCurrentDash] = useState({});
 
   const setGoldensLayout = event => {
-    console.log(event);
-
     setGoldenLayout(event);
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
@@ -115,14 +113,11 @@ const DashboardTabs = props => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
   };
-  const pullhighCharts = mappedCharts => {
-    console.log(mappedCharts);
-  };
+
   const [highchartsResponsive, setHighchartsResponsive] = useState(
     <HighChartsResponsiveGrid
       onLayoutChange={setDashboardLayout}
       dashboardID={null}
-      pullhighCharts={pullhighCharts}
     />,
   );
   const responsiveGridRef = React.useRef('highChartsResponsiveGrid');
@@ -141,7 +136,6 @@ const DashboardTabs = props => {
         permissions={props.user.permissions}
         onLayoutChange={setDashboardLayout}
         dashboardID={index}
-        pullhighCharts={pullhighCharts}
       />
     );
     console.log(dashboard);
@@ -229,7 +223,7 @@ const DashboardTabs = props => {
         className="justify-content-md-end dashNav"
       >
         <Navbar.Toggle aria-controls="basic-navbar-nav">
-          <Navbar.Brand>תפריט</Navbar.Brand>
+          <Navbar.Brand>תפריט דשבורדים</Navbar.Brand>
         </Navbar.Toggle>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav>

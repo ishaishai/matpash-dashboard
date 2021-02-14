@@ -33,7 +33,7 @@ export function lineExample() {
     },
     legend: {
       layout: 'vertical',
-      align: 'right',
+      align: 'center',
       verticalAlign: 'middle',
     },
 

@@ -78,7 +78,7 @@ exports.ajaxLineBuilder = async (graph, dashId) => {
     ],
 
     legend: {
-      align: 'left',
+      align: 'center',
       verticalAlign: 'top',
       borderWidth: 0,
     },

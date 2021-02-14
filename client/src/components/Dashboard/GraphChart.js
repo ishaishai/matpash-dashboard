@@ -55,6 +55,18 @@ const GraphChart = props => {
           id={'chart-' + MappedChart.index}
           options={{
             ...MappedChart.options,
+            chart: {
+              events: {
+                load() {
+                  const chart = this;
+                  chart.showLoading('...טוען גרף');
+                  setTimeout(function () {
+                    chart.hideLoading();
+                  }, 5000);
+                },
+              },
+              ...MappedChart.options.chart,
+            },
             series: MappedChart.options.series,
             plotOptions: {
               ...MappedChart.options.plotOptions,

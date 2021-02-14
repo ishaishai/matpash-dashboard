@@ -11,6 +11,7 @@ import GraphChart from './GraphChart';
 import { connect } from 'react-redux';
 const HighChartsResponsiveGrid = props => {
   const ResponsiveGridLayout = WidthProvider(Responsive);
+  const [isDraggable, setIsDraggable] = useState(true);
   const [highChartsOptions, setHighChartsOptions] = useState([]);
   const highChartsOptionsRef = React.useRef('highChartsOptions');
   // let chartRef = []; // Create array of refs for each chart
@@ -92,10 +93,20 @@ const HighChartsResponsiveGrid = props => {
       />
     </div>
   ));
-  props.pullhighCharts(mappedCharts);
+
+  window.addEventListener('resize', () => {
+    if (window.screen.width < 992) {
+      setIsDraggable(false);
+    } else {
+      setIsDraggable(true);
+    }
+  });
+
   return (
     <div>
       <ResponsiveGridLayout
+        isDraggable={isDraggable}
+        isResizable={true}
         onResizeStop={onResizeStop}
         className="layout"
         //compactType="false" - for free use (need to find the right attribute)

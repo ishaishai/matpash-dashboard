@@ -38,7 +38,7 @@ export function barExample() {
     },
     legend: {
       layout: 'vertical',
-      align: 'right',
+      align: 'center',
       verticalAlign: 'top',
       x: -40,
       y: 80,

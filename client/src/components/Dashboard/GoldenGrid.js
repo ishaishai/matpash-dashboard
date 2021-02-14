@@ -8,6 +8,7 @@ import { Button } from 'react-bootstrap';
 
 const GoldenGrid = props => {
   const [goldens, setGoldens] = useState([]);
+  const [isDraggable, setIsDraggable] = useState(false);
   const [goldensResponse, setGoldenResponse] = useState(false);
   const goldensRef = React.useRef('goldens');
   const [isViewer, setIsViewer] = useState(() => {
@@ -20,15 +21,21 @@ const GoldenGrid = props => {
   const ResponsiveGridLayout = WidthProvider(Responsive);
 
   const deleteGolden = async index => {
-    try {
-      const response = await axios.delete(
-        '/api/dashboard/remove-golden/' + index,
-      );
-      const { data } = response.data;
-    } catch (error) {
-      console.log(error);
+    let result = window.confirm(
+      'האם באמת למחוק את הגרף הזה? פעולה זו בלתי הפיכה',
+    );
+    let response;
+    if (result) {
+      try {
+        const response = await axios.delete(
+          '/api/dashboard/remove-golden/' + index,
+        );
+        const { data } = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+      getGoldens();
     }
-    getGoldens();
   };
   // chartRef = useMemo(() => highChartsOptions.map((_i) => React.createRef()), []);
   const onResizeStop = useCallback((event, index) => {
@@ -129,9 +136,19 @@ const GoldenGrid = props => {
     return strValue;
   };
 
+  window.addEventListener('resize', () => {
+    if (window.screen.width < 992) {
+      setIsDraggable(false);
+    } else {
+      setIsDraggable(true);
+    }
+  });
+
   return (
     <div className="goldensWrapper">
       <ResponsiveGridLayout
+        isDraggable={isDraggable}
+        isResizable={isDraggable}
         onResizeStop={onResizeStop}
         className="layout"
         //  compactType="horizontal" // - for free use (need to find the right attribute)
@@ -159,73 +176,37 @@ const GoldenGrid = props => {
                     מחק
                   </Button>
                 ) : null}
-                <Header as="h3" className="monitor-title">
-                  <p className="golden">{MappedMonitor.layout.title}</p>
-                </Header>
-                <Statistic.Group inverted>
-                  <Statistic className="monitor-base" size="mini">
-                    <Statistic.Label>
-                      {MappedMonitor.layout.actionType == 'סכום'
-                        ? `סה"כ לתקופה`
-                        : `ממוצע לתקופה`}
-                    </Statistic.Label>
-                    <Statistic.Value>
-                      {printValueByType(
-                        MappedMonitor.layout.valuetype,
-                        MappedMonitor.layout.actionType == 'סכום'
-                          ? numberWithCommas(calcSummarized(MappedMonitor))
-                          : calcAverageSum(MappedMonitor),
-                      )}
-                    </Statistic.Value>
-                    <Statistic.Label>
-                      שינוי ביחס לתקופה קודמת
-                      <br />(
-                      {printValueByType(
-                        MappedMonitor.layout.valuetype,
-                        numberWithCommas(calcSummarizedChange(MappedMonitor)),
-                      )}
-                      <Icon
-                        name={
-                          MappedMonitor.sum > 0
-                            ? 'arrow up green'
-                            : MappedMonitor.sum < 0
-                            ? 'arrow down red'
-                            : 'hand point left outline blue'
-                        }
-                      />
-                      )
-                    </Statistic.Label>
-                  </Statistic>
-                </Statistic.Group>
-                <Divider className="monitor-divider" inverted />
-                <Statistic.Group inverted className="subStatistics">
-                  {MappedMonitor.goldens.map(MappedGolden => (
+                <Segment inverted className="monitorwrap-innersegment">
+                  <Header as="h3" className="monitor-title">
+                    <p className="golden">{MappedMonitor.layout.title}</p>
+                  </Header>
+                  <Statistic.Group inverted>
                     <Statistic className="monitor-base" size="mini">
-                      <Statistic.Label>{MappedGolden.subTitle}</Statistic.Label>
                       <Statistic.Label>
-                        {printValueByType(
-                          MappedMonitor.layout.valuetype,
-                          numberWithCommas(
-                            parseFloat(MappedGolden.periodValue).toFixed(2),
-                          ),
-                        )}
+                        {MappedMonitor.layout.actionType == 'סכום'
+                          ? `סה"כ לתקופה`
+                          : `ממוצע לתקופה`}
                       </Statistic.Label>
-                      <Statistic.Label>
-                        (
+                      <Statistic.Value>
                         {printValueByType(
                           MappedMonitor.layout.valuetype,
-                          numberWithCommas(calcGoldenData(MappedGolden)),
+                          MappedMonitor.layout.actionType == 'סכום'
+                            ? numberWithCommas(calcSummarized(MappedMonitor))
+                            : calcAverageSum(MappedMonitor),
+                        )}
+                      </Statistic.Value>
+                      <Statistic.Label>
+                        שינוי ביחס לתקופה קודמת
+                        <br />(
+                        {printValueByType(
+                          MappedMonitor.layout.valuetype,
+                          numberWithCommas(calcSummarizedChange(MappedMonitor)),
                         )}
                         <Icon
-                          style={{ marginLeft: '2px' }}
                           name={
-                            MappedGolden.periodValue -
-                              MappedGolden.periodCmpValue >
-                            0
+                            MappedMonitor.sum > 0
                               ? 'arrow up green'
-                              : MappedGolden.periodValue -
-                                  MappedGolden.periodCmpValue <
-                                0
+                              : MappedMonitor.sum < 0
                               ? 'arrow down red'
                               : 'hand point left outline blue'
                           }
@@ -233,8 +214,48 @@ const GoldenGrid = props => {
                         )
                       </Statistic.Label>
                     </Statistic>
-                  ))}
-                </Statistic.Group>
+                  </Statistic.Group>
+                  <Divider className="monitor-divider" inverted />
+                  <Statistic.Group inverted className="subStatistics">
+                    {MappedMonitor.goldens.map(MappedGolden => (
+                      <Statistic className="monitor-base" size="mini">
+                        <Statistic.Label>
+                          {MappedGolden.subTitle}
+                        </Statistic.Label>
+                        <Statistic.Label>
+                          {printValueByType(
+                            MappedMonitor.layout.valuetype,
+                            numberWithCommas(
+                              parseFloat(MappedGolden.periodValue).toFixed(2),
+                            ),
+                          )}
+                        </Statistic.Label>
+                        <Statistic.Label>
+                          (
+                          {printValueByType(
+                            MappedMonitor.layout.valuetype,
+                            numberWithCommas(calcGoldenData(MappedGolden)),
+                          )}
+                          <Icon
+                            style={{ marginLeft: '2px' }}
+                            name={
+                              MappedGolden.periodValue -
+                                MappedGolden.periodCmpValue >
+                              0
+                                ? 'arrow up green'
+                                : MappedGolden.periodValue -
+                                    MappedGolden.periodCmpValue <
+                                  0
+                                ? 'arrow down red'
+                                : 'hand point left outline blue'
+                            }
+                          />
+                          )
+                        </Statistic.Label>
+                      </Statistic>
+                    ))}
+                  </Statistic.Group>
+                </Segment>
               </Segment>
             </div>
           ))

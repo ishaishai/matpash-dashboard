@@ -1,4 +1,6 @@
 * {
+  
+  font-family: 'Varela Round', sans-serif !important;
   margin: 0;
   padding: 0;
 }
@@ -10,10 +12,7 @@
 .chartWrap > div {
   height: 100%;
 }
-.MonitorWrap > div {
-  height: 100%;
-  min-width: max-content;
-}
+
 .layout {
   background-color: rgb(237, 241, 247);
 }
@@ -30,6 +29,7 @@
 .xBtn:hover {
   font-weight: bold;
 }
+
 
 
 body {
@@ -86,4 +86,10 @@ body {
   text-align: right;
   display: block;
   right: 20px;
+}
+
+
+.sign-in img {
+  height: 35vw;
+	width: 40vw;
 }

@@ -53,7 +53,7 @@ const NavBar = (props, { logout }) => {
       <Navbar.Brand className="mainBrand" href="/">
         מתפ״ש
       </Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Toggle aria-controls="basic-navbar-nav">תפריט ראשי</Navbar.Toggle>
       <Navbar.Collapse id="basic-navbar-nav">{adminNav}</Navbar.Collapse>
     </Navbar>
   );
