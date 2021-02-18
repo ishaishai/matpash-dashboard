@@ -144,6 +144,10 @@ const GoldenGrid = props => {
     }
   });
 
+  if(goldens && goldens.length==0) {
+    return null;
+  }
+
   return (
     <div className="goldensWrapper">
       <ResponsiveGridLayout

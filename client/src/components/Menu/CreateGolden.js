@@ -295,7 +295,7 @@ const CreateGolden = props => {
                   className="main-container"
                   style={{ direction: 'ltr' }}
                 >
-                  <Row className="form-row" style={{ height: '108px' }}>
+                  <Row className="form-row golden" style={{ height: '108px' }}>
                     <Col className="form-col">
                       <Form.Label className="FormLabel">
                         :כותרת המוניטור
@@ -474,7 +474,7 @@ const CreateGolden = props => {
                           />
                         </Col>
 
-                        <Col style={{ marginTop: '3.2%' }}>
+                        <Col style={{ marginTop: '3.2%'}}>
                           <Button
                             variant="primary"
                             type=""

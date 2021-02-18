@@ -31,7 +31,9 @@
 }
 
 
-
+html {
+  overflow: auto;
+}
 body {
   font-family: 'Varela Round', sans-serif !important;
   display:flex;

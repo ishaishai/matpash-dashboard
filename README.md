@@ -1,4 +1,4 @@
-### matpash dashboard
+# matpash dashboard
 
 ## install:
 ### inside the project directory: `npm install`

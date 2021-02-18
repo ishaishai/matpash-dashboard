@@ -216,3 +216,27 @@ div.dropdown button span {
   text-align: center;
   direction: rtl;
 }
+
+@media screen and (max-width: 991px) {
+  .react-tabs__tab-list {
+    display: flex !important;
+  }
+  .react-tabs__tab {
+    display: flex !important;
+  }
+
+  .container-fluid > .align-items-center {
+    width: inherit !important;
+  }
+  .row.bg-light.text-dark {
+    flex-direction: column-reverse !important;
+    box-shadow: 2px 2px 2px gray;
+    font-weight: 900;
+  }
+  .user-details {
+    box-shadow: 2px 2px 2px gray;
+    margin: 2vw;
+    flex-direction: column-reverse;
+  }
+  
+} 

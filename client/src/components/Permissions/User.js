@@ -53,7 +53,7 @@ const User = props => {
     <div
       id={props.userData.username}
       key={props.userData.username}
-      className="row "
+      className="row user-details"
     >
       <div className="col border text-center">
         <Button

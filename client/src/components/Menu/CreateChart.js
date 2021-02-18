@@ -580,6 +580,11 @@ const CreateChart = props => {
         alertType: 'success',
       });
     })();
+    setAlertObj({
+          alertShow: false,
+          alertText: '',
+          alertType: 'success',
+        });
   };
 
   return (
@@ -654,7 +659,7 @@ const CreateChart = props => {
         </Navbar>
       </div>
       <Container fluid="true">
-        <Row sm>
+        <Row sm className="containerRows">
           <Col className="chart-demo-col">
             <div id="exampleContainer">{chart}</div>
             {/* {chart} */}
@@ -900,6 +905,8 @@ const CreateChart = props => {
                     className="title-input"
                   />
                 </Col>
+                </Row>
+                <Row className="form-row" style={{ height: '108px' }}>
                 <Col>
                   <Form.Label className="FormLabel">:תת כותרת הגרף</Form.Label>
                   <Form.Control
@@ -909,7 +916,9 @@ const CreateChart = props => {
                     onBlur={handleSubTitle}
                   />
                 </Col>
-                <Col>
+                </Row>
+                <Row className="form-row" style={{ height: '108px' }}>
+                <Col className="colCreatChart">
                   <Button
                     variant="primary "
                     type=""
