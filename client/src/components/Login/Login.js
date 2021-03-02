@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { withRouter} from 'react-router-dom';
-import { login} from '../../actions';
+import { withRouter } from 'react-router-dom';
+import { login } from '../../actions';
 import './styles.scss';
 import logo from '../../assets/Matpash.png';
 
@@ -21,12 +21,7 @@ const Login = ({ login, error, isLoading, history }) => {
   return (
     <div style={{ height: '100vh' }} className="">
       <div className="sign-in ui big form">
-        <img
-          src={logo}
-          height={250}
-          width={300}
-          style={{ marginBottom: '40px' }}
-        ></img>
+        <img src={logo} style={{ marginBottom: '40px' }}></img>
         <h1 style={{ marginBottom: '40px' }}> ברוכים הבאים </h1>
         <form onSubmit={handleLogin} className="ui big form" dir="rtl">
           <div className="field">
@@ -51,7 +46,7 @@ const Login = ({ login, error, isLoading, history }) => {
               required
             />
           </div>
-          
+
           {error && error !== 'Invalid token' && (
             <h4 className="ui red header">{error}</h4>
           )}
@@ -75,6 +70,4 @@ const mapStateToProps = ({ auth }) => ({
   error: auth.error,
 });
 
-export default connect(mapStateToProps, { login })(
-  withRouter(Login)
-);
+export default connect(mapStateToProps, { login })(withRouter(Login));

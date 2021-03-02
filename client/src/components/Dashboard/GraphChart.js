@@ -27,9 +27,6 @@ const GraphChart = props => {
         MappedChart.info = MappedChart.info
           .replace(/""/g, `"`)
           .replace(/''/g, "'");
-        // MappedChart.info = MappedChart.info
-        //   .replace(/'/g, "''")
-        //   .replace((/"/g, `""`));
       } catch (error) {
         console.log(error);
       }

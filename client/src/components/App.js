@@ -5,7 +5,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchUser } from '../actions';
-
 import Statistics from './Statistics/Statistics';
 import CreateUser from '../components/Users/CreateUser';
 import NavBar from './Menu/NavBar';

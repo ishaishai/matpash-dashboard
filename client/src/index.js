@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import reduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import App from './components/App';
-
 const enhancers = [
   applyMiddleware(reduxThunk),
   // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),

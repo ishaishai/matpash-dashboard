@@ -9,7 +9,6 @@ import { Button } from 'react-bootstrap';
 const GoldenGrid = props => {
   const [goldens, setGoldens] = useState([]);
   const [isDraggable, setIsDraggable] = useState(false);
-  const [goldensResponse, setGoldenResponse] = useState(false);
   const goldensRef = React.useRef('goldens');
   const [isViewer, setIsViewer] = useState(() => {
     if (props.user.permissions === 'צופה') {
@@ -19,7 +18,6 @@ const GoldenGrid = props => {
     }
   });
   const ResponsiveGridLayout = WidthProvider(Responsive);
-
   const deleteGolden = async index => {
     let result = window.confirm(
       'האם באמת למחוק את הגרף הזה? פעולה זו בלתי הפיכה',
@@ -144,7 +142,7 @@ const GoldenGrid = props => {
     }
   });
 
-  if(goldens && goldens.length==0) {
+  if (goldens && goldens.length == 0) {
     return null;
   }
 
