@@ -10,7 +10,7 @@
 .dropdown-menu.show {
   position: absolute !important;
   display: block !important;
-  
+
   height: 170px !important;
   width: max-content !important;
   overflow-y: scroll;
@@ -20,24 +20,23 @@
   direction: rtl;
 }
 .navbar-brand.mainBrand {
-  color:white !important;
+  color: white !important;
 }
-
 
 @media screen and (max-width: 991px) {
   .mainNavbar {
     text-align: right;
   }
-  .containerRows { 
+  .containerRows {
     flex-direction: column;
     line-height: 3rem;
   }
   .containerRows > col {
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
   }
   .chart-demo-col > div {
-    margin:0 !important;
+    margin: 0 !important;
   }
   .dropdown-btn {
     width: inherit;
@@ -46,7 +45,7 @@
     flex-direction: column;
     margin: 0;
   }
-  .upload-picture { 
+  .upload-picture {
     margin-right: 0 !important;
     width: inherit;
   }
@@ -58,10 +57,10 @@
     padding-bottom: 0;
   }
   .add-graph-btn {
-  margin:auto;
+    margin: auto;
   }
   .colCreatChart {
-    display:flex !important;
+    display: flex !important;
   }
   .form-row.golden {
     height: inherit !important;
@@ -77,21 +76,20 @@
     padding-bottom: 3%;
   }
 
-  .inner-row:last-of-type{
+  .inner-row:last-of-type {
     padding-bottom: 3%;
   }
 
   .list-group {
     margin: 0 !important;
     width: 100% !important;
-
   }
   .list-group-item {
     width: 100% !important;
   }
   .ui.message {
-    position:relative !important;
-    width:100% !important;
+    position: relative !important;
+    width: 100% !important;
   }
 }
 .navBar-Color {
@@ -100,8 +98,7 @@
 }
 
 .color-picker-col {
- display:inline-table; 
- 
+  display: inline-table;
 }
 
 .form-row {
@@ -154,11 +151,11 @@
 .form-label {
   line-height: 2rem;
 }
-.ytitle-input{
+.ytitle-input {
   margin: 10px 0px 0px;
   direction: rtl;
   width: 50% !important;
-  display:inline-block !important;
+  display: inline-block !important;
 }
 .FormLabel {
   display: block;
@@ -260,7 +257,6 @@
   float: left;
 }
 
-
 /* MODAL for popup color picker */
 .modalPopUp {
   z-index: 1 !important;
@@ -297,7 +293,10 @@
   cursor: pointer;
 }
 
-
 .custom-file {
   z-index: 0 !important;
+}
+
+.col {
+  min-width: fit-content;
 }
