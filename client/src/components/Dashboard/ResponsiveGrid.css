@@ -159,6 +159,10 @@ g text {
   }
 } */
 
+.goldensWrapper > .react-grid-layout > .react-grid-item > .ui.inverted.segment {
+  min-width: fit-content;
+}
+
 .goldensWrapper > .react-grid-layout > .react-grid-item {
   border-radius: 5px;
 }
