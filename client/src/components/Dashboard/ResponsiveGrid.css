@@ -148,7 +148,7 @@ g text {
   overflow: hidden;
 }
 
-/* iphone x screen */
+/* iphone x screen
 @media screen and (max-width: 991px) {
   .goldensWrapper {
     height: 92vw !important;
@@ -157,7 +157,7 @@ g text {
   .goldensWrapper .react-grid-layout {
     height: 92vw !important;
   }
-}
+} */
 
 .goldensWrapper > .react-grid-layout > .react-grid-item {
   border-radius: 5px;
