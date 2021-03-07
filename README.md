@@ -31,34 +31,33 @@ If an individual wants to have a look at the project at live view please visit: 
 
 ## Screenshots from desktop view
 ### Main screen - Goldens view:
-![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/monitors-main-screen.png?raw=true)
-
+![monitors-main-screen](https://user-images.githubusercontent.com/36458741/110242864-9945ab80-7f60-11eb-9103-7e1c286ae854.png)
 
 ### Main screen - Graphs view:
 ![graphs-main-screen](https://user-images.githubusercontent.com/36458741/110242824-6a2f3a00-7f60-11eb-9069-0f4a81272e96.png)
 
 ### Graph create screen:
-![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/create-graph.png?raw=true)
+![create-graph](https://user-images.githubusercontent.com/36458741/110242872-a82c5e00-7f60-11eb-8420-2660543a34f2.png)
 
 ### Monitor create screen:
-![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/create-monitor.png?raw=true)
+![create-monitor](https://user-images.githubusercontent.com/36458741/110242873-a95d8b00-7f60-11eb-907f-094d88ca0caa.png)
 
-### Previledges screen:
+### Priviledges screen:
 #### Users Manage screen:
-![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/users-screen.png?raw=true)
+![users-screen](https://user-images.githubusercontent.com/36458741/110242890-b8dcd400-7f60-11eb-86e3-e2944474390d.png)
 
-#### Users Previledges Manage screen:
-![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/users-privileges-screen.png?raw=true)
+#### Users Priviledges Manage screen:
+![users-privileges-screen](https://user-images.githubusercontent.com/36458741/110242909-c6925980-7f60-11eb-906a-713ee70f644d.png)
 
 #### Users Dashboard View Manage screen:
-![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/users-view.png?raw=true)
+![users-view](https://user-images.githubusercontent.com/36458741/110242915-d3af4880-7f60-11eb-87d3-ae614692c759.png)
 
 ### Create User screen:
-![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/create-user.png?raw=true)
+![create-user](https://user-images.githubusercontent.com/36458741/110242929-dca01a00-7f60-11eb-9bab-1cfedf17afa0.png)
 
 ### Admin screen:
 #### Excel File Check & Upload screen:
-![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/upload-xlsx.png?raw=true)
+![upload-xlsx](https://user-images.githubusercontent.com/36458741/110242936-e7f34580-7f60-11eb-9896-1dfc96fd5d97.png)
 
 #### Database Manage and Export to Excel File screen:
-![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/manage-view-xlsx.png?raw=true)
+![manage-view-xlsx](https://user-images.githubusercontent.com/36458741/110242941-ee81bd00-7f60-11eb-810c-4d417af26370.png)
