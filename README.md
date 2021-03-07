@@ -7,12 +7,17 @@ So, what is our solution to the problem? make it easier to read and analyze data
 **Due to the subject of the project any excel conversion which isn't in the form we suggested won't work**
 
 
-
+If an individual wants to have a look at the project at live view please visit: 185.60.170.80:5050 with user and password set as: 'tester'
 
 ## Steps to install:
 ### inside the project directory: `npm install` - will install any node module needed for the server
 ### inside the project directory: `pip install -r requirements.txt` - will install any conversion script modules needed
 ### inside the client directory: `npm install` - - will install any node module needed for the client
+
+## Configure database:
+### First install Postgresql server + pgadmin v4. afterwards please create a server and a user which autherized to log-in with the name matpash (Both are names matpash), with password equal to '1234'.
+### Set up databases: dashboardsdb, usersdb and maindb all be with the same owner - matpash.
+### Upload the database files located in the base dir of the project as a restored databases.
 
 ## run client & server:
 ### `npm run dev`
@@ -22,3 +27,23 @@ So, what is our solution to the problem? make it easier to read and analyze data
 
 ## run only the server:
 ### `npm run server`
+
+
+##Screenshots from desktop view
+###Main screen:
+
+
+
+###Graph create screen:
+
+
+
+###Monitor create screen:
+
+
+
+###Previledges screen:
+
+
+###Admin screen:
+
