@@ -35,7 +35,7 @@ If an individual wants to have a look at the project at live view please visit: 
 
 
 ### Main screen - Graphs view:
-![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/graphs-main-screen.png?raw=true)
+![graphs-main-screen](https://user-images.githubusercontent.com/36458741/110242824-6a2f3a00-7f60-11eb-9069-0f4a81272e96.png)
 
 ### Graph create screen:
 ![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/create-graph.png?raw=true)
