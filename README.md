@@ -47,5 +47,18 @@ If an individual wants to have a look at the project at live view please visit: 
 #### Users Manage screen:
 ![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/users-screen.png?raw=true)
 
-### Admin screen:
+#### Users Previledges Manage screen:
+![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/users-privileges-screen.png?raw=true)
 
+#### Users Dashboard View Manage screen:
+![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/users-view.png?raw=true)
+
+### Create User screen:
+![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/create-user.png?raw=true)
+
+### Admin screen:
+#### Excel File Check & Upload screen:
+![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/upload-xlsx.png?raw=true)
+
+#### Database Manage and Export to Excel File screen:
+![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/manage-view-xlsx.png?raw=true)
