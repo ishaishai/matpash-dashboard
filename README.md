@@ -30,17 +30,18 @@ If an individual wants to have a look at the project at live view please visit: 
 
 
 ## Screenshots from desktop view
-### Main screen:
+### Main screen - Goldens view:
 ![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/monitors-main-screen.png?raw=true)
 
 
+### Main screen - Graphs view:
+![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/graphs-main-screen.png?raw=true)
+
 ### Graph create screen:
-
-
+![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/create-graph.png?raw=true)
 
 ### Monitor create screen:
-
-
+![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/create-monitor.png?raw=true)
 
 ### Previledges screen:
 
