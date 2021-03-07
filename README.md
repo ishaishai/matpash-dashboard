@@ -29,21 +29,21 @@ If an individual wants to have a look at the project at live view please visit: 
 ### `npm run server`
 
 
-##Screenshots from desktop view
-###Main screen:
+## Screenshots from desktop view
+### Main screen:
 
 
 
-###Graph create screen:
+### Graph create screen:
 
 
 
-###Monitor create screen:
+### Monitor create screen:
 
 
 
-###Previledges screen:
+### Previledges screen:
 
 
-###Admin screen:
+### Admin screen:
 
