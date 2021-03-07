@@ -43,8 +43,9 @@ If an individual wants to have a look at the project at live view please visit: 
 ### Monitor create screen:
 ![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/create-monitor.png?raw=true)
 
-### Previledges screen:
-
+## Previledges screen:
+### Users Manage screen:
+![alt text](https://github.com/ishaishai/screeenshots/blob/main/matpash/desktop/users-screen.png?raw=true)
 
 ### Admin screen:
 
