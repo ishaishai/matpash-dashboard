@@ -19,6 +19,7 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
+  console.log('in delete user');
   const result = await userService.deleteUser(req.params.username);
   if (result) {
     res.status(200).json({ msg: 'ok' });

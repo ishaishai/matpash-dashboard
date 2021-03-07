@@ -16,8 +16,11 @@ const User = props => {
     username = username.replace(/'/g, "''");
     username = username.replace(/"/g, `""`);
     let result = window.confirm('האם למחוק משתמש זה? פעולה זו בלתי הפיכה');
+    console.log(result);
     if (result) {
+      console.log(result);
       const response = await axios.delete('/api/users/delete-user/' + username);
+      console.log(response);
       alert('!המשתמש נמחק');
       props.searchData();
     }
