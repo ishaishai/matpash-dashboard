@@ -20,7 +20,6 @@ const User = props => {
     if (result) {
       console.log(result);
       const response = await axios.delete('/api/users/delete-user/' + username);
-      console.log(response);
       alert('!המשתמש נמחק');
       props.searchData();
     }
