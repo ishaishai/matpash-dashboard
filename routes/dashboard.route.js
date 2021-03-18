@@ -65,6 +65,7 @@ router.post(
 );
 router.post(
   '/update-graph-info',
+  requireToken,
   checkTestUser,
   dashboardContoller.updateGraphInfo,
 );
