@@ -7,7 +7,7 @@
 }
 
 .saveLayoutBtn {
-  left: 15rem;
+  left: 20rem;
 }
 
 .menuBtn {
@@ -15,11 +15,11 @@
 }
 
 .defaultDashboardBtn {
-  right: 15rem;
+  right: 20rem;
 }
 
 .deleteDashboardBtn {
-  left: 5rem;
+  left: 10rem;
 }
 
 .colLastUpdate {
@@ -28,6 +28,8 @@
 
 .navbar-nav {
   height: 3rem;
+  display: flex;
+  flex-direction: row-reverse;
 }
 
 @media screen and (max-width: 991px) {
@@ -119,7 +121,7 @@ hr {
   align-content: center;
 }
 .dashboardDropDown {
-  right: 5rem;
+  right: 10rem;
 }
 
 .dropdown-btn {
