@@ -114,6 +114,7 @@ exports.getDashboardNames = async (req, res) => {
 
 exports.deleteDashboardById = async (req, res) => {
   const { id } = req.params;
+  console.log('DASHBOARD TO DELETE: ', id);
   const userId = req.user.id; //should get from token.
   const username = req.user.username;
 

@@ -178,6 +178,9 @@ const DashboardTabs = props => {
     );
 
     if (result) {
+      const response = await axios.delete(
+        '/api/dashboard/delete-dashboard-by-id/' + currentDash.index,
+      );
       alert('!הדשבורד נמחק');
     }
 
