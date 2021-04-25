@@ -61,3 +61,6 @@ If an individual wants to have a look at the project at live view please visit: 
 
 #### Database Manage and Export to Excel File screen:
 ![manage-view-xlsx](https://user-images.githubusercontent.com/36458741/110242941-ee81bd00-7f60-11eb-810c-4d417af26370.png)
+
+#### Manage Concepts Dictionary screen:
+![manage-concepts](https://user-images.githubusercontent.com/36458741/115987157-77f65880-a5bc-11eb-8f41-e72e3daafb72.png)
