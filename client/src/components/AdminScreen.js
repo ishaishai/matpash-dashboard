@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,9 +9,9 @@ import {
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import Admin from './Admin';
 import ManageExcel from './ManageExcel';
+import AdminConcept from './AdminConcept';
 
 function AdminScreen() {
-  
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleSelect = index => {
@@ -48,6 +48,14 @@ function AdminScreen() {
                   ניהול קבצי אקסל
                 </Link>
               </Tab>
+              <Tab>
+                <Link
+                  className="navbar bg-primary text-white border border-bottom-0 rounded-top "
+                  to="/admin/concept-manage"
+                >
+                  ניהול מילון מושגים
+                </Link>
+              </Tab>
             </TabList>
           </Tabs>
         </nav>
@@ -55,6 +63,11 @@ function AdminScreen() {
           <Switch>
             <Route exact path="/admin/excel-upload" component={Admin} />
             <Route exact path="/admin/excel-manage" component={ManageExcel} />
+            <Route
+              exact
+              path="/admin/concept-manage"
+              component={AdminConcept}
+            />
             <Redirect to="/admin/excel-upload" />
           </Switch>
         </div>
@@ -63,4 +76,4 @@ function AdminScreen() {
   );
 }
 
-export default AdminScreen
+export default AdminScreen;

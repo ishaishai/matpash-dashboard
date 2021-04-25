@@ -1,0 +1,73 @@
+.concepts-container {
+  display: flex;
+  flex-direction: row;
+}
+.concepts-add-title,
+.concepts-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0px auto;
+}
+
+.chosen-concept-definition {
+  width: 80%;
+  height: 25vh;
+  overflow-y: auto;
+}
+
+.concepts-dropdown-container {
+  display: flex;
+  width: 50%;
+  margin-top: 4vw;
+  flex-direction: column;
+  justify-content: space-evenly;
+  font-weight: 500;
+  border-left-style: solid;
+  border-width: 1px;
+}
+.concepts-form {
+  width: 40%;
+  padding: 0px 5vw;
+  margin-top: 4vw;
+}
+.chosen-item-description {
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+}
+.chosen-concept-label {
+  margin-top: 5vh;
+  font-weight: 500;
+}
+
+.concepts-dropdown {
+  width: 20vw;
+  margin-top: 0.8vw;
+}
+.delete-concept-btn {
+  margin-top: 1vh;
+  width: 20vw;
+}
+
+@media screen and (max-width: 768px) {
+  .concepts-container {
+    flex-direction: column;
+  }
+  .concepts-dropdown-container,
+  .concepts-form {
+    width: 100%;
+  }
+  .concepts-dropdown-container {
+    border-left: none;
+    border-bottom: solid 1px;
+    height: 50vh;
+  }
+
+  .concepts-dropdown {
+    width: auto;
+  }
+  .chosen-item-description,
+  .chosen-item-description textarea {
+    width: auto;
+  }
+}

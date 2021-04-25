@@ -23,6 +23,7 @@ app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/tables', require('./routes/tables.route'));
 app.use('/api/dashboard', require('./routes/dashboard.route'));
 app.use('/api/view', require('./routes/viewRoutes'));
+app.use('/api/concepts', require('./routes/conceptsRoutes'));
 
 if (process.env.NODE_ENV === 'production') {
   // Serve up production assets

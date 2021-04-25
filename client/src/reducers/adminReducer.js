@@ -15,18 +15,29 @@ import {
   DELETE_TABLE_ERROR,
   DELETE_TABLE_LOADING,
   DELETE_TABLE_SUCCESS,
+  FETCH_CONCEPT_LOADING,
+  FETCH_CONCEPT_ERROR,
+  FETCH_CONCEPT_SUCCESS,
+  ADD_CONCEPT_LOADING,
+  ADD_CONCEPT_SUCCESS,
+  ADD_CONCEPT_ERROR,
+  DELETE_CONCEPT_LOADING,
+  DELETE_CONCEPT_SUCCESS,
+  DELETE_CONCEPT_ERROR,
 } from '../actions/types';
 
 const initialState = {
   loading: false,
   error: null,
   result: 'null',
-  tableNames: []
+  tableNames: [],
+  concepts: [],
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = initialState, action) => {
   const { type, payload } = action;
+  console.log(action, 'action');
   switch (type) {
     case CHECK_EXCEL_LOADING:
       return {
@@ -111,6 +122,68 @@ export default (state = initialState, action) => {
         loading: false,
         error: payload,
       };
+    case FETCH_CONCEPT_LOADING:
+      return {
+        ...initialState,
+        loading: true,
+      };
+    case FETCH_CONCEPT_SUCCESS: {
+      return {
+        ...initialState,
+        concepts: payload,
+        loading: false,
+      };
+    }
+    case FETCH_CONCEPT_ERROR: {
+      return {
+        ...initialState,
+        loading: false,
+        error: null, ///add error
+      };
+    }
+    case ADD_CONCEPT_LOADING: {
+      console.log('ADDCONCEPT');
+      console.log(action);
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case ADD_CONCEPT_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        error: payload, // change error
+      };
+    }
+    case ADD_CONCEPT_SUCCESS: {
+      return {
+        ...state,
+        concepts: [...state.concepts, payload],
+        loading: false,
+      };
+    }
+    case DELETE_CONCEPT_LOADING: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case DELETE_CONCEPT_SUCCESS: {
+      return {
+        ...state,
+        concepts: state.concepts.filter(item => item.title !== payload),
+        loading: false,
+      };
+    }
+    case DELETE_CONCEPT_ERROR: {
+      return {
+        ...state,
+        error: null, //change error
+        loading: false,
+      };
+    }
+
     default:
       return state;
   }
