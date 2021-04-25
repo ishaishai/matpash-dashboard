@@ -9,7 +9,7 @@ exports.getAllConcepts = async (req, res) => {
     console.log(data);
     res.status(200).json({ concepts: data });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    res.status(500).json({ msg: 'לא ניתן למשוך נתונים' });
   }
 };
 
@@ -29,6 +29,6 @@ exports.deleteConcept = async (req, res) => {
     const response = await conceptsService.deleteConcept(req.body.title);
     res.status(200).json({ msg: 'OK' });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    res.status(500).json({ msg: 'הפעולה נכשלה' });
   }
 };

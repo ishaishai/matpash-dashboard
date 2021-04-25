@@ -180,7 +180,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: null, //change error
-        loading: false,
+        loading: payload,
       };
     }
 

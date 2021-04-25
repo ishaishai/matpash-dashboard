@@ -151,7 +151,7 @@ export const getConcepts = () => async dispatch => {
 
     dispatch({ type: FETCH_CONCEPT_SUCCESS, payload: response.data.concepts });
   } catch (error) {
-    dispatch({ type: FETCH_CONCEPT_ERROR });
+    dispatch({ type: FETCH_CONCEPT_ERROR, payload: error.response.data.msg });
   }
 };
 
@@ -177,7 +177,7 @@ export const deleteConcept = ({ title }) => async dispatch => {
     });
     dispatch({ type: DELETE_CONCEPT_SUCCESS, payload: title });
   } catch (error) {
-    dispatch({ type: DELETE_CONCEPT_ERROR });
+    dispatch({ type: DELETE_CONCEPT_ERROR, payload: error.response.data.msg });
   }
 };
 
