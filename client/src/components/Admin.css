@@ -72,7 +72,7 @@
 .concept-description {
   font-size: 1.2rem;
 }
-.concepts-container-dictionary @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .concepts-container {
     flex-direction: column;
   }
