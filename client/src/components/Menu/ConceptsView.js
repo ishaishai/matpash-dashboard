@@ -32,10 +32,13 @@ const ConceptsView = props => {
       <div className="concepts-segment">
         {concepts.map(concept => {
           return (
-            <div className="concept">
-              <div className="concept-title"> {concept.title} </div>
-              &nbsp;-&nbsp;
-              <div className="concept-description"> {concept.definition} </div>
+            <div className="concept-box">
+              <div className="concept">
+                <div className="concept-title"> {concept.title} </div>
+                &nbsp;-&nbsp;
+                <div className="concept-description">{concept.definition}</div>
+              </div>
+              <hr />
             </div>
           );
         })}
