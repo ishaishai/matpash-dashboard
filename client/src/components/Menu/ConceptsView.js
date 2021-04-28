@@ -30,7 +30,7 @@ const ConceptsView = props => {
     <div className="concepts-container-dictionary" dir="rtl">
       <div className="concepts-title">מילון מושגים</div>
       <div className="concepts-segment">
-        {concepts.map(concept => {
+        {concepts.map((concept, i) => {
           return (
             <div className="concept-box">
               <div className="concept">
@@ -38,7 +38,7 @@ const ConceptsView = props => {
                 &nbsp;-&nbsp;
                 <div className="concept-description">{concept.definition}</div>
               </div>
-              <hr />
+              {i < concepts.length - 1 ? <hr /> : null}
             </div>
           );
         })}
