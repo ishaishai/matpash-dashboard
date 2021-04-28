@@ -68,9 +68,11 @@
 .concept-title {
   font-weight: 600;
   font-size: 1.2rem;
+  min-width: max-content;
 }
 .concept-description {
   font-size: 1.2rem;
+  min-width: max-content;
 }
 @media screen and (max-width: 768px) {
   .concepts-container {
