@@ -49,7 +49,30 @@
   width: 20vw;
 }
 
-@media screen and (max-width: 768px) {
+.concepts-container-dictionary {
+  padding-top: 5vh;
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+}
+.concepts-segment {
+  padding: 1vw 1vw;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.concept {
+  display: flex;
+  flex-direction: row;
+}
+.concept-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.concept-description {
+  font-size: 1.2rem;
+}
+.concepts-container-dictionary @media screen and (max-width: 768px) {
   .concepts-container {
     flex-direction: column;
   }

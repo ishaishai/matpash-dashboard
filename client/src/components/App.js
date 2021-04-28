@@ -15,6 +15,7 @@ import Permissions from './Permissions/Permissions';
 import AdminScreen from './AdminScreen';
 import ProtectedRoute from './ProtectedRoute';
 import CreateGolden from './Menu/CreateGolden';
+import ConceptsView from './Menu/ConceptsView';
 
 const App = ({ fetchUser, auth }) => {
   useEffect(() => {
@@ -31,6 +32,12 @@ const App = ({ fetchUser, auth }) => {
             path="/"
             exact
             component={Tabs}
+          />
+          <ProtectedRoute
+            isLoggedIn={auth.user}
+            path="/concepts-view"
+            exact
+            component={ConceptsView}
           />
           <ProtectedRoute
             isLoggedIn={auth.user}
