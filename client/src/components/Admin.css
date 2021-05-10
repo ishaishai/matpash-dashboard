@@ -48,15 +48,18 @@
   margin-top: 1vh;
   width: 20vw;
 }
-
+.concept-search {
+  width: 20vw;
+  margin-right: 2vw !important;
+}
 .concepts-container-dictionary {
   padding-top: 5vh;
   display: flex;
   flex-direction: column;
   height: inherit;
-  align-items: center;
 }
 .concepts-segment {
+  align-self: center;
   padding: 1vw 1vw;
   display: flex;
   flex-direction: column;
