@@ -148,6 +148,11 @@ g text {
   overflow: hidden;
 }
 
+.highcharts-menu-item {
+	text-align: right;
+}
+
+
 /* iphone x screen
 @media screen and (max-width: 991px) {
   .goldensWrapper {

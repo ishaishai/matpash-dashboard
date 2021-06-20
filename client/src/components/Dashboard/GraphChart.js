@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+﻿import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import Chart from './Charts';
 import { numberWithCommas } from './NumWithCommas';
 import './ResponsiveGrid.css';
@@ -78,12 +78,12 @@ const GraphChart = props => {
               enabled: false,
             },
             lang: {
-              printChart: "<p style='text-align:right'>הדפסת גרף</p>",
-              downloadPNG: "<p style='text-align:right'>PNG-הורדה כ</p>",
-              downloadPDF: "<p style='text-align:right'>PDF-הורדה כ </p>",
-              downloadJPEG: "<p style='text-align:right'>JPEG-הורד כ</p>",
-              downloadSVG: "<p style='text-align:right'>SVG-הורדה כ </p>",
-              viewFullscreen: "<p style='text-align:right'>צפייה במסך מלא</p>",
+              printChart: `הדפסת גרף`,
+              downloadPNG: `PNG-הורדה כ`,
+              downloadPDF: `PDF-הורדה כ`,
+              downloadJPEG: `JPEG-הורד כ`,
+              downloadSVG: `SVG-הורדה כ`,
+              viewFullscreen: `צפייה במסך מלא`,
             },
             tooltip: {
               style: {
@@ -153,14 +153,14 @@ const GraphChart = props => {
                   menuItems: [
                     props.permissions != 'צופה'
                       ? {
-                          text: "<p style='text-align:right'>מחיקת גרף </p>",
+                          text: "מחיקת גרף",
                           onclick: () => {
                             props.deleteChart(MappedChart.index);
                           },
                         }
                       : null,
                     {
-                      text: "<p style='text-align:right'>הצג מידע נוסף </p>",
+                      text: "הצג מידע נוסף",
                       onclick: event => {
                         flipGraph(event, MappedChart.index);
                       },
